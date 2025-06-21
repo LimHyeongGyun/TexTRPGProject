@@ -3,9 +3,11 @@
 #include "Inventory.h"
 #include "Item.h"
 
+using namespace std;
+
 Inventory* Inventory::iveninstance = nullptr;
 
-Inventory* Inventory::Get(string name)
+Inventory* Inventory::Get()
 {
     if (iveninstance == nullptr)
     {
@@ -15,26 +17,32 @@ Inventory* Inventory::Get(string name)
     return iveninstance;
 }
 
-void Inventory::ClassificationItem(Item* item, int num)
+void Inventory::ClassificationItem(vector<Item*> items)
 {
-    if (item->itemType == Potion)
-    {
-        //포션인벤토리에 해당 포션이 없다면
-        if (potionValue.find(item) == potionValue.end()) {
-            potionValue[item] = num;
+    for (Item* item : items) {
+        if (item->itemType == Consumable)
+        {
+            //소비인벤토리에 해당 소비아이템이 없다면
+            if (consumableValue.find(item) == consumableValue.end()) {
+                consumableValue[item] = 1;
+            }
+            //기존에 가지고 있던 소비아이템 이라면
+            else if (consumableValue.find(item) != consumableValue.end()) {
+                consumableValue[item] += 1; //기존에 가지고있던 갯수에 추가해주기
+            }
         }
-        //기존에 가지고 있던 포션이라면
-        else if (potionValue.find(item) != potionValue.end()) {
-            potionValue[item] += num; //기존에 가지고있던 갯수에 추가해주기
+        else if (item->itemType == Weapon)
+        {
+            weaponValue.push_back(item);
         }
-    }
-    if (item->itemType == Weapon)
-    {
-        weaponValue.push_back(item);
-    }
-    if (item->itemType == Armor)
-    {
-        armorValue.push_back(item);
+        else if (item->itemType == Armor)
+        {
+            armorValue.push_back(item);
+        }
+        else if (item->itemType == Other)
+        {
+            otherItems.push_back(item);
+        }
     }
 }
 
@@ -65,13 +73,13 @@ void Inventory::DisplayInventory()
 void Inventory::DisplayConsumeItem()
 {
     //소지하고 있는 소비아이템이 없을 때
-    if (potionValue.empty())
+    if (consumableValue.empty())
     {
         cout << "소지하고 있는 소비아이템 없습니다." << endl;
         return;
     }
 
-    for (unordered_map<Item*, int>::value_type& p : potionValue)
+    for (unordered_map<Item*, int>::value_type& p : consumableValue)
     {
         cout << "아이템 이름" << p.first->name << "" << p.second << "개" << endl;
     }
@@ -85,7 +93,7 @@ void Inventory::DisplayConsumeItem()
     else if (key != "p")
     {
         Character* character = Character::Get();
-        for (unordered_map<Item*, int>::value_type& p : potionValue)
+        for (unordered_map<Item*, int>::value_type& p : consumableValue)
         {
             if (p.first->name == key) {
                 p.first->Use(character);
@@ -196,7 +204,7 @@ void Inventory::UnEquipArmor()
 
 Inventory::~Inventory()
 {
-    for (auto& it : potionValue) {
+    for (auto& it : consumableValue) {
         delete it.first;
     }
 

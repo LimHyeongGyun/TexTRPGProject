@@ -21,15 +21,13 @@ Character::Character() {
     equipArmor = nullptr;
 }
 
-Character* Character::Get(string name)
+Character* Character::Get()
 {
     //만약 instance가 생성되지 않았다면
     if (charInstance == nullptr)
     {
         charInstance = new Character(); //캐릭터 생성해주기
     }
-
-    charInstance->name = name;
 
     return charInstance;
 }
@@ -153,9 +151,9 @@ void Character::UnEquipStatus(int getAttack, int getHealth)
 
 #pragma region Item & Shop
 
-void Character::GetItem(Item* getItem, int num)
+void Character::GetItem(vector<Item*> getItems)
 {
-    Inventory::Get()->ClassificationItem(getItem, num);
+    Inventory::Get()->ClassificationItem(getItems);
 }
 void Character::UseItem(int index)
 {
