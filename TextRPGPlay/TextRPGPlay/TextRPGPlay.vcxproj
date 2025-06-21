@@ -123,7 +123,21 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="TextRPGPlay.cpp" />
+    <ClCompile Include="Dragon.cpp" />
+    <ClCompile Include="Goblin.cpp" />
+    <ClCompile Include="Monster.cpp" />
+    <ClCompile Include="Orc.cpp" />
+    <ClCompile Include="Slime.cpp" />
+    <ClCompile Include="Troll.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Dragon.h" />
+    <ClInclude Include="DropItems.h" />
+    <ClInclude Include="Goblin.h" />
+    <ClInclude Include="Monster.h" />
+    <ClInclude Include="Orc.h" />
+    <ClInclude Include="Slime.h" />
+    <ClInclude Include="Troll.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
