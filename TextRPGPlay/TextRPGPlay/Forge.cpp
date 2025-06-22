@@ -65,9 +65,9 @@ void Forge::EnteredForge()
 void Forge::DisplayUpgradeEquipment()
 {
 	cout << "==============강화확률==============" << endl;
-	for (int i = 0; i < 1; i++)
+	for (int i = 0; i < UP.per.size(); i++)
 	{
-		cout << i << endl;
+		cout << i << "강 강화확률:" << UP.per[i] << endl;
 	}
 
 	int category = 0;
@@ -123,14 +123,14 @@ void Forge::DisplayUpgradeEquipment()
 	
 	//강화가 성공했을 때
 	if (result.second == "성공") {
-		cout << "강화 단계: " << result.first->upgradeProbablity - 1 << "=>" << result.first->upgradeProbablity << endl;
+		cout << "강화 단계: " << result.first->upgradePhase - 1 << "=>" << result.first->upgradePhase << endl;
 		if (result.first->itemType == Weapon)
 		{
-			cout << "강화 후 아이템 수치" << result.first->attack - result.first->upgradeProbablity << "=>" << result.first->attack << endl;
+			cout << "강화 후 아이템 수치" << result.first->attack - result.first->upgradeAtkValue << "=>" << result.first->attack << endl;
 		}
 		else if (result.first->itemType == Armor)
 		{
-			cout << "강화 후 아이템 수치" << result.first->health - result.first->upgradeProbablity << "=>" << result.first->health << endl;
+			cout << "강화 후 아이템 수치" << result.first->health - result.first->upgradeHpValue << "=>" << result.first->health << endl;
 		}
 	}
 	//강화가 실패했을 때
@@ -140,19 +140,26 @@ void Forge::DisplayUpgradeEquipment()
 	}
 }
 
+int Forge::UpgradePercent(int upValue)
+{
+	return UP.per[upValue];
+}
+
 pair<Item*, string> Forge::Upgrade(Item* equipment)
 {
 	string result;
-	int successRate = equipment->upgradeProbablity;
+	int successRate = UpgradePercent(equipment->upgradePhase);
 	int roll = rand() % 100;
 
-	if (roll < successRate) {
+	if (roll < successRate)
+	{
 		result = "성공";
-		equipment->upgradeProbablity++;
-		if (equipment->itemType == Weapon) equipment->attack += equipment->upgradeProbablity;
-		else if (equipment->itemType == Armor) equipment->health += equipment->upgradeProbablity;
+		equipment->upgradePhase++;
+		if (equipment->itemType == Weapon) equipment->attack += equipment->upgradeAtkValue;
+		else if (equipment->itemType == Armor) equipment->health += equipment->upgradeHpValue;
 	}
-	else {
+	else
+	{
 		result = "실패";
 	}
 
