@@ -14,7 +14,7 @@
 using namespace std;
 
 GameManager::GameManager() {
-    player = Character::Get("용사"); // 싱글턴을 통한 캐릭터객체 생성
+    player = Character::Get("용사");
 }
 
 Monster* GameManager::GenerateMonster(int level) {
@@ -72,23 +72,40 @@ void GameManager::Run() {
     while (player->isAlive() && player->GetLevel() < 10) {
         cout << "\n===== 전투 시작 (레벨: " << player->GetLevel() << ") =====" << endl;
         Monster* monster = GenerateMonster(player->GetLevel());
-        cout << monster->getName() << " 등장! 체력: " << monster->getHealth() << ", 공격력: " << monster->Attack() << endl;
+        cout << monster->getName() << " 등장! 체력: " << monster->getHealth()
+            << ", 공격력: " << monster->Attack() << endl;
         Battle(player, monster);
 
         if (!player->isAlive()) break;
 
         char choice;
         cout << "인벤토리를 확인하시겠습니까? (Y/N): ";
-        cin >> choice;
-        if (choice == 'Y' || choice == 'y') {
-            DisplayInventory(player);
+        while (true) {
+            cin >> choice;
+            if (cin.fail()) {
+                cin.clear();
+                cin.ignore(numeric_limits<streamsize>::max(), '\n');
+                cout << "입력 오류입니다. Y 또는 N을 입력해주세요: ";
+                continue;
+            }
+            if (choice == 'Y' || choice == 'y') {
+                DisplayInventory(player);
+                break;
+            }
+            else if (choice == 'N' || choice == 'n') {
+                break;
+            }
+            else {
+                cout << "잘못된 입력입니다. Y 또는 N을 입력해주세요: ";
+            }
         }
     }
 
     if (player->isAlive() && player->GetLevel() >= 10) {
         cout << "\n===== 보스 몬스터 등장 =====" << endl;
         BossMonster* boss = GenerateBossMonster(player->GetLevel());
-        cout << boss->getName() << " 등장! 체력: " << boss->getHealth() << ", 공격력: " << boss->Attack() << endl;
+        cout << boss->getName() << " 등장! 체력: " << boss->getHealth()
+            << ", 공격력: " << boss->Attack() << endl;
         Battle(player, boss);
         delete boss;
 

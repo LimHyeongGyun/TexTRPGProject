@@ -6,7 +6,8 @@ class BossMonster;
 
 class GameManager {
 public:
-    GameManager();
+    GameManager(); 
+
     Character* player;
 
     Monster* GenerateMonster(int level);
