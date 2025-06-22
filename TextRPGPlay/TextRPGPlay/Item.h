@@ -32,6 +32,7 @@ public:
 
 class Weapon : public Item {
 private:
+    int upgradePhase = 0;
     int attackPower;
     bool equip;
 
@@ -40,14 +41,27 @@ public:
     void Use(Character* character, Inventory* inventory) override;
     Item* Clone() const override;
 
+    int GetupgradePhase() const { return upgradePhase; }
+    //강화 횟수 가져오기
+
     int GetAttackPower() const { return attackPower; }
+    //공격력 가져오기
+
     bool IsEquipped() const { return equip; }
+    //착용된 아이템인지 확인
+
     void SetEquipped(bool equipped) { equip = equipped; }
+    //착용 상태 변경
+
+    void Upgrade();
+    //강화 기능
+       //강화 기능 5강까지 가능
 
 };
 
 class Armor : public Item {
 private:
+    int upgradePhase = 0;
     int health;
     bool equip;
 
@@ -56,9 +70,22 @@ public:
     void Use(Character* character, Inventory* inventory) override;
     Item* Clone() const override;
 
+    int GetupgradePhase() const { return upgradePhase; }
+    //강화 횟수 가져오기
+
+
     int GetBonusHealth() const { return health; }
+    //방어력 가져오기
+
     bool IsEquipped() const { return equip; }
+    //착용된 아이템인지 확인
+
     void SetEquipped(bool equipped) { equip = equipped; }
+    //착용 상태 변경
+
+    void Upgrade();
+    //강화 기능 5강까지 가능
+
 };
 
 class expendables : public Item {

@@ -24,9 +24,6 @@ void Potion::Use(Character* character, Inventory* inventory) {
 }
 
 
-Item* Potion::Clone() const {
-    return new Potion(*this); // 복사 생성자 호출
-}
 
 //=== Weapon 클래스 구현 ===//
 Weapon::Weapon(const std::string& name, int price, int attackPower)
@@ -40,9 +37,7 @@ void Weapon::Use(Character* character, Inventory* inventory) {
     }
 }
 
-Item* Weapon::Clone() const {
-    return new Weapon(*this);
-}
+
 
 //=== Armor 클래스 구현 ===//
 Armor::Armor(const std::string& name, int price, int bonusHealth)
@@ -56,6 +51,30 @@ void Armor::Use(Character* character, Inventory* inventory) {
     }
 }
 
-Item* Armor::Clone() const {
-    return new Armor(*this);
+void Armor::Upgrade() {
+    if (upgradePhase < 6) {
+        ++upgradePhase;
+        this->health +=5;
+    }
+}
+
+void Weapon::Upgrade() {
+    // 예시: 최대 5강까지 가능하며, 강화마다 공격력이 5씩 증가
+    if (upgradePhase < 5) {
+        ++upgradePhase;
+        this->attackPower +=5;
+    }
+}
+
+
+//복사생성자들 구현
+Item* Weapon::Clone() const {
+    return new Weapon(*this);
+}
+
+Item* Armor::Clone() const {  
+    return new Armor(*this);  
+}
+Item* Potion::Clone() const {
+    return new Potion(*this); // 복사 생성자 호출
 }
