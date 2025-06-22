@@ -23,21 +23,21 @@ void Inventory::ClassificationItem(vector<Item*> items)
         if (item->itemType == Consumable)
         {
             //소비인벤토리에 해당 소비아이템이 없다면
-            if (consumableValue.find(item) == consumableValue.end()) {
-                consumableValue[item] = 1;
+            if (consumableItems.find(item) == consumableItems.end()) {
+                consumableItems[item] = 1;
             }
             //기존에 가지고 있던 소비아이템 이라면
-            else if (consumableValue.find(item) != consumableValue.end()) {
-                consumableValue[item] += 1; //기존에 가지고있던 갯수에 추가해주기
+            else if (consumableItems.find(item) != consumableItems.end()) {
+                consumableItems[item] += 1; //기존에 가지고있던 갯수에 추가해주기
             }
         }
         else if (item->itemType == Weapon)
         {
-            weaponValue.push_back(item);
+            weaponItems.push_back(item);
         }
         else if (item->itemType == Armor)
         {
-            armorValue.push_back(item);
+            armorItems.push_back(item);
         }
         else if (item->itemType == Other)
         {
@@ -50,36 +50,37 @@ void Inventory::DisplayInventory()
 {
     int category;
 
-    cout << "확인할 인벤토리의 카테고리 번호를 입력해주세요." << endl;
-    cout << "1. 소모형 아이템" << endl;
-    cout << "2. 무기" << endl;
-    cout << "3. 방어구" << endl;
-    cin >> category;
+    while (true) {
+        cout << "확인할 인벤토리의 카테고리 번호를 입력해주세요." << endl;
+        cout << "1. 소모형 아이템" << endl;
+        cout << "2. 무기" << endl;
+        cout << "3. 방어구" << endl;
+        cout << "0. 종료" << endl;
+        cout << "입력: ";
+        cin >> category;
 
-    if (category == 1)
-    {
-        DisplayConsumeItem();
-    }
-    else if (category == 2)
-    {
-        DisplayWeapon();
-    }
-    else if (category == 3)
-    {
-        DisplayArmor();
+        switch (category)
+        {
+            case 0: return;
+            case 1: DisplayConsumeItem(); break;
+            case 2: DisplayWeapon(); break;
+            case 3: DisplayArmor(); break;
+            default: cout << "유효하지 않은 입력입니다" << endl; break;
+        }
     }
 }
 
 void Inventory::DisplayConsumeItem()
 {
     //소지하고 있는 소비아이템이 없을 때
-    if (consumableValue.empty())
+    if (consumableItems.empty())
     {
         cout << "소지하고 있는 소비아이템 없습니다." << endl;
         return;
     }
 
-    for (unordered_map<Item*, int>::value_type& p : consumableValue)
+    cout << "소비 아이템 목록" << endl;
+    for (unordered_map<Item*, int>::value_type& p : consumableItems)
     {
         cout << "아이템 이름" << p.first->name << "" << p.second << "개" << endl;
     }
@@ -89,132 +90,147 @@ void Inventory::DisplayConsumeItem()
     if (key == "p")
     {
         cout << "취소했습니다." << endl;
+        return;
     }
-    else if (key != "p")
+
+    Character* character = Character::Get();
+    for (unordered_map<Item*, int>::value_type& item : consumableItems)
     {
-        Character* character = Character::Get();
-        for (unordered_map<Item*, int>::value_type& p : consumableValue)
-        {
-            if (p.first->name == key) {
-                p.first->Use(character);
-            }
+        if (item.first->name == key) {
+            item.first->Use(character);
+            return;
         }
     }
+
+    cout << "입력한 이름의 아이템이 없습니다." << endl;
 }
 
 void Inventory::DisplayWeapon()
 {
     //소지하고 있는 무기가 없을 때
-    if (weaponValue.size() == 0) {
+    if (weaponItems.empty())
+    {
         cout << "소지하고 있는 무기가 없습니다." << endl;
         return;
     }
 
-    for (int i = 0; i < weaponValue.size(); i++)
+    cout << "무기 목록" << endl;
+    for (int i = 0; i < weaponItems.size(); i++)
     {
-        cout << i + 1 << ".무기 이름: " << weaponValue[i]->name << endl;
+        cout << i + 1 << "." << weaponItems[i]->name << endl;
     }
+
     int num = 0;
-    cout << "무기를 장착하려면 원하는 무기의 숫자를 입력해 주세요(취소하기 '0' 입력): " << num << endl;
+    cout << "장착할 무기의 번호를 입력해 주세요(취소하기 '0' 입력): ";
+    cin >> num;
 
     if (num == 0)
     {
         cout << "취소했습니다." << endl;
+        return;
     }
+
     //장비를 장착할 때
-    else if (num != 0) {
-        EquipWeapon(weaponValue[num - 1]);
+    if (num > 0 && num <= weaponItems.size()) {
+        EquipWeapon(weaponItems[num - 1]);
+    }
+    else
+    {
+        cout << "유효하지 않은 번호입니다." << endl;
     }
 }
 
 void Inventory::DisplayArmor()
 {
     //소지하고 있는 방어구가 없을 때
-    if (armorValue.size() == 0) {
+    if (armorItems.empty()) {
         cout << "소지하고 있는 방어구가 없습니다." << endl;
         return;
     }
 
-    for (int i = 0; i < armorValue.size(); i++) {
-        cout << i + 1 << ".방어구 이름: " << armorValue[i]->name << endl;
+    cout << "방어구 목록" << endl;
+    for (int i = 0; i < armorItems.size(); i++) {
+        cout << i + 1 << ".: " << armorItems[i]->name << endl;
     }
+
     int num = 0;
-    cout << "방어구를 장착하려면 원하는 방어구의 숫자를 입력해 주세요(취소하기 '0' 입력): " << num << endl;
+    cout << "장착할 방어구의 번호를 입력해 주세요(취소하기 '0' 입력): " << num << endl;
 
     if (num == 0)
     {
         cout << "취소했습니다." << endl;
+        return;
     }
+
     //장비를 장착할 때
-    else if (num != 0) {
-        EquipArmor(armorValue[num - 1]);
+    if (num > 0 && num <= armorItems.size()) {
+        EquipArmor(armorItems[num - 1]);
+    }
+    else
+    {
+        cout << "유효하지 않은 번호입니다." << endl;
     }
 }
 
 
 void Inventory::EquipWeapon(Item* weapon)
 {
-    weapon->equip = true;
+    weapon->SetEquipped(true);
 
-    //무기가 비어있을 때
-    if (Character::Get()->GetEquipWeapon() == nullptr)
+    Character* character = Character::Get();
+    Item* equipped = character->GetEquipWeapon();
+
+    //장착한 무기가 있을때
+    if (equipped != nullptr)
     {
-        Character::Get()->SetEquipWeapon(weapon);
-        Character::Get()->EquipStatus(weapon->attack, 0);
-    }
-    else
-    {
-        //기본 무기해제
+        //무기해제
         UnEquipWeapon();
-        Character::Get()->UnEquipStatus(Character::Get()->GetEquipWeapon()->attack, 0);
-
-        //새로운 무기 장착
-        Character::Get()->SetEquipWeapon(weapon);
-        Character::Get()->EquipStatus(weapon->attack, 0);
+        character->UnEquipStatus(equipped->attack, 0); //장비로 얻은 능력치 해제
     }
+
+    character->SetEquipWeapon(weapon);
+    character->EquipStatus(weapon->attack, 0);
 }
 void Inventory::EquipArmor(Item* armor)
 {
-    armor->equip = true;
-    //방어구가 비어있을 때
-    if (Character::Get()->GetEquipArmor() == nullptr)
-    {
-        Character::Get()->SetEquipArmor(armor);
-        Character::Get()->EquipStatus(0, armor->health);
-    }
-    else
+    armor->SetEquipped(true);
+
+    Character* character = Character::Get();
+    Item* equipped = character->GetEquipArmor();
+
+    //장착한 방어구가 있을때
+    if (equipped != nullptr)
     {
         //기존 방어구 해제
         UnEquipArmor();
-        Character::Get()->UnEquipStatus(0, Character::Get()->GetEquipArmor()->health); //기존 장비 해제 스탯변경
-
-        //새로운 방어구 장착
-        Character::Get()->SetEquipArmor(armor);
-        Character::Get()->EquipStatus(0, armor->health);
+        character->UnEquipStatus(0, equipped->health); //장비로 얻은 능력치 해제
     }
+    //새로운 방어구 장착
+    character->SetEquipArmor(armor);
+    character->EquipStatus(0, armor->health);
 }
 void Inventory::UnEquipWeapon()
 {
-    Character::Get()->GetEquipWeapon()->equip = false;
+    Character::Get()->GetEquipWeapon()->SetEquipped(false);
 }
 void Inventory::UnEquipArmor()
 {
-    Character::Get()->GetEquipArmor()->equip = false;
+    Character::Get()->GetEquipArmor()->SetEquipped(false);
 }
 
 Inventory::~Inventory()
 {
-    for (auto& it : consumableValue) {
+    for (auto& it : consumableItems) {
         delete it.first;
     }
 
-    for (int i = 0; i < weaponValue.size(); i++)
+    for (Item* weapon : weaponItems)
     {
-        delete weaponValue[i];
+        delete weapon;
     }
-    for (int i = 0; i < armorValue.size(); i++)
+    for (Item* armor : armorItems)
     {
-        delete armorValue[i];
+        delete armor;
     }
 
     delete iveninstance;
