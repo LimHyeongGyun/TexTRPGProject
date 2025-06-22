@@ -1,6 +1,8 @@
 #pragma once
 
 #include <vector>
+#include <string>
+
 class Item;
 
 class Character {
@@ -25,32 +27,31 @@ private:
 
 public:
 	Character();
-	static Character* Get(); //싱글턴 인스턴스
-	Inventory* inventory;
+	static Character* Get(std::string playerName = " "); //싱글턴 인스턴스
 
 	//플레이어 정보
 	void DisplayStatus() const; //플레이어의 현재 스탯 확인
 	std::string GetName() const; //플레이어 이름
 
 	//전투 관련
-	int Attack();
+	int Attack() const;
 	void TakeDamage(int damage); //피격시
 	void RecoveryHP(int health); //체력 회복
 	void GetExperience(int experience); //경험치 획득 -> 몬스터 처치시 몬스터의 사망로직에서 호출하여 사용
 	void Die();
 
 	//아이템 관리
-	void GetItem(std::vector<Item*> item);
-	void UseItem(int index); //전투에서 아이템 사용
-	Item* GetEquipWeapon(); //현재 장착 무기 반환
-	Item* GetEquipArmor(); //현재 장착 방어구 반환
+	void GetItem(std::vector<Item*> item) const;
+	void UseItem(int index) const; //전투에서 아이템 사용
+	Item* GetEquipWeapon() const; //현재 장착 무기 반환
+	Item* GetEquipArmor() const; //현재 장착 방어구 반환
 	void SetEquipWeapon(Item* weapon); //무기 장착
 	void SetEquipArmor(Item* armor); //방어구 장착
 	void EquipStatus(int getAttack, int getHealth); //장비 장착시 스탯 변환
 	void UnEquipStatus(int getAttack, int getHealth); //장비 해제시 스탯 변환
 
 	//골드 관련
-	void GetGold(int getGold);
+	void BorrowGold(int getGold);
 	void ConsumeGold(int consumeGold);
 	void VisitShop(); //Shop과 상호작용
 

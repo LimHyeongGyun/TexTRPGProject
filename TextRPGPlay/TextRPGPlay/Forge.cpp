@@ -1,7 +1,9 @@
 #include <iostream>
+
 #include "Forge.h"
 #include "item.h"
 #include "Inventory.h"
+#include "Character.h"
 
 using namespace std;
 
@@ -34,18 +36,18 @@ void Forge::EnteredForge()
 		}
 		else if (num == 2)
 		{
-			MakeEquipment();
+			CraftEquipment();
 		}
 		else if (num == 3)
 		{
-			DisplayEquipmentRecipe();
+			DisplayAllRecipes();
 		}
 		else if (num == 4)
 		{
 			Item* test; //나중에 DB에서 끌어다주기
-			unordered_map<Item*, int>::iterator dragonToken = Inventory::Get()->consumableValue.find(test);
+			unordered_map<Item*, int>::iterator dragonToken = Inventory::Get()->expendableItems.find(test);
 			//드래곤을 잡은 증표가 없을때
-			if (dragonToken == Inventory::Get()->consumableValue.end())
+			if (dragonToken == Inventory::Get()->expendableItems.end())
 			{
 
 			}
@@ -79,11 +81,11 @@ void Forge::DisplayUpgradeEquipment()
 	switch (category)
 	{
 		case 1:
-			itemList = Inventory::Get()->weaponValue;
+			itemList = Inventory::Get()->weaponItems;
 			cout << "내가 소지한 무기 리스트" << endl;
 			break;
-		case2:
-			itemList = Inventory::Get()->armorValue;
+		case 2:
+			itemList = Inventory::Get()->armorItems;
 			cout << "내가 소지한 방어구 리스트" << endl;
 			break;
 		default:
@@ -123,14 +125,14 @@ void Forge::DisplayUpgradeEquipment()
 	
 	//강화가 성공했을 때
 	if (result.second == "성공") {
-		cout << "강화 단계: " << result.first->upgradePhase - 1 << "=>" << result.first->upgradePhase << endl;
+		cout << "강화 단계: " << result.first->GetupgradePhase() - 1 << "=>" << result.first->GetupgradePhase() << endl;
 		if (result.first->itemType == Weapon)
 		{
-			cout << "강화 후 아이템 수치" << result.first->attack - result.first->upgradeAtkValue << "=>" << result.first->attack << endl;
+			cout << "강화 후 아이템 수치" << result.first->GetAttackPower() - upgradeAtkValue << "=>" << result.first->GetAttackPower() << endl;
 		}
 		else if (result.first->itemType == Armor)
 		{
-			cout << "강화 후 아이템 수치" << result.first->health - result.first->upgradeHpValue << "=>" << result.first->health << endl;
+			cout << "강화 후 아이템 수치" << result.first->GetBonusHealth() - upgradeHpValue << "=>" << result.first->GetBonusHealth() << endl;
 		}
 	}
 	//강화가 실패했을 때
@@ -148,15 +150,15 @@ int Forge::UpgradePercent(int upValue)
 pair<Item*, string> Forge::Upgrade(Item* equipment)
 {
 	string result;
-	int successRate = UpgradePercent(equipment->upgradePhase);
+	int successRate = UpgradePercent(equipment->GetupgradePhase());
 	int roll = rand() % 100;
 
 	if (roll < successRate)
 	{
 		result = "성공";
-		equipment->upgradePhase++;
-		if (equipment->itemType == Weapon) equipment->attack += equipment->upgradeAtkValue;
-		else if (equipment->itemType == Armor) equipment->health += equipment->upgradeHpValue;
+		/*equipment->upgradePhase++;
+		if (equipment->itemType == Weapon) equipment->attackPower += upgradeAtkValue;
+		else if (equipment->itemType == Armor) equipment->health += upgradeHpValue;*/
 	}
 	else
 	{
@@ -166,17 +168,106 @@ pair<Item*, string> Forge::Upgrade(Item* equipment)
 	return { equipment, result };
 }
 
-void Forge::MakeEquipment()
+#pragma region CraftEquipment
+
+vector<Forge::EquipmentRecipeDB> Forge::CanCraftRecipes()
 {
+	vector<EquipmentRecipeDB>craftableList;
+
+	for (const EquipmentRecipeDB& recipe : recipeList)
+	{
+		bool canCraft = false;
+		for (const unordered_map<string, int>::value_type& material : recipe.materials)
+		{
+			const string& name = material.first; //재료의 이름
+			int requiredAmount = material.second; //재료의 수량
+
+			bool found = false;
+			for (unordered_map<Item*, int>::value_type& pair : Inventory::Get()->otherItems)
+			{
+				//이름이 일치하고 수량이 충분할 때
+				if (pair.first->name == name && pair.second >= requiredAmount)
+				{
+					found = true;
+					break;
+				}
+			}
+
+			//이름에 맞는 아이템이 없거나 수량이 부족하면
+			if (!found)
+			{
+				canCraft = false;
+				break;
+			}
+		}
+		if (canCraft)
+		{
+			craftableList.push_back(recipe);
+		}
+	}
+
+	return craftableList;
+}
+
+void Forge::DisplayAllRecipes()
+{
+	for(int i = 0; i < recipeList.size(); i++)
+	{
+		cout << i + 1 << "." << recipeList[i].equipment->name << "필요한 재료: [";
+		for(const unordered_map<string, int>::value_type& pair : recipeList[i].materials)
+		{
+			cout << pair.first << " " << pair.second << "개";
+		}
+		cout << "]" << endl;
+	}
+}
+
+void Forge::CraftEquipment()
+{
+	cout << "대장간에서는 멋진 장비를 제작할 수 있습니다!" << endl;
+	cout << "현재 제작 가능한 아이템 목록" << endl;
+
+	vector<EquipmentRecipeDB> craftableList = CanCraftRecipes();
+	
+	if(craftableList.empty())
+	{
+		cout << "현재 제작 가능한 장비가 없습니다." << endl;
+		return;
+	}
+	for (int i = 0; i < craftableList.size(); i++)
+	{
+		cout << i+1 << "." << craftableList[i].equipment->name 
+			<< "공격력: " << craftableList[i].equipment->GetAttackPower() 
+			<< "체력: " << craftableList[i].equipment->GetBonusHealth() << endl;
+	}
+
+	int num;
+	cout << "제작할 장비아이템의 번호를 입력해주세요: ";
+	cin >> num;
+
+	Craft(craftableList[num - 1], craftableList[num - 1].equipment);
+}
+
+void Forge::Craft(const EquipmentRecipeDB& recipe, Item* item)
+{
+	//Inventory에 제거할 재료목록 전달
+	unordered_map<string, int> materialMap = recipe.materials;
+	Inventory::Get()->RemoveItem(materialMap);
+
+	//Character에 제작한 아이템 전달
+	cout << "아이템 제작에 성공했습니다!" << endl;
+	vector<Item*> _item;
+	_item.push_back(item);
+	Character::Get()->GetItem(_item);
 
 }
 
-void Forge::DisplayEquipmentRecipe()
-{
-	cout << "아래에 있는 재료를 통해 멋진 장비를 제작할 수 있습니다." << endl;
-}
+#pragma endregion
 
-void Forge::AddEquipmentRecipe()
+#pragma region RecipeManagement
+void Forge::AddEquipmentRecipe(Item* equipment, unordered_map<string, int> materials)
 {
 
 }
+#pragma endregion
+

@@ -1,13 +1,16 @@
 #include <iostream>
+
 #include "Character.h"
 #include "Inventory.h"
+
+using namespace std;
 
 Character* Character::charInstance = nullptr;
 
 #pragma region PlayerInformation
 
 Character::Character() {
-    name = GetName();
+    name = name;
     level = 1;
     maxLevel = 10;
     maxHealth = 200;
@@ -19,17 +22,17 @@ Character::Character() {
 
     equipWeapon = nullptr;
     equipArmor = nullptr;
-
-    inventory = Inventory::Get();
 }
 
-Character* Character::Get()
+Character* Character::Get(string playerName)
 {
     //만약 instance가 생성되지 않았다면
     if (charInstance == nullptr)
     {
         charInstance = new Character(); //캐릭터 생성해주기
     }
+
+    charInstance->name = playerName;
 
     return charInstance;
 }
@@ -52,7 +55,7 @@ string Character::GetName() const
 
 #pragma region Battle
 
-int Character::Attack()
+int Character::Attack() const
 {
     return attack;
 }
@@ -118,11 +121,11 @@ void Character::UpgradeStatus()
 #pragma endregion
 
 #pragma region Equipment
-Item* Character::GetEquipWeapon()
+Item* Character::GetEquipWeapon() const
 {
     return equipWeapon;
 }
-Item* Character::GetEquipArmor()
+Item* Character::GetEquipArmor() const
 {
     return equipArmor;
 }
@@ -153,16 +156,16 @@ void Character::UnEquipStatus(int getAttack, int getHealth)
 
 #pragma region Item & Shop
 
-void Character::GetItem(vector<Item*> getItems)
+void Character::GetItem(vector<Item*> getItems) const
 {
     Inventory::Get()->ClassificationItem(getItems);
 }
-void Character::UseItem(int index)
+void Character::UseItem(int index) const
 {
     Inventory::Get()->DisplayConsumeItem();
 }
 
-void Character::GetGold(int getGold)
+void Character::BorrowGold(int getGold)
 {
     gold += getGold;
 }

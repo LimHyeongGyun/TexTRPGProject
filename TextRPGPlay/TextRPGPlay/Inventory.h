@@ -4,10 +4,9 @@
 #include<vector>
 #include<unordered_map>
 
-using namespace std;
-
 class Character;
 class Item;
+class Forge;
 
 class Inventory {
 private:
@@ -25,15 +24,16 @@ private:
 public:
 	static Inventory* Get(); //싱글턴 인스턴스
 
-	unordered_map<Item*, int> expendableItems;
-	vector<Item*> weaponItems;
-	vector<Item*> armorItems;
-	vector<Item*> otherItems;
+	std::unordered_map<Item*, int> expendableItems;
+	std::unordered_map<Item*, int> otherItems;
+	std::vector<Item*> weaponItems;
+	std::vector<Item*> armorItems;
 
 	//인벤토리 관리
-	void ClassificationItem(vector<Item*> items); //획득한 아이템을 분류해서 인벤토리에 넣기
+	void ClassificationItem(std::vector<Item*> items); //획득한 아이템을 분류해서 인벤토리에 넣기
 	void DisplayInventory();	
 	void DisplayConsumeItem();
+	void RemoveItem(const std::unordered_map<std::string, int>& materials); //아이템 제거
 
 	~Inventory();
 };

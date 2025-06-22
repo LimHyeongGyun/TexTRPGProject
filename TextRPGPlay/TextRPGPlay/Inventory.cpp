@@ -1,4 +1,6 @@
 #include <iostream>
+#include <string>
+
 #include "Character.h"
 #include "Inventory.h"
 #include "Item.h"
@@ -41,8 +43,16 @@ void Inventory::ClassificationItem(vector<Item*> items)
         }
         else if (item->itemType == Other)
         {
-            otherItems.push_back(item);
+            //기타인벤토리에 해당 기타아이템이 없다면
+            if (otherItems.find(item) == otherItems.end()) {
+                otherItems[item] = 1;
+            }
+            //기존에 가지고 있던 소비아이템 이라면
+            else if (otherItems.find(item) != otherItems.end()) {
+                otherItems[item] += 1; //기존에 가지고있던 갯수에 추가해주기
+            }
         }
+        cout << item << "을 획득했습니다." << endl;
     }
 }
 
@@ -131,7 +141,7 @@ void Inventory::DisplayWeapon()
     }
     //장비를 장착할 때
     if (num > 0 && num <= weaponItems.size()) {
-        weaponItems[num - 1]->Use(Character::Get(), this);
+        weaponItems[num - 1]->Use(this);
     }
     else
     {
@@ -163,14 +173,13 @@ void Inventory::DisplayArmor()
 
     //장비를 장착할 때
     if (num > 0 && num <= armorItems.size()) {
-        armorItems[num - 1]->Use(Character::Get(), this);
+        armorItems[num - 1]->Use( this);
     }
     else
     {
         cout << "유효하지 않은 번호입니다." << endl;
     }
 }
-
 
 void Inventory::EquipWeapon(Item* weapon)
 {
@@ -184,11 +193,11 @@ void Inventory::EquipWeapon(Item* weapon)
     {
         //무기해제
         UnEquipWeapon();
-        character->UnEquipStatus(equipped->attack, 0); //장비로 얻은 능력치 해제
+        character->UnEquipStatus(equipped->GetAttackPower(), 0); //장비로 얻은 능력치 해제
     }
 
     character->SetEquipWeapon(weapon);
-    character->EquipStatus(weapon->attack, 0);
+    character->EquipStatus(weapon->GetAttackPower(), 0);
 }
 void Inventory::EquipArmor(Item* armor)
 {
@@ -202,11 +211,11 @@ void Inventory::EquipArmor(Item* armor)
     {
         //기존 방어구 해제
         UnEquipArmor();
-        character->UnEquipStatus(0, equipped->health); //장비로 얻은 능력치 해제
+        character->UnEquipStatus(0, equipped->GetBonusHealth()); //장비로 얻은 능력치 해제
     }
     //새로운 방어구 장착
     character->SetEquipArmor(armor);
-    character->EquipStatus(0, armor->health);
+    character->EquipStatus(0, armor->GetBonusHealth());
 }
 void Inventory::UnEquipWeapon()
 {
@@ -217,9 +226,34 @@ void Inventory::UnEquipArmor()
     Character::Get()->GetEquipArmor()->SetEquipped(false);
 }
 
+void Inventory::RemoveItem(const unordered_map<string, int>& materials)
+{
+    for (const unordered_map<string, int>::value_type& material : materials)
+    {
+        const string& itemName = material.first;
+        int amountToRemove = material.second;
+
+        for (unordered_map<Item*, int>::value_type& other : otherItems)
+        {
+            if (other.first->name == itemName)
+            {
+                if (other.second > amountToRemove)
+                {
+                    other.second -= amountToRemove;
+                }
+                else if (other.second == amountToRemove)
+                {
+                    otherItems.erase(other.first);
+                }
+                break;
+            }
+        }
+    }
+}
+
 Inventory::~Inventory()
 {
-    for (auto& it : expendableItems) {
+    for (unordered_map<Item*, int>::value_type& it : expendableItems) {
         delete it.first;
     }
 
