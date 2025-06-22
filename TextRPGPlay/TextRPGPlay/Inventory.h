@@ -25,7 +25,7 @@ private:
 public:
 	static Inventory* Get(); //싱글턴 인스턴스
 
-	unordered_map<Item*, int> consumableItems;
+	unordered_map<Item*, int> expendableItems;
 	vector<Item*> weaponItems;
 	vector<Item*> armorItems;
 	vector<Item*> otherItems;

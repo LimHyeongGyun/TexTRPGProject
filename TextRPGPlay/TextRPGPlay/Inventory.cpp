@@ -20,15 +20,15 @@ Inventory* Inventory::Get()
 void Inventory::ClassificationItem(vector<Item*> items)
 {
     for (Item* item : items) {
-        if (item->itemType == Consumable)
+        if (item->itemType == Expendable)
         {
             //소비인벤토리에 해당 소비아이템이 없다면
-            if (consumableItems.find(item) == consumableItems.end()) {
-                consumableItems[item] = 1;
+            if (expendableItems.find(item) == expendableItems.end()) {
+                expendableItems[item] = 1;
             }
             //기존에 가지고 있던 소비아이템 이라면
-            else if (consumableItems.find(item) != consumableItems.end()) {
-                consumableItems[item] += 1; //기존에 가지고있던 갯수에 추가해주기
+            else if (expendableItems.find(item) != expendableItems.end()) {
+                expendableItems[item] += 1; //기존에 가지고있던 갯수에 추가해주기
             }
         }
         else if (item->itemType == Weapon)
@@ -73,14 +73,14 @@ void Inventory::DisplayInventory()
 void Inventory::DisplayConsumeItem()
 {
     //소지하고 있는 소비아이템이 없을 때
-    if (consumableItems.empty())
+    if (expendableItems.empty())
     {
         cout << "소지하고 있는 소비아이템 없습니다." << endl;
         return;
     }
 
     cout << "소비 아이템 목록" << endl;
-    for (unordered_map<Item*, int>::value_type& p : consumableItems)
+    for (unordered_map<Item*, int>::value_type& p : expendableItems)
     {
         cout << "아이템 이름" << p.first->name << "" << p.second << "개" << endl;
     }
@@ -94,7 +94,7 @@ void Inventory::DisplayConsumeItem()
     }
 
     Character* character = Character::Get();
-    for (unordered_map<Item*, int>::value_type& item : consumableItems)
+    for (unordered_map<Item*, int>::value_type& item : expendableItems)
     {
         if (item.first->name == key) {
             item.first->Use(character);
@@ -129,10 +129,9 @@ void Inventory::DisplayWeapon()
         cout << "취소했습니다." << endl;
         return;
     }
-
     //장비를 장착할 때
     if (num > 0 && num <= weaponItems.size()) {
-        EquipWeapon(weaponItems[num - 1]);
+        weaponItems[num - 1]->Use(Character::Get(), this);
     }
     else
     {
@@ -164,7 +163,7 @@ void Inventory::DisplayArmor()
 
     //장비를 장착할 때
     if (num > 0 && num <= armorItems.size()) {
-        EquipArmor(armorItems[num - 1]);
+        armorItems[num - 1]->Use(Character::Get(), this);
     }
     else
     {
@@ -220,7 +219,7 @@ void Inventory::UnEquipArmor()
 
 Inventory::~Inventory()
 {
-    for (auto& it : consumableItems) {
+    for (auto& it : expendableItems) {
         delete it.first;
     }
 

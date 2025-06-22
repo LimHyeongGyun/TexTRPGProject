@@ -26,6 +26,7 @@ private:
 public:
 	Character();
 	static Character* Get(); //싱글턴 인스턴스
+	Inventory* inventory;
 
 	//플레이어 정보
 	void DisplayStatus() const; //플레이어의 현재 스탯 확인

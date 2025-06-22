@@ -7,7 +7,7 @@ Character* Character::charInstance = nullptr;
 #pragma region PlayerInformation
 
 Character::Character() {
-    name = name;
+    name = GetName();
     level = 1;
     maxLevel = 10;
     maxHealth = 200;
@@ -19,6 +19,8 @@ Character::Character() {
 
     equipWeapon = nullptr;
     equipArmor = nullptr;
+
+    inventory = Inventory::Get();
 }
 
 Character* Character::Get()
