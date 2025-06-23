@@ -201,39 +201,56 @@ void Inventory::DisplayArmor()
 
 void Inventory::EquipWeapon(Item* weapon)
 {
-    weapon->SetEquipped(true);
-
-    Character* character = Character::Get();
-    Item* equipped = character->GetEquipWeapon();
-
-    //장착한 무기가 있을때
-    if (equipped != nullptr)
+    //이미 착용중일 때
+    if (weapon->IsEquipped())
     {
-        //무기해제
-        UnEquipWeapon();
-        character->UnEquipStatus(equipped->GetAttackPower(), 0); //장비로 얻은 능력치 해제
+        cout << "이미 착용중인 무기입니다." << endl;
     }
+    //착용중이 아닐 때
+    else
+    {
+        weapon->SetEquipped(true);
 
-    character->SetEquipWeapon(weapon);
-    character->EquipStatus(weapon->GetAttackPower(), 0);
+        Character* character = Character::Get();
+        Item* equipped = character->GetEquipWeapon();
+
+        //장착한 무기가 있을때
+        if (equipped != nullptr)
+        {
+            //무기해제
+            UnEquipWeapon();
+            character->UnEquipStatus(equipped->GetAttackPower(), 0); //장비로 얻은 능력치 해제
+        }
+
+        character->SetEquipWeapon(weapon);
+        character->EquipStatus(weapon->GetAttackPower(), 0);
+    }
 }
 void Inventory::EquipArmor(Item* armor)
 {
-    armor->SetEquipped(true);
-
-    Character* character = Character::Get();
-    Item* equipped = character->GetEquipArmor();
-
-    //장착한 방어구가 있을때
-    if (equipped != nullptr)
+    //이미 착용중일 때
+    if (armor->IsEquipped())
     {
-        //기존 방어구 해제
-        UnEquipArmor();
-        character->UnEquipStatus(0, equipped->GetBonusHealth()); //장비로 얻은 능력치 해제
+        cout << "이미 착용중인 방어구입니다." << endl;
     }
-    //새로운 방어구 장착
-    character->SetEquipArmor(armor);
-    character->EquipStatus(0, armor->GetBonusHealth());
+    else
+    {
+        armor->SetEquipped(true);
+
+        Character* character = Character::Get();
+        Item* equipped = character->GetEquipArmor();
+
+        //장착한 방어구가 있을때
+        if (equipped != nullptr)
+        {
+            //기존 방어구 해제
+            UnEquipArmor();
+            character->UnEquipStatus(0, equipped->GetBonusHealth()); //장비로 얻은 능력치 해제
+        }
+        //새로운 방어구 장착
+        character->SetEquipArmor(armor);
+        character->EquipStatus(0, armor->GetBonusHealth());
+    }
 }
 void Inventory::UnEquipWeapon()
 {
