@@ -24,13 +24,20 @@ void Inventory::ClassificationItem(vector<Item*> items)
     for (Item* item : items) {
         if (item->itemType == Expendable)
         {
-            //소비인벤토리에 해당 소비아이템이 없다면
-            if (expendableItems.find(item) == expendableItems.end()) {
-                expendableItems[item] = 1;
-            }
-            //기존에 가지고 있던 소비아이템 이라면
-            else if (expendableItems.find(item) != expendableItems.end()) {
-                expendableItems[item] += 1; //기존에 가지고있던 갯수에 추가해주기
+            for (const unordered_map<Item*, int>::value_type& expen : expendableItems)
+            {
+                //소비인벤토리에 해당 소비아이템이 없다면
+                if (expendableItems.find(expen.first) != expendableItems.end())
+                {
+                    //새로 추가해주기
+                    expendableItems[item] = 1;
+                }
+                //기존에 가지고 있던 소비아이템 이라면
+                else if (expen.first->name == item->name)
+                {
+                    expendableItems[expen.first] += 1; //기존에 가지고있던 갯수에 추가해주기
+                }
+                break;
             }
         }
         else if (item->itemType == Weapon)
@@ -43,13 +50,20 @@ void Inventory::ClassificationItem(vector<Item*> items)
         }
         else if (item->itemType == Other)
         {
-            //기타인벤토리에 해당 기타아이템이 없다면
-            if (otherItems.find(item) == otherItems.end()) {
-                otherItems[item] = 1;
-            }
-            //기존에 가지고 있던 소비아이템 이라면
-            else if (otherItems.find(item) != otherItems.end()) {
-                otherItems[item] += 1; //기존에 가지고있던 갯수에 추가해주기
+            for (const unordered_map<Item*, int>::value_type& other : otherItems)
+            {
+                //소비인벤토리에 해당 소비아이템이 없다면
+                if (otherItems.find(other.first) != otherItems.end())
+                {
+                    //새로 추가해주기
+                    otherItems[item] = 1;
+                }
+                //기존에 가지고 있던 소비아이템 이라면
+                else if (other.first->name == item->name)
+                {
+                    otherItems[other.first] += 1; //기존에 가지고있던 갯수에 추가해주기
+                }
+                break;
             }
         }
         cout << item << "을 획득했습니다." << endl;
