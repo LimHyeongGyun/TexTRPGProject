@@ -12,7 +12,7 @@ ItemManager::ItemManager() {
     Itemdb["소형힐링포션"] = make_unique<Item>("소형 힐링 포션", ItemType::Potion,/*가격*/50, 0, 0, 50);
     Itemdb["중형힐링포션"] = make_unique<Item>("중형 힐링 포션", ItemType::Potion,/*가격*/120, 0, 0, 100);
     Itemdb["대형힐링포션"] = make_unique<Item>("대형 힐링 포션", ItemType::Potion,/*가격*/250, 0, 0, 200);
-    Itemdb["나무롱소드"] = make_unique<Iteam>("나무 롱소드", ItemType::Potion,/*가격*/50, 25, 0, 0);
+    Itemdb["나무롱소드"] = make_unique<Item>("나무 롱소드", ItemType::Potion,/*가격*/50, 25, 0, 0);
     Itemdb["흑요석롱소드"] = make_unique<Item>("흑요석 롱소드", ItemType::Potion,/*가격*/100, 60, 0, 0);
     Itemdb["철 롱소드"] = make_unique<Item>("흑요석 롱소드", ItemType::Potion,/*가격*/250, 100, 0, 0);
     Itemdb["가죽갑옷"] = make_unique<Item>("가죽 갑옷", ItemType::Potion,/*가격*/50, 0, 0, 30);

@@ -1,6 +1,8 @@
 #pragma once
 #include<string>
-#include "Character.h"
+#include"Character.h"
+#include "Inventory.h"
+
 
 enum class ItemType {
 	Armor,
@@ -51,15 +53,18 @@ public:
 	bool GetEquip();
 	//장비 여부 가져오기 
 
-	void SetEquip();
-	//장비및 장비 해제 //매개변수로 받아서
+	void SetEquip(bool equip);
+	//장비및 장비 해제
 
 	int GetUpgradePhase() { return UpgradePhase; }
 	//강화성공 횟수 가져오기
 
 	void Use(Character* character);
-	//캐릭터 치료기능 //use 오버로딩
+	//캐릭터 치료기능
 
+
+	void Use(Inventory* inventory);
+	//장착기능
 
 	void Upgrade();
 	//업그레이드 기능 구현

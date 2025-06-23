@@ -2,6 +2,9 @@
 #include<string>
 #include<iostream>
 
+using namespace std;
+
+
 
 class Character;
 
@@ -23,18 +26,20 @@ bool Item::GetEquip()
 	}
 }
 
+
+
 //장비 및 장비해제
-void Item::SetEquip()
+void Item::SetEquip(bool equip)
 {
 	if (this->type == ItemType::Armor || this->type == ItemType::Weapon)
 	{
-		if (this->Equip == false)
+		if (equip == false)
 		{
-			this->Equip = true;
+			this->Equip = false;
 		}
 		else
 		{
-			this->Equip = false;
+			this->Equip = true;
 		}
 	}
 	else
@@ -48,7 +53,10 @@ void Item::Use(Character* character)
 {
 	if (this->type == ItemType::Potion)
 	{
-		character->RecoveryHP(Heal);
+		if (character)
+		{
+			character->RecoveryHP(Heal);
+		}
 	}
 
 	else
@@ -57,6 +65,23 @@ void Item::Use(Character* character)
 	}
 
 }
+
+void Item::Use(Inventory* inventory) {
+	if (this->type == ItemType::Armor || this->type == ItemType::Weapon) {
+		
+		if (inventory)
+		{
+			// 캐릭터가 이 무기를 장착하도록 함
+			inventory->EquipWeapon(this);
+		}
+	}
+	else
+	{
+		cout << "장비아이템이 아닙니다." << endl;
+	}
+}
+
+
 
 //장비 업그레이드
 void Item::Upgrade()
