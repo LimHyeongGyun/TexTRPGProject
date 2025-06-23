@@ -22,22 +22,25 @@ Inventory* Inventory::Get()
 void Inventory::ClassificationItem(vector<Item*> items)
 {
     for (Item* item : items) {
+        bool hasItem = false;
         if (item->itemType == Expendable)
         {
             for (const unordered_map<Item*, int>::value_type& expen : expendableItems)
             {
-                //소비인벤토리에 해당 소비아이템이 없다면
-                if (expendableItems.find(expen.first) != expendableItems.end())
-                {
-                    //새로 추가해주기
-                    expendableItems[item] = 1;
-                }
                 //기존에 가지고 있던 소비아이템 이라면
-                else if (expen.first->name == item->name)
+                if (expen.first->name == item->name)
                 {
                     expendableItems[expen.first] += 1; //기존에 가지고있던 갯수에 추가해주기
+                    hasItem = true;
+                    break;
                 }
-                break;
+            }
+
+            //소비인벤토리에 해당 소비아이템이 없다면
+            if (!hasItem)
+            {
+                //새로 추가해주기
+                expendableItems[item] = 1;
             }
         }
         else if (item->itemType == Weapon)
@@ -52,18 +55,19 @@ void Inventory::ClassificationItem(vector<Item*> items)
         {
             for (const unordered_map<Item*, int>::value_type& other : otherItems)
             {
-                //소비인벤토리에 해당 소비아이템이 없다면
-                if (otherItems.find(other.first) != otherItems.end())
-                {
-                    //새로 추가해주기
-                    otherItems[item] = 1;
-                }
                 //기존에 가지고 있던 소비아이템 이라면
-                else if (other.first->name == item->name)
+                if (other.first->name == item->name)
                 {
                     otherItems[other.first] += 1; //기존에 가지고있던 갯수에 추가해주기
+                    break;
                 }
-                break;
+            }
+
+            //소비인벤토리에 해당 소비아이템이 없다면
+            if (!hasItem)
+            {
+                //새로 추가해주기
+                otherItems[item] = 1;
             }
         }
         cout << item << "을 획득했습니다." << endl;
