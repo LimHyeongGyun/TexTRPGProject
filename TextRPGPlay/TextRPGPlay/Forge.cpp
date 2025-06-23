@@ -4,6 +4,7 @@
 #include "item.h"
 #include "Inventory.h"
 #include "Character.h"
+#include "ItemManager.h"
 
 using namespace std;
 
@@ -50,7 +51,7 @@ void Forge::EnteredForge()
 			for (unordered_map<Item*, int>::value_type& token : Inventory::Get()->otherItems)
 			{
 				//드래곤을 잡은 증표가 있을때
-				if (token.first->name == dragonToken->name)
+				if (token.first->GetName() == dragonToken->GetName())
 				{
 					Craft(dragonToothSword, dragonToken);
 					hasToken = true;
@@ -105,7 +106,7 @@ void Forge::DisplayUpgradeEquipment()
 		//최대로 강화된 아이템 제외하기
 		for (vector<Item*>::iterator item = itemList.begin(); item != itemList.end();)
 		{
-			if ((*item)->GetupgradePhase() == (*item)->maxUpgradePhase)
+			if ((*item)->GetUpgradePhase() == (*item)->GetMaxUpgradePhase())
 			{
 				itemList.erase(item);
 			}
@@ -124,7 +125,7 @@ void Forge::DisplayUpgradeEquipment()
 
 	//장비 리스트 출력
 	for (int i = 0; i < itemList.size(); i++) {
-		cout << i + 1 << "." << itemList[i]->name << endl;
+		cout << i + 1 << "." << itemList[i]->GetName() << endl;
 	}
 
 	int selected = 0; //장비 순서
@@ -144,16 +145,16 @@ void Forge::DisplayUpgradeEquipment()
 	//결과
 	pair<Item*, string> result = Upgrade(itemList[selected - 1]);
 
-	cout << result.first->name << "의 강화가" << result.second << "했습니다." << endl;
+	cout << result.first->GetName() << "의 강화가" << result.second << "했습니다." << endl;
 	
 	//강화가 성공했을 때
 	if (result.second == "성공") {
-		cout << "강화 단계: " << result.first->GetupgradePhase() - 1 << "=>" << result.first->GetupgradePhase() << endl;
-		if (result.first->itemType == Weapon)
+		cout << "강화 단계: " << result.first->GetUpgradePhase() - 1 << "=>" << result.first->GetUpgradePhase() << endl;
+		if (result.first->GetType() == ItemType::Weapon)
 		{
-			cout << "강화 후 아이템 수치" << result.first->GetAttackPower() - upgradeAtkValue << "=>" << result.first->GetAttackPower() << endl;
+			cout << "강화 후 아이템 수치" << result.first->GetAtack() - upgradeAtkValue << "=>" << result.first->GetAtack() << endl;
 		}
-		else if (result.first->itemType == Armor)
+		else if (result.first->GetType() == ItemType::Armor)
 		{
 			cout << "강화 후 아이템 수치" << result.first->GetBonusHealth() - upgradeHpValue << "=>" << result.first->GetBonusHealth() << endl;
 		}
@@ -173,7 +174,7 @@ int Forge::UpgradePercent(int upValue)
 pair<Item*, string> Forge::Upgrade(Item* equipment)
 {
 	string result;
-	int successRate = UpgradePercent(equipment->GetupgradePhase());
+	int successRate = UpgradePercent(equipment->GetUpgradePhase());
 	int roll = rand() % 100;
 
 	if (roll < successRate)
@@ -209,7 +210,7 @@ vector<Forge::EquipmentRecipeDB> Forge::CanCraftRecipes()
 			for (unordered_map<Item*, int>::value_type& pair : Inventory::Get()->otherItems)
 			{
 				//이름이 일치하고 수량이 충분할 때
-				if (pair.first->name == name && pair.second >= requiredAmount)
+				if (pair.first->GetName() == name && pair.second >= requiredAmount)
 				{
 					found = true;
 					break;
@@ -236,7 +237,7 @@ void Forge::DisplayAllRecipes()
 {
 	for(int i = 0; i < recipeList.size(); i++)
 	{
-		cout << i + 1 << "." << recipeList[i].equipment->name << "필요한 재료: [";
+		cout << i + 1 << "." << recipeList[i].equipment->GetName() << "필요한 재료: [";
 		for(const unordered_map<string, int>::value_type& pair : recipeList[i].materials)
 		{
 			cout << pair.first << " " << pair.second << "개";
@@ -259,8 +260,8 @@ void Forge::CraftEquipment()
 	}
 	for (int i = 0; i < craftableList.size(); i++)
 	{
-		cout << i+1 << "." << craftableList[i].equipment->name 
-			<< "공격력: " << craftableList[i].equipment->GetAttackPower() 
+		cout << i+1 << "." << craftableList[i].equipment->GetName()
+			<< "공격력: " << craftableList[i].equipment->GetAtack()
 			<< "체력: " << craftableList[i].equipment->GetBonusHealth() << endl;
 	}
 
@@ -290,7 +291,12 @@ void Forge::Craft(const EquipmentRecipeDB& recipe, Item* item)
 #pragma region RecipeManagement
 void Forge::AddEquipmentRecipe(Item* equipment, unordered_map<string, int> materials)
 {
-
+	EquipmentRecipeDB recipe;
+	Item* craftItem = ItemManager::Get()->CreateItem("말랑한 보호대");
+	recipe.equipment = craftItem;
+	recipe.materials["슬라임의 핵"] = 2;
+	recipe.materials["고블린의 허리띠"] = 2;
+	recipeList.push_back(recipe);
 }
 #pragma endregion
 

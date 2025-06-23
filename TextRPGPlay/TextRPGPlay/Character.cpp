@@ -9,8 +9,8 @@ Character* Character::charInstance = nullptr;
 
 #pragma region PlayerInformation
 
-Character::Character() {
-    name = name;
+Character::Character(string playerName) {
+    name = playerName;
     level = 1;
     maxLevel = 10;
     maxHealth = 200;
@@ -29,10 +29,8 @@ Character* Character::Get(string playerName)
     //만약 instance가 생성되지 않았다면
     if (charInstance == nullptr)
     {
-        charInstance = new Character(); //캐릭터 생성해주기
+        charInstance = new Character(playerName); //캐릭터 생성해주기
     }
-
-    charInstance->name = playerName;
 
     return charInstance;
 }

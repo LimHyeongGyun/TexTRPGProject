@@ -23,12 +23,12 @@ void Inventory::ClassificationItem(vector<Item*> items)
 {
     for (Item* item : items) {
         bool hasItem = false;
-        if (item->itemType == Expendable)
+        if (item->GetType() == ItemType::Expendables)
         {
             for (const unordered_map<Item*, int>::value_type& expen : expendableItems)
             {
                 //기존에 가지고 있던 소비아이템 이라면
-                if (expen.first->name == item->name)
+                if (expen.first->GetName() == item->GetName())
                 {
                     expendableItems[expen.first] += 1; //기존에 가지고있던 갯수에 추가해주기
                     hasItem = true;
@@ -43,20 +43,20 @@ void Inventory::ClassificationItem(vector<Item*> items)
                 expendableItems[item] = 1;
             }
         }
-        else if (item->itemType == Weapon)
+        else if (item->GetType() == ItemType::Weapon)
         {
             weaponItems.push_back(item);
         }
-        else if (item->itemType == Armor)
+        else if (item->GetType() == ItemType::Armor)
         {
             armorItems.push_back(item);
         }
-        else if (item->itemType == Other)
+        else if (item->GetType() == ItemType::Other)
         {
             for (const unordered_map<Item*, int>::value_type& other : otherItems)
             {
                 //기존에 가지고 있던 소비아이템 이라면
-                if (other.first->name == item->name)
+                if (other.first->GetName() == item->GetName())
                 {
                     otherItems[other.first] += 1; //기존에 가지고있던 갯수에 추가해주기
                     break;
@@ -110,7 +110,7 @@ void Inventory::DisplayConsumeItem()
     cout << "소비 아이템 목록" << endl;
     for (unordered_map<Item*, int>::value_type& p : expendableItems)
     {
-        cout << "아이템 이름" << p.first->name << "" << p.second << "개" << endl;
+        cout << "아이템 이름" << p.first->GetName() << "" << p.second << "개" << endl;
     }
 
     string key;
@@ -124,7 +124,7 @@ void Inventory::DisplayConsumeItem()
     Character* character = Character::Get();
     for (unordered_map<Item*, int>::value_type& item : expendableItems)
     {
-        if (item.first->name == key) {
+        if (item.first->GetName() == key) {
             item.first->Use(character);
             return;
         }
@@ -145,7 +145,7 @@ void Inventory::DisplayWeapon()
     cout << "무기 목록" << endl;
     for (int i = 0; i < weaponItems.size(); i++)
     {
-        cout << i + 1 << "." << weaponItems[i]->name << endl;
+        cout << i + 1 << "." << weaponItems[i]->GetName() << endl;
     }
 
     int num = 0;
@@ -177,7 +177,7 @@ void Inventory::DisplayArmor()
 
     cout << "방어구 목록" << endl;
     for (int i = 0; i < armorItems.size(); i++) {
-        cout << i + 1 << ".: " << armorItems[i]->name << endl;
+        cout << i + 1 << ".: " << armorItems[i]->GetName() << endl;
     }
 
     int num = 0;
@@ -191,7 +191,7 @@ void Inventory::DisplayArmor()
 
     //장비를 장착할 때
     if (num > 0 && num <= armorItems.size()) {
-        armorItems[num - 1]->Use( this);
+        armorItems[num - 1]->Use(this);
     }
     else
     {
@@ -202,14 +202,14 @@ void Inventory::DisplayArmor()
 void Inventory::EquipWeapon(Item* weapon)
 {
     //이미 착용중일 때
-    if (weapon->IsEquipped())
+    if (weapon->GetEquip())
     {
         cout << "이미 착용중인 무기입니다." << endl;
     }
     //착용중이 아닐 때
     else
     {
-        weapon->SetEquipped(true);
+        weapon->SetEquip(true);
 
         Character* character = Character::Get();
         Item* equipped = character->GetEquipWeapon();
@@ -219,23 +219,23 @@ void Inventory::EquipWeapon(Item* weapon)
         {
             //무기해제
             UnEquipWeapon();
-            character->UnEquipStatus(equipped->GetAttackPower(), 0); //장비로 얻은 능력치 해제
+            character->UnEquipStatus(equipped->GetAtack(), 0); //장비로 얻은 능력치 해제
         }
 
         character->SetEquipWeapon(weapon);
-        character->EquipStatus(weapon->GetAttackPower(), 0);
+        character->EquipStatus(weapon->GetAtack(), 0);
     }
 }
 void Inventory::EquipArmor(Item* armor)
 {
     //이미 착용중일 때
-    if (armor->IsEquipped())
+    if (armor->GetEquip())
     {
         cout << "이미 착용중인 방어구입니다." << endl;
     }
     else
     {
-        armor->SetEquipped(true);
+        armor->SetEquip(true);
 
         Character* character = Character::Get();
         Item* equipped = character->GetEquipArmor();
@@ -254,11 +254,11 @@ void Inventory::EquipArmor(Item* armor)
 }
 void Inventory::UnEquipWeapon()
 {
-    Character::Get()->GetEquipWeapon()->SetEquipped(false);
+    Character::Get()->GetEquipWeapon()->SetEquip(false);
 }
 void Inventory::UnEquipArmor()
 {
-    Character::Get()->GetEquipArmor()->SetEquipped(false);
+    Character::Get()->GetEquipArmor()->SetEquip(false);
 }
 
 void Inventory::RemoveItem(const unordered_map<string, int>& materials)
@@ -270,7 +270,7 @@ void Inventory::RemoveItem(const unordered_map<string, int>& materials)
 
         for (unordered_map<Item*, int>::value_type& other : otherItems)
         {
-            if (other.first->name == itemName)
+            if (other.first->GetName() == itemName)
             {
                 if (other.second > amountToRemove)
                 {

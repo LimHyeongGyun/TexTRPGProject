@@ -8,6 +8,7 @@ class Item;
 class Character {
 private:
 	static Character* charInstance;
+	Character(std::string playerName);
 
 	std::string name; //플레이어 이름
 	int level = 1; //레벨
@@ -26,7 +27,8 @@ private:
 	void LevelUp(); //레벨업
 
 public:
-	Character();
+	Character(const Character&) = delete;
+	Character& operator=(const Character&) = delete;
 	static Character* Get(std::string playerName = " "); //싱글턴 인스턴스
 
 	//플레이어 정보
