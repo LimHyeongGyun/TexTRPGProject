@@ -84,8 +84,9 @@ void Item::Upgrade()
 
 
 
-
-
+Item* Item::Clone() {
+	return new Item(*this); // 복사 생성자 호출
+}
 
 
 

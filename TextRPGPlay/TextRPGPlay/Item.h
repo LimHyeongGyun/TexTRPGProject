@@ -52,6 +52,8 @@ public:
 
 	void Upgrade();
 	//업그레이드 기능 구현
+
+	Item* Clone();
 };
 
 
