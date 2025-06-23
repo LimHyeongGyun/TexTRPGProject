@@ -26,7 +26,7 @@ void Forge::EnteredForge()
 
 		if (num == 0)
 		{
-			cout << "드워프 대장장이 불카누스: 드래곤을 잡으면 장비를 제작하러 오게!" << endl;
+			cout << "드워프 대장장이 불카누스: 몬스터를 잡으면 장비를 제작하러 오게!" << endl;
 			cout << "드워프 대장장이 불카누스: 내가 아주 멋진 것을 만들어주지!" << endl;
 			break;
 		}
@@ -44,17 +44,24 @@ void Forge::EnteredForge()
 		}
 		else if (num == 4)
 		{
-			Item* test; //나중에 DB에서 끌어다주기
-			unordered_map<Item*, int>::iterator dragonToken = Inventory::Get()->expendableItems.find(test);
-			//드래곤을 잡은 증표가 없을때
-			if (dragonToken == Inventory::Get()->expendableItems.end())
+			EquipmentRecipeDB dragonToothSword;
+			Item* dragonToken; //나중에 DB에서 끌어다주기
+			bool hasToken = false;
+			for (unordered_map<Item*, int>::value_type& token : Inventory::Get()->otherItems)
 			{
-
+				//드래곤을 잡은 증표가 있을때
+				if (token.first->name == dragonToken->name)
+				{
+					Craft(dragonToothSword, dragonToken);
+					hasToken = true;
+					break;
+				}
 			}
-			//드래곤을 잡은 증표가 있을때
-			else
+			//드래곤을 잡은 증표가 없을때
+			if (!hasToken)
 			{
-
+				cout << "드워프 대장장이 불카누스: 이건 아직 너 같은 애송이가 사용할 수 있는게 아니야!" << endl;
+				cout << "드워프 대장장이 불카누스: 드래곤 정도는 잡고 오라고!" << endl;
 			}
 		}
 		else
@@ -73,7 +80,7 @@ void Forge::DisplayUpgradeEquipment()
 	}
 
 	int category = 0;
-	cout << "강화할 장비 번호를 입력해주세요.[1.무기, 2.방어구]: " << endl;
+	cout << "강화할 장비카테고리 번호를 입력해주세요.[1.무기, 2.방어구]: " << endl;
 	cin >> category;
 
 	vector<Item*> itemList; //장비 인벤토리를 저장할 변수
@@ -82,15 +89,31 @@ void Forge::DisplayUpgradeEquipment()
 	{
 		case 1:
 			itemList = Inventory::Get()->weaponItems;
-			cout << "내가 소지한 무기 리스트" << endl;
+			cout << "내가 소지한 강화 가능한 무기 리스트" << endl;
 			break;
 		case 2:
 			itemList = Inventory::Get()->armorItems;
-			cout << "내가 소지한 방어구 리스트" << endl;
+			cout << "내가 소지한 강화 가능한 방어구 리스트" << endl;
 			break;
 		default:
 			cout << "잘못된 번호입니다." << endl;
 			return;
+	}
+
+	if (!itemList.empty())
+	{
+		//최대로 강화된 아이템 제외하기
+		for (vector<Item*>::iterator item = itemList.begin(); item != itemList.end();)
+		{
+			if ((*item)->GetupgradePhase() == (*item)->maxUpgradePhase)
+			{
+				itemList.erase(item);
+			}
+			else
+			{
+				++item;
+			}
+		}
 	}
 
 	//강화할 장비가 없을때
