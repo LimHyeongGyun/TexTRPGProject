@@ -3,7 +3,7 @@
 #include<iostream>
 
 
-
+class Character;
 
 Item::Item(std::string name, ItemType type, int Value, int Atack, int Defense, int Heal, bool Equip)
 	:name(name), type(type),Value(Value), Atack(Atack), Defense(Defense), Heal(Heal), Equip(Equip) {}
@@ -39,7 +39,7 @@ void Item::SetEquip()
 	}
 	else
 	{
-		std::cout << "장비아이템이 아닙니다." << endl;
+		cout << "장비아이템이 아닙니다." << endl;
 	}
 }
 

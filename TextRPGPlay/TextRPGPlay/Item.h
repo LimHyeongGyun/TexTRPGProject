@@ -17,7 +17,10 @@ private:
 	int Atack=0;
 	int Defense=0;
 	int Heal=0;
+	int upgradeAtack=0;
+	int upgradeDefense=0;
 	int UpgradePhase = 0;
+	int MaxUpgradePhase = 9;
 	bool Equip=false;
 public:
 	Item(std::string name, ItemType type, int Value, int Atack, int Defense, int Heal, bool Equip);
@@ -28,27 +31,35 @@ public:
 
 	ItemType GetType() { return type; }
 	//타입 가져오기
+	int getAtack() { return Atack; }
 
-	int GetAtack() { return Atack; }
+	int getMaxUpgradePhase() { return Atack; }
 	//공격력 가져오기
+
+	int GetUpgradeAtack() { return upgradeAtack; }
+	//업그레이드 공격력 가져오기
 
 	int GetDefense() { return Defense; }
 	//방어력 가져오기
+
+	int GetUpgradeDefense() { return upgradeDefense; }
+	//업그레이드 방어력 가져오기
 
 	int GetHeal() { return Heal; }
 	//회복량 가져오기
 
 	bool GetEquip();
-	//장비 여부 가져오기
+	//장비 여부 가져오기 
 
 	void SetEquip();
-	//장비및 장비 해제
+	//장비및 장비 해제 //매개변수로 받아서
 
 	int GetUpgradePhase() { return UpgradePhase; }
 	//강화성공 횟수 가져오기
 
 	void Use(Character* character);
-	//캐릭터 치료기능
+	//캐릭터 치료기능 //use 오버로딩
+
 
 	void Upgrade();
 	//업그레이드 기능 구현

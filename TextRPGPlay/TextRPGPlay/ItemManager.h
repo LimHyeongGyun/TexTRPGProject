@@ -24,6 +24,6 @@ public:
 	//복사 차단
 
 	Item* CreateItem(const std::string& name);
-	//db로 부터 아이템 생성
+
 };
 
