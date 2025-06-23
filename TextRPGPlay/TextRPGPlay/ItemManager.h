@@ -14,7 +14,7 @@ private:
 	~ItemManager();
 
 public:
-	static ItemManager& GetInstance();
+	static ItemManager& Get();
 	//½Ì±ÛÅæ ÆĞÅÏ °´Ã¼¸¦ »ı¼ºÇÏ´Â ÇÔ¼ö
 
 	ItemManager(const ItemManager&) = delete;

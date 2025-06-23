@@ -1,7 +1,7 @@
 #include "ItemManager.h"
 using namespace std;
 
-ItemManager& ItemManager::GetInstance() {
+ItemManager& ItemManager::Get() {
     static ItemManager instance; // 객체 자체를 static으로
     return instance;
 }

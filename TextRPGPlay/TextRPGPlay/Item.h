@@ -1,8 +1,8 @@
 #pragma once
 #include<string>
-#include"Character.h"
-#include "Inventory.h"
 
+class Character;
+class Inventory;
 
 enum class ItemType {
 	Armor,
@@ -15,49 +15,62 @@ class Item {
 private:
 	std::string name;
 	ItemType type= ItemType::Expendables;
-	int Value;
-	int Atack=0;
-	int Defense=0;
-	int Heal=0;
+	int value;
+	int atack=0;
+	int health =0;
+	int heal=0;
 	int upgradeAtack=0;
 	int upgradeDefense=0;
-	int UpgradePhase = 0;
-	int MaxUpgradePhase = 9;
-	bool Equip=false;
+	int upgradePhase = 0;
+	int maxUpgradePhase = 9;
+	bool equip=false;
 public:
-	Item(std::string name, ItemType type, int Value, int Atack, int Defense, int Heal, bool Equip);
+	Item(std::string name, ItemType type, int value, int Atack, int Defense, int Heal, bool Equip);
 	//생성자
+
 
 	std::string GetName() { return name; }
 	//이름 가져오기
 
+	int GetValue() { return value; }
+	//가격 가져오기
+
+	int GetAtack() { return atack; }
+	//공격력
+
+	int GetUpgradeAtack() { return upgradeAtack; }
+	//공격력 가져오기
+
 	ItemType GetType() { return type; }
 	//타입 가져오기
-	int getAtack() { return Atack; }
 
-	int getMaxUpgradePhase() { return Atack; }
-	//공격력 가져오기
+
+	int GeHealth() { return health; }
+	//갑옷 의 추가체력
 
 	int GetUpgradeAtack() { return upgradeAtack; }
 	//업그레이드 공격력 가져오기
 
-	int GetDefense() { return Defense; }
-	//방어력 가져오기
+	int GeHealth() { return health; }
+	//갑옷 의 추가체력
 
 	int GetUpgradeDefense() { return upgradeDefense; }
 	//업그레이드 방어력 가져오기
 
-	int GetHeal() { return Heal; }
+	int GetHeal() { return heal; }
 	//회복량 가져오기
 
-	bool GetEquip();
+	bool GetEquip() { equip; }
 	//장비 여부 가져오기 
 
 	void SetEquip(bool equip);
 	//장비및 장비 해제
 
-	int GetUpgradePhase() { return UpgradePhase; }
+	int GetUpgradePhase() { return upgradePhase; }
 	//강화성공 횟수 가져오기
+
+	int GetMaxUbgradePhase() { return maxUpgradePhase; }
+	//최대 강화 횟수 가져오기
 
 	void Use(Character* character);
 	//캐릭터 치료기능

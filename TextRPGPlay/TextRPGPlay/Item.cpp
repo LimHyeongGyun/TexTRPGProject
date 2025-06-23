@@ -1,7 +1,8 @@
 #include "Item.h"
 #include<string>
 #include<iostream>
-
+#include"Character.h"
+#include"Inventory.h"
 using namespace std;
 
 
@@ -9,7 +10,7 @@ using namespace std;
 class Character;
 
 Item::Item(std::string name, ItemType type, int Value, int Atack, int Defense, int Heal, bool Equip)
-	:name(name), type(type),Value(Value), Atack(Atack), Defense(Defense), Heal(Heal), Equip(Equip) {}
+	:name(name), type(type),value(Value), atack(Atack), health(Defense), heal(Heal), equip(Equip) {}
 
 
 //장비 여부 가져오기
@@ -17,7 +18,7 @@ bool Item::GetEquip()
 {
 	if (this->type == ItemType::Armor || this->type == ItemType::Weapon)
 	{
-		return this->Equip;
+		return this->equip;
 	}
 	else
 	{
@@ -35,11 +36,11 @@ void Item::SetEquip(bool equip)
 	{
 		if (equip == false)
 		{
-			this->Equip = false;
+			this->equip = false;
 		}
 		else
 		{
-			this->Equip = true;
+			this->equip = true;
 		}
 	}
 	else
@@ -55,7 +56,7 @@ void Item::Use(Character* character)
 	{
 		if (character)
 		{
-			character->RecoveryHP(Heal);
+			character->RecoveryHP(heal);
 		}
 	}
 
@@ -88,16 +89,16 @@ void Item::Upgrade()
 {
 	if(this->type == ItemType::Armor || this->type == ItemType::Weapon)
 	{
-		this->UpgradePhase++;
+		this->upgradePhase++;
 
 		if (this->type == ItemType::Armor)
 		{
-			this->Defense = this->Defense + (10 * this->UpgradePhase);
+			this->health = this->health + (10 * this->upgradePhase);
 		}
 
 		else
 		{
-			this->Atack = this->Atack + (5 * this->UpgradePhase);
+			this->atack = this->atack + (5 * this->upgradePhase);
 		}
 
 	}
