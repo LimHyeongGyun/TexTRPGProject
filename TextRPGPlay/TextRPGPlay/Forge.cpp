@@ -45,19 +45,46 @@ void Forge::EnteredForge()
 		}
 		else if (num == 4)
 		{
-			EquipmentRecipeDB dragonToothSword;
-			Item* dragonToken; //나중에 DB에서 끌어다주기
-			bool hasToken = false;
-			for (unordered_map<Item*, int>::value_type& token : Inventory::Get()->otherItems)
+			EquipmentRecipe* findRecipe = nullptr;
+			for (EquipmentRecipe& recipe : recipeBook)
 			{
-				//드래곤을 잡은 증표가 있을때
-				if (token.first->GetName() == dragonToken->GetName())
+				if (recipe.craftEquipment->GetName() == "드래곤 이빨검")
 				{
-					Craft(dragonToothSword, dragonToken);
-					hasToken = true;
+					findRecipe = &recipe;
 					break;
 				}
 			}
+			
+			bool hasToken = false;
+			hasToken = true;
+
+			bool usedDragonPart = false;
+			if (hasToken)
+			{
+				for (unordered_map<Item*, int>::value_type& token : Inventory::Get()->otherItems)
+				{
+					for (unordered_map<string, int>::value_type& heart : findRecipe->materials)
+					{
+						//드래곤을 잡아서 얻은 재료가 있을때
+						if (heart.first == token.first->GetName())
+						{
+							Craft(*findRecipe, findRecipe->craftEquipment);
+							usedDragonPart = true;
+							break;
+						}
+					}
+					if (usedDragonPart)
+					{
+						break;
+					}
+				}
+				if (!usedDragonPart)
+				{
+					cout << "드워프 대장장이 불카누스: 저번에 잡은 드래곤의 부산물은 다 사용한 것 같은데?" << endl;
+					cout << "드워프 대장장이 불카누스: 더 만들고 싶으면 드래곤 한마리 더 잡아보라고!" << endl;
+				}
+			}
+
 			//드래곤을 잡은 증표가 없을때
 			if (!hasToken)
 			{
@@ -194,11 +221,11 @@ pair<Item*, string> Forge::Upgrade(Item* equipment)
 
 #pragma region CraftEquipment
 
-vector<Forge::EquipmentRecipeDB> Forge::CanCraftRecipes()
+vector<Forge::EquipmentRecipe> Forge::CanCraftRecipes()
 {
-	vector<EquipmentRecipeDB>craftableList;
+	vector<EquipmentRecipe>craftableList;
 
-	for (const EquipmentRecipeDB& recipe : recipeList)
+	for (const EquipmentRecipe& recipe : recipeBook)
 	{
 		bool canCraft = false;
 		for (const unordered_map<string, int>::value_type& material : recipe.materials)
@@ -235,10 +262,10 @@ vector<Forge::EquipmentRecipeDB> Forge::CanCraftRecipes()
 
 void Forge::DisplayAllRecipes()
 {
-	for(int i = 0; i < recipeList.size(); i++)
+	for(int i = 0; i < recipeBook.size(); i++)
 	{
-		cout << i + 1 << "." << recipeList[i].equipment->GetName() << "필요한 재료: [";
-		for(const unordered_map<string, int>::value_type& pair : recipeList[i].materials)
+		cout << i + 1 << "." << recipeBook[i].craftEquipment->GetName() << "필요한 재료: [";
+		for(const unordered_map<string, int>::value_type& pair : recipeBook[i].materials)
 		{
 			cout << pair.first << " " << pair.second << "개";
 		}
@@ -251,7 +278,7 @@ void Forge::CraftEquipment()
 	cout << "대장간에서는 멋진 장비를 제작할 수 있습니다!" << endl;
 	cout << "현재 제작 가능한 아이템 목록" << endl;
 
-	vector<EquipmentRecipeDB> craftableList = CanCraftRecipes();
+	vector<EquipmentRecipe> craftableList = CanCraftRecipes();
 	
 	if(craftableList.empty())
 	{
@@ -260,19 +287,19 @@ void Forge::CraftEquipment()
 	}
 	for (int i = 0; i < craftableList.size(); i++)
 	{
-		cout << i+1 << "." << craftableList[i].equipment->GetName()
-			<< "공격력: " << craftableList[i].equipment->GetAtack()
-			<< "체력: " << craftableList[i].equipment->GetBonusHealth() << endl;
+		cout << i+1 << "." << craftableList[i].craftEquipment->GetName()
+			<< "공격력: " << craftableList[i].craftEquipment->GetAtack()
+			<< "체력: " << craftableList[i].craftEquipment->GetBonusHealth() << endl;
 	}
 
 	int num;
 	cout << "제작할 장비아이템의 번호를 입력해주세요: ";
 	cin >> num;
 
-	Craft(craftableList[num - 1], craftableList[num - 1].equipment);
+	Craft(craftableList[num - 1], craftableList[num - 1].craftEquipment);
 }
 
-void Forge::Craft(const EquipmentRecipeDB& recipe, Item* item)
+void Forge::Craft(const EquipmentRecipe& recipe, Item* item)
 {
 	//Inventory에 제거할 재료목록 전달
 	unordered_map<string, int> materialMap = recipe.materials;
@@ -289,14 +316,16 @@ void Forge::Craft(const EquipmentRecipeDB& recipe, Item* item)
 #pragma endregion
 
 #pragma region RecipeManagement
-void Forge::AddEquipmentRecipe(Item* equipment, unordered_map<string, int> materials)
+
+void Forge::InitRecipes()
 {
-	EquipmentRecipeDB recipe;
-	Item* craftItem = ItemManager::Get()->CreateItem("말랑한 보호대");
-	recipe.equipment = craftItem;
-	recipe.materials["슬라임의 핵"] = 2;
-	recipe.materials["고블린의 허리띠"] = 2;
-	recipeList.push_back(recipe);
+	Item* softArmor = ItemManager::Get()->CreateItem("말랑한 보호대");
+	unordered_map<string, int> needMat = {{"슬라임의 핵", 2}, {"고블린의 허리띠", 2}};
+	AddCraftRecipe(softArmor, needMat);
+}
+
+void Forge::AddCraftRecipe(Item* craftItem, const unordered_map<string, int> materials)
+{
+	recipeBook.emplace_back(craftItem, materials);
 }
 #pragma endregion
-
