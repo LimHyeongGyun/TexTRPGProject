@@ -34,6 +34,8 @@ public:
 	//플레이어 정보
 	void DisplayStatus() const; //플레이어의 현재 스탯 확인
 	std::string GetName() const; //플레이어 이름
+	int GetHealth() const; //플레이어 체력
+	int GetLevel() const; //플레이어 레벨
 
 	//전투 관련
 	int Attack() const;

@@ -49,6 +49,17 @@ string Character::GetName() const
 {
     return name;
 }
+
+int Character::GetHealth() const
+{
+    return health;
+}
+
+int Character::GetLevel() const
+{
+    return level;
+}
+
 #pragma endregion
 
 #pragma region Battle
