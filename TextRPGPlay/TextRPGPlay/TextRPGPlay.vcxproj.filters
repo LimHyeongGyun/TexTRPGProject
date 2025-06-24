@@ -13,18 +13,54 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="소스 파일\Monster">
+      <UniqueIdentifier>{ac2ebfd4-3003-4d4c-8436-52093f025559}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="헤더 파일\Monster">
+      <UniqueIdentifier>{bb5042aa-0158-49c3-b2c8-dcc5fdc3ed93}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Monster.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
     <ClCompile Include="TextRPGPlay.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="GameManager.cpp">
-      <Filter>소스 파일</Filter>
+    <ClCompile Include="Dragon.cpp">
+      <Filter>소스 파일\Monster</Filter>
+    </ClCompile>
+    <ClCompile Include="Goblin.cpp">
+      <Filter>소스 파일\Monster</Filter>
+    </ClCompile>
+    <ClCompile Include="Orc.cpp">
+      <Filter>소스 파일\Monster</Filter>
+    </ClCompile>
+    <ClCompile Include="Slime.cpp">
+      <Filter>소스 파일\Monster</Filter>
+    </ClCompile>
+    <ClCompile Include="Troll.cpp">
+      <Filter>소스 파일\Monster</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="GameManager.h">
+    <ClInclude Include="Monster.h">
       <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="Dragon.h">
+      <Filter>헤더 파일\Monster</Filter>
+    </ClInclude>
+    <ClInclude Include="Goblin.h">
+      <Filter>헤더 파일\Monster</Filter>
+    </ClInclude>
+    <ClInclude Include="Orc.h">
+      <Filter>헤더 파일\Monster</Filter>
+    </ClInclude>
+    <ClInclude Include="Slime.h">
+      <Filter>헤더 파일\Monster</Filter>
+    </ClInclude>
+    <ClInclude Include="Troll.h">
+      <Filter>헤더 파일\Monster</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
