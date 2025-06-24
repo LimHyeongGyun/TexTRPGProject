@@ -27,7 +27,9 @@ private:
 
 	void JudgementUseCategory(); //카테고리 사용할 수 있는지 판단
 
-	//강화 확률
+	//강화
+	int upgradeAtkValue;
+	int upgradeHPValue;
 	void Upgrade(Item* equipment); //장비 강화
 	void DisplayUpgradePercent(); //강화확률 보여주기
 	int GetUpgradePercent(int upValue); //강화 확률
@@ -46,7 +48,8 @@ private:
 	EquipmentRecipe* FindRecipe(std::string recipeName); //레시피 찾기
 
 public:
-	int upgradeAtkValue = 0; //강화로 얻는 공격력
-	int upgradeHpValue = 0; //강화로 얻는 체력
+	int GetUpgradeAtkValue(); //강화로 얻는 공격력
+	int GetUpgradeHPValue(); //강화로 얻는 체력
+	void UpgradeResult(Item* equipment, int percent, int successRate);
 	void EnteredForge(); //Forge에 입장
 };
