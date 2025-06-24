@@ -70,7 +70,7 @@ void Inventory::ClassificationItem(vector<Item*> items)
                 otherItems[item] = 1;
             }
         }
-        cout << item << "À» È¹µæÇß½À´Ï´Ù." << endl;
+        cout << item->GetName() << "À» È¹µæÇß½À´Ï´Ù." << endl;
     }
 }
 
