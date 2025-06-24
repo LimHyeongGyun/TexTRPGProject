@@ -12,6 +12,6 @@ public:
 		return dropItem;
 	}
 
-	float getMultiplyHp() const override { return 1.5f; };
-	float getMultiplyAtk() const override { return 1.5f; };
+	float getMultiplyHp() const override { return 1.0f; };
+	float getMultiplyAtk() const override { return 1.0f; };
 };

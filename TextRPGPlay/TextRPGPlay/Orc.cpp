@@ -12,8 +12,8 @@ Orc::Orc(int level) {
 	int baseMinAtk = level * 5;
 	int baseMaxAtk = level * 10;
 
-	health = getRandomInRange(baseMinHp, baseMaxHp);
-	attack = getRandomInRange(baseMinAtk, baseMaxAtk);
+	health = getRandomInRange(baseMinHp, baseMaxHp) * getMultiplyHp();
+	attack = getRandomInRange(baseMinAtk, baseMaxAtk) * getMultiplyAtk();
 
 	expDrop = 50;
 	goldDrop = getRandomInRange(10, 20);

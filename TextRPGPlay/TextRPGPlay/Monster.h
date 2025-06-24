@@ -26,15 +26,13 @@ protected:
 	bool alive = false;
 
 public:
-	std::string getName() const;						// 몬스터 이름
+	std::string getName() const;				// 몬스터 이름
 	int getHealth() const;						// 몬스터 체력
 	int Attack() const;							// 몬스터 공격력
 	void takeDamage(int damage);				// 몬스터가 받는 피해 (인수: 캐릭터의 대미지)
 
 	virtual Item* getPossibleDrops() const = 0;
 	virtual Item* ItemDrop();
-	ItemManager getItemDrop() const;
-	std::string getItemDropName() const;
 
 	int getExpDrop() const;						// 경험치 드랍
 	int getGoldDrop() const;					// 골드 드랍
