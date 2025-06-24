@@ -132,7 +132,6 @@
     <ClCompile Include="Troll.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Character.h" />
     <ClInclude Include="Dragon.h" />
     <ClInclude Include="Goblin.h" />
     <ClInclude Include="Monster.h" />

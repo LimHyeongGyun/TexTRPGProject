@@ -24,7 +24,7 @@ protected:
 	int goldDrop = 0;
 
 	bool alive = false;
-
+		
 public:
 	std::string getName() const;						// 몬스터 이름
 	int getHealth() const;						// 몬스터 체력
