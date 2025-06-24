@@ -12,16 +12,18 @@ ItemManager::ItemManager() {
     Itemdb["¼ÒÇüÈú¸µÆ÷¼Ç"] = make_unique<Item>("¼ÒÇü Èú¸µ Æ÷¼Ç", ItemType::Potion,/*°¡°Ý*/50, 0, 0, 50);
     Itemdb["ÁßÇüÈú¸µÆ÷¼Ç"] = make_unique<Item>("ÁßÇü Èú¸µ Æ÷¼Ç", ItemType::Potion,/*°¡°Ý*/120, 0, 0, 100);
     Itemdb["´ëÇüÈú¸µÆ÷¼Ç"] = make_unique<Item>("´ëÇü Èú¸µ Æ÷¼Ç", ItemType::Potion,/*°¡°Ý*/250, 0, 0, 200);
-    Itemdb["³ª¹«·Õ¼Òµå"] = make_unique<Item>("³ª¹« ·Õ¼Òµå", ItemType::Potion,/*°¡°Ý*/50, 25, 0, 0);
-    Itemdb["Èæ¿ä¼®·Õ¼Òµå"] = make_unique<Item>("Èæ¿ä¼® ·Õ¼Òµå", ItemType::Potion,/*°¡°Ý*/100, 60, 0, 0);
-    Itemdb["Ã¶ ·Õ¼Òµå"] = make_unique<Item>("Èæ¿ä¼® ·Õ¼Òµå", ItemType::Potion,/*°¡°Ý*/250, 100, 0, 0);
-    Itemdb["°¡Á×°©¿Ê"] = make_unique<Item>("°¡Á× °©¿Ê", ItemType::Potion,/*°¡°Ý*/50, 0, 0, 30);
-    Itemdb["»ç½½°©¿Ê"] = make_unique<Item>("»ç½½ °©À¿", ItemType::Potion,/*°¡°Ý*/250, 100, 0, 50);
-    Itemdb["Ã¶°©¿Ê"] = make_unique<Item>("Ã¶ °©¿Ê", ItemType::Potion,/*°¡°Ý*/250, 100, 0, 100);
+    Itemdb["³ª¹«·Õ¼Òµå"] = make_unique<Item>("³ª¹« ·Õ¼Òµå", ItemType::Weapon,/*°¡°Ý*/50, 25, 0, 0);
+    Itemdb["Èæ¿ä¼®·Õ¼Òµå"] = make_unique<Item>("Èæ¿ä¼® ·Õ¼Òµå", ItemType::Weapon,/*°¡°Ý*/100, 60, 0, 0);
+    Itemdb["Ã¶ ·Õ¼Òµå"] = make_unique<Item>("Ã¶ ·Õ¼Òµå", ItemType::Weapon,/*°¡°Ý*/250, 100, 0, 0);
+    Itemdb["°¡Á×°©¿Ê"] = make_unique<Item>("°¡Á× °©¿Ê", ItemType::Armor,/*°¡°Ý*/50, 0, 0, 30);
+    Itemdb["»ç½½°©¿Ê"] = make_unique<Item>("»ç½½ °©À¿", ItemType::Armor,/*°¡°Ý*/250, 100, 0, 50);
+    Itemdb["Ã¶°©¿Ê"] = make_unique<Item>("Ã¶ °©¿Ê", ItemType::Armor,/*°¡°Ý*/250, 100, 0, 100);
     Itemdb["²öÀûÇÑÁ¡¾×"] = make_unique<Item>("²öÀûÇÑ Á¡¾×", ItemType::Expendables,/*°¡°Ý*/20, 0, 0, 0);
     Itemdb["¿ÀÅ©Á·ÀüÅõÈÖÀå"] = make_unique<Item>("¿ÀÅ©Á· ÀüÅõ ÈÖÀå", ItemType::Expendables,/*°¡°Ý*/100, 0, 0, 0);
     Itemdb["µå·¡°ï ½ÉÀå"] = make_unique<Item>("µå·¡°ï ½ÉÀå", ItemType::Expendables,/*°¡°Ý*/300, 0, 0, 0);
     Itemdb["°íºí¸°ÀÌ»¡"] = make_unique<Item>("°íºí¸° ÀÌ»¡", ItemType::Expendables,/*°¡°Ý*/30, 0, 0, 0);
+    Itemdb["°­È­¼®"] = make_unique<Item>("°­È­¼®", ItemType::Expendables,/*°¡°Ý*/50, 0, 0, 0);
+
 }
 
 ItemManager::~ItemManager() = default;
