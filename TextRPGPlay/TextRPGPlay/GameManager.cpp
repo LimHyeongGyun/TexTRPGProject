@@ -1,20 +1,24 @@
-#include "GameManager.h"
+ï»¿#include "GameManager.h"
+#include "Monster.h"
 #include "Goblin.h"
 #include "Orc.h"
 #include "Troll.h"
 #include "Slime.h"
 #include "Dragon.h"
 #include "Character.h"
-#include "Item.h"
 #include "Inventory.h"
+#include "ItemManager.h"
+#include "Item.h"
+#include "DropItems.h"
+
 #include <iostream>
-#include <cstdlib>
-#include <ctime>
+#include <vector>
+#include <limits>
 
 using namespace std;
 
 GameManager::GameManager() {
-    player = Character::Get("¿ë»ç");
+    player = Character::Get("ìš©ì‚¬");
 }
 
 Monster* GameManager::GenerateMonster(int level) {
@@ -24,41 +28,46 @@ Monster* GameManager::GenerateMonster(int level) {
     else return new Goblin(level);
 }
 
-BossMonster* GameManager::GenerateBossMonster(int level) {
+Monster* GameManager::GenerateBossMonster(int level) {
     return new Dragon(level);
 }
 
 void GameManager::Battle(Character* character, Monster* monster) {
-    while (character->isAlive() && monster->IsAlive()) {
+    while (character->IsAlive() && monster->IsAlive()) {
         int damage = character->Attack();
         monster->takeDamage(damage);
-        cout << character->GetName() << "ÀÌ(°¡) " << monster->getName()
-            << "À»(¸¦) °ø°Ý! ¸ó½ºÅÍ Ã¼·Â: " << monster->getHealth() << endl;
+        cout << character->GetName() << "ì´(ê°€) " << monster->getName()
+            << "ì„(ë¥¼) ê³µê²©! ëª¬ìŠ¤í„° ì²´ë ¥: " << monster->getHealth() << endl;
 
         if (monster->IsAlive()) {
             int mDamage = monster->Attack();
             character->TakeDamage(mDamage);
-            cout << monster->getName() << "ÀÇ ¹Ý°Ý! " << character->GetName()
-                << " Ã¼·Â: " << character->GetCurrentHealth() << endl;
+            cout << monster->getName() << "ì˜ ë°˜ê²©! " << character->GetName()
+                << " ì²´ë ¥: " << character->GetCurrentHealth() << endl;
         }
     }
 
-    if (character->isAlive()) {
-        cout << "\nÀüÅõ ½Â¸®!" << endl;
+    if (character->IsAlive()) {
+        cout << "\nì „íˆ¬ ìŠ¹ë¦¬!" << endl;
 
         int exp = monster->getExpDrop();
         int gold = monster->getGoldDrop();
         character->GetExperience(exp);
-        character->GainGold(gold);
-        cout << "°æÇèÄ¡: +" << exp << ", °ñµå: +" << gold << endl;
+        character->BorrowGold(gold);
+        cout << "ê²½í—˜ì¹˜: +" << exp << ", ê³¨ë“œ: +" << gold << endl;
 
-        Item* dropItem = new Item(monster->getItemDrop());
-        vector<Item*> dropItems = { dropItem };
-        character->GetItem(dropItems);
-        cout << "¾ÆÀÌÅÛ È¹µæ: " << dropItem->name << endl;
+        ItemType dropType = monster->getItemDrop();
+        string dropName = monster->getItemDropName();
+
+        Item* dropItem = ItemManager::Get().CreateItem(dropName);
+        if (dropItem) {
+            vector<Item*> dropItems = { dropItem };
+            character->GetItem(dropItems);
+            cout << "ì•„ì´í…œ íšë“: " << dropItem->GetName() << endl;
+        }
     }
     else {
-        cout << character->GetName() << "ÀÌ(°¡) »ç¸ÁÇß½À´Ï´Ù. °ÔÀÓ ¿À¹ö." << endl;
+        cout << character->GetName() << "ì´(ê°€) ì‚¬ë§í–ˆìŠµë‹ˆë‹¤. ê²Œìž„ ì˜¤ë²„." << endl;
     }
 
     delete monster;
@@ -69,23 +78,23 @@ void GameManager::DisplayInventory(Character* character) {
 }
 
 void GameManager::Run() {
-    while (player->isAlive() && player->GetLevel() < 10) {
-        cout << "\n===== ÀüÅõ ½ÃÀÛ (·¹º§: " << player->GetLevel() << ") =====" << endl;
+    while (player->IsAlive() && player->GetLevel() < 10) {
+        cout << "\n===== ì „íˆ¬ ì‹œìž‘ (ë ˆë²¨: " << player->GetLevel() << ") =====" << endl;
         Monster* monster = GenerateMonster(player->GetLevel());
-        cout << monster->getName() << " µîÀå! Ã¼·Â: " << monster->getHealth()
-            << ", °ø°Ý·Â: " << monster->Attack() << endl;
+        cout << monster->getName() << " ë“±ìž¥! ì²´ë ¥: " << monster->getHealth()
+            << ", ê³µê²©ë ¥: " << monster->Attack() << endl;
         Battle(player, monster);
 
-        if (!player->isAlive()) break;
+        if (!player->IsAlive()) break;
 
         char choice;
-        cout << "ÀÎº¥Åä¸®¸¦ È®ÀÎÇÏ½Ã°Ú½À´Ï±î? (Y/N): ";
+        cout << "ì¸ë²¤í† ë¦¬ë¥¼ í™•ì¸í•˜ì‹œê² ìŠµë‹ˆê¹Œ? (Y/N): ";
         while (true) {
             cin >> choice;
             if (cin.fail()) {
                 cin.clear();
                 cin.ignore(numeric_limits<streamsize>::max(), '\n');
-                cout << "ÀÔ·Â ¿À·ùÀÔ´Ï´Ù. Y ¶Ç´Â NÀ» ÀÔ·ÂÇØÁÖ¼¼¿ä: ";
+                cout << "ìž…ë ¥ ì˜¤ë¥˜ìž…ë‹ˆë‹¤. Y ë˜ëŠ” Nì„ ìž…ë ¥í•´ì£¼ì„¸ìš”: ";
                 continue;
             }
             if (choice == 'Y' || choice == 'y') {
@@ -96,27 +105,28 @@ void GameManager::Run() {
                 break;
             }
             else {
-                cout << "Àß¸øµÈ ÀÔ·ÂÀÔ´Ï´Ù. Y ¶Ç´Â NÀ» ÀÔ·ÂÇØÁÖ¼¼¿ä: ";
+                cout << "ìž˜ëª»ëœ ìž…ë ¥ìž…ë‹ˆë‹¤. Y ë˜ëŠ” Nì„ ìž…ë ¥í•´ì£¼ì„¸ìš”: ";
             }
         }
     }
 
-    if (player->isAlive() && player->GetLevel() >= 10) {
-        cout << "\n===== º¸½º ¸ó½ºÅÍ µîÀå =====" << endl;
-        BossMonster* boss = GenerateBossMonster(player->GetLevel());
-        cout << boss->getName() << " µîÀå! Ã¼·Â: " << boss->getHealth()
-            << ", °ø°Ý·Â: " << boss->Attack() << endl;
+    if (player->IsAlive() && player->GetLevel() >= 10) {
+        cout << "\n===== ë³´ìŠ¤ ëª¬ìŠ¤í„° ë“±ìž¥ =====" << endl;
+        Monster* boss = GenerateBossMonster(player->GetLevel());
+        cout << boss->getName() << " ë“±ìž¥! ì²´ë ¥: " << boss->getHealth()
+            << ", ê³µê²©ë ¥: " << boss->Attack() << endl;
         Battle(player, boss);
         delete boss;
 
-        if (player->isAlive()) {
-            cout << "\nÃàÇÏÇÕ´Ï´Ù! º¸½º¸¦ ¹°¸®Ä¡°í °ÔÀÓÀ» Å¬¸®¾îÇß½À´Ï´Ù!" << endl;
+        if (player->IsAlive()) {
+            cout << "\nì¶•í•˜í•©ë‹ˆë‹¤! ë³´ìŠ¤ë¥¼ ë¬¼ë¦¬ì¹˜ê³  ê²Œìž„ì„ í´ë¦¬ì–´í–ˆìŠµë‹ˆë‹¤!" << endl;
         }
         else {
-            cout << "\nº¸½º¿¡°Ô ÆÐ¹èÇß½À´Ï´Ù. °ÔÀÓ ¿À¹ö." << endl;
+            cout << "\në³´ìŠ¤ì—ê²Œ íŒ¨ë°°í–ˆìŠµë‹ˆë‹¤. ê²Œìž„ ì˜¤ë²„." << endl;
         }
     }
 
-    cout << "\n°ÔÀÓ Á¾·á. ¸Þ¸ð¸® Á¤¸® Áß..." << endl;
-    Character::ReleaseInstance();
+    cout << "\nê²Œìž„ ì¢…ë£Œ. ë©”ëª¨ë¦¬ ì •ë¦¬ ì¤‘..." << endl;
+    delete player;
+    player = nullptr;
 }
