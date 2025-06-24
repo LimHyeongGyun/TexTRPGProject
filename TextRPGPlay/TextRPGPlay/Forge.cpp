@@ -169,7 +169,7 @@ void Forge::UpgradeResult(Item* equipment, int roll, int successRate)
 	//강화 성공
 	if (roll < successRate)
 	{
-		equipment->Upgrade();
+		equipment->Upgrade(*this);
 
 		cout << "강화 단계: " << equipment->GetUpgradePhase() - 1 << "=>" << equipment->GetUpgradePhase() << endl;
 		if (equipment->GetType() == ItemType::Weapon)

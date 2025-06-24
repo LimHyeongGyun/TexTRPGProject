@@ -3,6 +3,7 @@
 #include<iostream>
 #include"Character.h"
 #include"Inventory.h"
+#include"Forge.h"
 using namespace std;
 
 
@@ -89,20 +90,20 @@ void Item::Use(Inventory* inventory) {
 
 
 //장비 업그레이드
-void Item::Upgrade()
-{
+void Item::Upgrade(Forge forge)
+{	
 	if(this->type == ItemType::Armor || this->type == ItemType::Weapon)
 	{
 		this->upgradePhase++;
 
 		if (this->type == ItemType::Armor)
 		{
-			this->health = this->health + (10 * this->upgradePhase);
+			this->health = forge.GetUpgradeHPValue();
 		}
 
 		else
 		{
-			this->atack = this->atack + (5 * this->upgradePhase);
+			this->atack = forge.GetUpgradeAtkValue();
 		}
 
 	}
@@ -120,7 +121,8 @@ Item* Item::Clone() {
 
 
 
-
+//int GetUpgradeAtkValue(); //강화로 얻는 공격력
+//int GetUpgradeHPValue(); //강화로 얻는 체력
 
 
 

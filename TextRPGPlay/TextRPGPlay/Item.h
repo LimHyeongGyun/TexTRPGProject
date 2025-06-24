@@ -3,7 +3,7 @@
 
 class Character;
 class Inventory;
-
+class Forge;
 enum class ItemType {
 	Armor,
 	Weapon,
@@ -74,7 +74,7 @@ public:
 	void Use(Inventory* inventory);
 	//장착기능
 
-	void Upgrade();
+	void Upgrade(Forge forge);
 	//업그레이드 기능 구현
 
 	Item* Clone();
