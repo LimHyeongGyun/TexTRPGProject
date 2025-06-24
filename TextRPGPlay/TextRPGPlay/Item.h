@@ -8,13 +8,13 @@ enum class ItemType {
 	Armor,
 	Weapon,
 	Expendables,
-	Potion
+	Other
 };
 
 class Item {
 private:
 	std::string name;
-	ItemType type= ItemType::Expendables;
+	ItemType type= ItemType::Other;
 	int value;
 	int atack=0;
 	int health =0;
@@ -25,7 +25,7 @@ private:
 	int maxUpgradePhase = 9;
 	bool equip=false;
 public:
-	Item(std::string name, ItemType type, int value, int Atack, int Defense, int Heal, bool Equip);
+	Item(std::string name, ItemType type, int value, int Atack, int Defense, int Heal);
 	//생성자
 
 
@@ -45,14 +45,9 @@ public:
 	//타입 가져오기
 
 
-	int GeHealth() { return health; }
+	int GetBonusHealth() { return health; }
 	//갑옷 의 추가체력
 
-	int GetUpgradeAtack() { return upgradeAtack; }
-	//업그레이드 공격력 가져오기
-
-	int GeHealth() { return health; }
-	//갑옷 의 추가체력
 
 	int GetUpgradeDefense() { return upgradeDefense; }
 	//업그레이드 방어력 가져오기
@@ -60,7 +55,7 @@ public:
 	int GetHeal() { return heal; }
 	//회복량 가져오기
 
-	bool GetEquip() { equip; }
+	bool GetEquip();
 	//장비 여부 가져오기 
 
 	void SetEquip(bool equip);

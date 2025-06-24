@@ -9,8 +9,8 @@ using namespace std;
 
 class Character;
 
-Item::Item(std::string name, ItemType type, int Value, int Atack, int Defense, int Heal, bool Equip)
-	:name(name), type(type),value(Value), atack(Atack), health(Defense), heal(Heal), equip(Equip) {}
+Item::Item(std::string name, ItemType type, int Value, int Atack, int Defense, int Heal)
+	:name(name), type(type),value(Value), atack(Atack), health(Defense), heal(Heal) {}
 
 
 //장비 여부 가져오기
@@ -52,7 +52,7 @@ void Item::SetEquip(bool equip)
 //캐릭터 힐기능
 void Item::Use(Character* character)
 {
-	if (this->type == ItemType::Potion)
+	if (this->type == ItemType::Expendables)
 	{
 		if (character)
 		{
@@ -72,8 +72,12 @@ void Item::Use(Inventory* inventory) {
 		
 		if (inventory)
 		{
-			// 캐릭터가 이 무기를 장착하도록 함
-			inventory->EquipWeapon(this);
+			if (this->type == ItemType::Armor) {
+				inventory->EquipWeapon(this);
+			}
+			else if (this->type == ItemType::Weapon) {
+				inventory->EquipWeapon(this);
+			}
 		}
 	}
 	else
