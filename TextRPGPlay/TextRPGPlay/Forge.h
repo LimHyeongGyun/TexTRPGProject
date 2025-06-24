@@ -43,7 +43,7 @@ private:
 	void DisplayAllRecipes(); //모든 장비 레시피 보여주기
 	void InitRecipes(); //레시피 생성
 	void AddCraftRecipe(Item* equipment, std::unordered_map<std::string, int> materials);//레시피 추가
-	EquipmentRecipe& FindRecipe(std::string recipeName); //레시피 찾기
+	EquipmentRecipe* FindRecipe(std::string recipeName); //레시피 찾기
 
 public:
 	int upgradeAtkValue = 0; //강화로 얻는 공격력

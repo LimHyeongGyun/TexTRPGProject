@@ -260,17 +260,17 @@ void Forge::CraftCategory()
 void Forge::CraftUniqueEquipiment(string recipeName)
 {
 	//드래곤 재료로 만들 수 있는 재료 찾아오기
-	EquipmentRecipe findRecipe = FindRecipe(recipeName);
+	EquipmentRecipe* findRecipe = FindRecipe(recipeName);
 
 	bool usedDragonPart = false;
 	for (unordered_map<Item*, int>::value_type& bone : Inventory::Get().otherItems)
 	{
-		for (unordered_map<string, int>::value_type& mat : findRecipe.materials)
+		for (unordered_map<string, int>::value_type& mat : findRecipe->materials)
 		{
 			//드래곤을 잡아서 얻은 재료가 있을때
 			if (mat.first == bone.first->GetName())
 			{
-				Craft(findRecipe, findRecipe.craftEquipment);
+				Craft(*findRecipe, findRecipe->craftEquipment);
 				usedDragonPart = true;
 				return;
 			}
@@ -322,15 +322,16 @@ void Forge::DisplayAllRecipes()
 	}
 }
 
-Forge::EquipmentRecipe& Forge::FindRecipe(std::string recipeName)
+Forge::EquipmentRecipe* Forge::FindRecipe(std::string recipeName)
 {
 	for (EquipmentRecipe& recipe : recipeBook)
 	{
 		if (recipe.craftEquipment->GetName() == recipeName)
 		{
-			return recipe;
-			break;
+			return &recipe;
 		}
 	}
+
+	return nullptr;
 }
 #pragma endregion
