@@ -25,17 +25,25 @@ private:
 	UpgradeProbablity UP; //강화확률
 	int expense = 0; //Forge에서 사용하는 작업에 드는 비용
 
-	std::pair<Item*, std::string> Upgrade(Item* equipment); //장비 강화
-	int UpgradePercent(int upValue); //강화 확률
-	void DisplayUpgradeEquipment(); //강화 가능한 장비 보여주기
+	void JudgementUseCategory(); //카테고리 사용할 수 있는지 판단
 
-	void DisplayAllRecipes(); //모든 장비 레시피 보여주기
-	void CraftEquipment(); //장비 제작하기
+	//강화 확률
+	void Upgrade(Item* equipment); //장비 강화
+	void DisplayUpgradePercent(); //강화확률 보여주기
+	int GetUpgradePercent(int upValue); //강화 확률
+	void DisplayPossibleUpgradEquipment(); //강화 가능한 장비 보여주기
+
+	//장비 제작
+	void CraftCategory(); //제작 카테고리
 	std::vector<EquipmentRecipe> CanCraftRecipes(); //제작 가능한 레시피 반환
 	void Craft(const EquipmentRecipe& recipe, Item* item); //장비 제작
+	void CraftUniqueEquipiment(std::string recipeName); //유니크 아이템 제작
 
-	void InitRecipes();
-	void AddCraftRecipe(Item* equipment, std::unordered_map<std::string, int> materials);//조합식 추가
+	//레시피
+	void DisplayAllRecipes(); //모든 장비 레시피 보여주기
+	void InitRecipes(); //레시피 생성
+	void AddCraftRecipe(Item* equipment, std::unordered_map<std::string, int> materials);//레시피 추가
+	EquipmentRecipe& FindRecipe(std::string recipeName); //레시피 찾기
 
 public:
 	int upgradeAtkValue = 0; //강화로 얻는 공격력

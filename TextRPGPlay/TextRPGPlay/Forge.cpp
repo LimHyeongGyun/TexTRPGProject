@@ -21,107 +21,67 @@ void Forge::EnteredForge()
 		cout << "1.장비강화" << endl;
 		cout << "2.장비제작 " << endl;
 		cout << "3.조합식 확인하기" << endl;
-		cout << "4.???" << endl;
+		cout << "4.유니크 아이템 제작" << endl;
 		cout << "진행할 작업의 번호를 입력해주세요: ";
 		cin >> num;
 
-		if (num == 0)
+		switch (num)
 		{
-			cout << "드워프 대장장이 불카누스: 몬스터를 잡으면 장비를 제작하러 오게!" << endl;
-			cout << "드워프 대장장이 불카누스: 내가 아주 멋진 것을 만들어주지!" << endl;
-			break;
+			case 0:
+				cout << "드워프 대장장이 불카누스: 몬스터를 잡으면 장비를 제작하러 오게!" << endl;
+				cout << "드워프 대장장이 불카누스: 내가 아주 멋진 것을 만들어주지!" << endl;
+				return;
+			case 1:
+				DisplayPossibleUpgradEquipment();
+				break;
+			case 2:
+				CraftCategory();
+				break;
+			case 3:
+				DisplayAllRecipes();
+				break;
+			case 4:
+				JudgementUseCategory();
+				break;
+			default:
+				cout << "진행 가능한 작업만 입력해주세요." << endl;
+				continue;
 		}
-		else if (num == 1)
-		{
-			DisplayUpgradeEquipment();
-		}
-		else if (num == 2)
-		{
-			CraftEquipment();
-		}
-		else if (num == 3)
-		{
-			DisplayAllRecipes();
-		}
-		else if (num == 4)
-		{
-			bool hasToken = false;
-			for (unordered_map<Item*, int>::value_type& token : Inventory::Get().otherItems)
-			{
-				if (token.first->GetName() == "드래곤 증표")
-				{
-					hasToken = true;
-					break;
-				}
-			}
 
-			EquipmentRecipe* findRecipe = nullptr;
-			for (EquipmentRecipe& recipe : recipeBook)
-			{
-				if (recipe.craftEquipment->GetName() == "드래곤 이빨검")
-				{
-					findRecipe = &recipe;
-					break;
-				}
-			}
-
-			if (hasToken)
-			{
-				bool usedDragonPart = false;
-				for (unordered_map<Item*, int>::value_type& bone : Inventory::Get().otherItems)
-				{
-					for (unordered_map<string, int>::value_type& heart : findRecipe->materials)
-					{
-						//드래곤을 잡아서 얻은 재료가 있을때
-						if (heart.first == bone.first->GetName())
-						{
-							Craft(*findRecipe, findRecipe->craftEquipment);
-							usedDragonPart = true;
-							break;
-						}
-					}
-					if (usedDragonPart)
-					{
-						break;
-					}
-				}
-				if (!usedDragonPart)
-				{
-					cout << "드워프 대장장이 불카누스: 저번에 잡은 드래곤의 부산물은 다 사용한 것 같은데?" << endl;
-					cout << "드워프 대장장이 불카누스: 더 만들고 싶으면 드래곤 한마리 더 잡아보라고!" << endl;
-				}
-			}
-
-			//드래곤을 잡은 증표가 없을때
-			if (!hasToken)
-			{
-				cout << "드워프 대장장이 불카누스: 이건 아직 너 같은 애송이가 사용할 수 있는게 아니야!" << endl;
-				cout << "드워프 대장장이 불카누스: 드래곤 정도는 잡고 오라고!" << endl;
-			}
-		}
-		else
-		{
-			cout << "진행 가능한 작업만 입력해주세요." << endl;
-		}
+		break;
 	}
 }
 
-void Forge::DisplayUpgradeEquipment()
+void Forge::JudgementUseCategory()
 {
-	cout << "==============강화확률==============" << endl;
-	for (int i = 0; i < UP.per.size(); i++)
+	for (unordered_map<Item*, int>::value_type& token : Inventory::Get().otherItems)
 	{
-		cout << i << "강 강화확률:" << UP.per[i] << endl;
+		if (token.first->GetName() == "드래곤 증표") //나중에 증표 토큰은 따로 해서 변경
+		{
+			//추후 여유 있을시 CraftUniqueItem을 제외하고 제작가능한 유니크아이템 목록 보여주기
+			CraftUniqueEquipiment("드래곤 이빨검");
+			return;
+		}
 	}
 
-	int category = 0;
-	cout << "강화할 장비카테고리 번호를 입력해주세요.[1.무기, 2.방어구]: " << endl;
-	cin >> category;
+	//특별한 몬스터를 잡은 증표가 없을때
+	cout << "드워프 대장장이 불카누스: 이건 아직 너 같은 애송이가 사용할 수 있는게 아니야!" << endl;
+	cout << "드워프 대장장이 불카누스: 드래곤 정도는 잡고 오라고!" << endl;
+}
+void Forge::DisplayPossibleUpgradEquipment()
+{
+	DisplayUpgradePercent();
 
+	int category = 0;
 	vector<Item*> itemList; //장비 인벤토리를 저장할 변수
 
-	switch (category)
+	while (true)
 	{
+		cout << "강화할 장비카테고리 번호를 입력해주세요.[1.무기, 2.방어구]: " << endl;
+		cin >> category;
+
+		switch (category)
+		{
 		case 1:
 			itemList = Inventory::Get().weaponItems;
 			cout << "내가 소지한 강화 가능한 무기 리스트" << endl;
@@ -132,7 +92,9 @@ void Forge::DisplayUpgradeEquipment()
 			break;
 		default:
 			cout << "잘못된 번호입니다." << endl;
-			return;
+			continue;
+		}
+		break;
 	}
 
 	if (!itemList.empty())
@@ -177,53 +139,49 @@ void Forge::DisplayUpgradeEquipment()
 	}
 	
 	//결과
-	pair<Item*, string> result = Upgrade(itemList[selected - 1]);
+	Upgrade(itemList[selected - 1]);
+}
 
-	cout << result.first->GetName() << "의 강화가" << result.second << "했습니다." << endl;
-	
-	//강화가 성공했을 때
-	if (result.second == "성공") {
-		cout << "강화 단계: " << result.first->GetUpgradePhase() - 1 << "=>" << result.first->GetUpgradePhase() << endl;
-		if (result.first->GetType() == ItemType::Weapon)
-		{
-			cout << "강화 후 아이템 수치" << result.first->GetAtack() - upgradeAtkValue << "=>" << result.first->GetAtack() << endl;
-		}
-		else if (result.first->GetType() == ItemType::Armor)
-		{
-			cout << "강화 후 아이템 수치" << result.first->GetBonusHealth() - upgradeHpValue << "=>" << result.first->GetBonusHealth() << endl;
-		}
-	}
-	//강화가 실패했을 때
-	else if (result.second == "실패")
+void Forge::DisplayUpgradePercent()
+{
+	cout << "==============강화확률==============" << endl;
+	for (int i = 0; i < UP.per.size(); i++)
 	{
-		cout << "강화에 실패했습니다. " << endl;
+		cout << i << "강 강화확률:" << UP.per[i] << endl;
 	}
 }
 
-int Forge::UpgradePercent(int upValue)
+int Forge::GetUpgradePercent(int upValue)
 {
 	return UP.per[upValue];
 }
 
-pair<Item*, string> Forge::Upgrade(Item* equipment)
+void Forge::Upgrade(Item* equipment)
 {
-	string result;
-	int successRate = UpgradePercent(equipment->GetUpgradePhase());
+	int successRate = GetUpgradePercent(equipment->GetUpgradePhase());
 	int roll = rand() % 100;
 
+	//강화 성공
 	if (roll < successRate)
 	{
-		result = "성공";
+		cout << "강화 단계: " << equipment->GetUpgradePhase() - 1 << "=>" << equipment->GetUpgradePhase() << endl;
+		if (equipment->GetType() == ItemType::Weapon)
+		{
+			cout << "강화 후 아이템 수치" << equipment->GetAtack() - upgradeAtkValue << "=>" << equipment->GetAtack() << endl;
+		}
+		else if (equipment->GetType() == ItemType::Armor)
+		{
+			cout << "강화 후 아이템 수치" << equipment->GetBonusHealth() - upgradeHpValue << "=>" << equipment->GetBonusHealth() << endl;
+		}
 		/*equipment->upgradePhase++;
 		if (equipment->itemType == Weapon) equipment->attackPower += upgradeAtkValue;
 		else if (equipment->itemType == Armor) equipment->health += upgradeHpValue;*/
 	}
+	//강화 실패
 	else
 	{
-		result = "실패";
+		cout << "강화에 실패했습니다. " << endl;
 	}
-
-	return { equipment, result };
 }
 
 #pragma region CraftEquipment
@@ -237,14 +195,11 @@ vector<Forge::EquipmentRecipe> Forge::CanCraftRecipes()
 		bool canCraft = false;
 		for (const unordered_map<string, int>::value_type& material : recipe.materials)
 		{
-			const string& name = material.first; //재료의 이름
-			int requiredAmount = material.second; //재료의 수량
-
 			bool found = false;
 			for (unordered_map<Item*, int>::value_type& pair : Inventory::Get().otherItems)
 			{
 				//이름이 일치하고 수량이 충분할 때
-				if (pair.first->GetName() == name && pair.second >= requiredAmount)
+				if (pair.first->GetName() == material.first && pair.second >= material.second)
 				{
 					found = true;
 					break;
@@ -255,7 +210,6 @@ vector<Forge::EquipmentRecipe> Forge::CanCraftRecipes()
 			if (!found)
 			{
 				canCraft = false;
-				break;
 			}
 		}
 		if (canCraft)
@@ -267,24 +221,10 @@ vector<Forge::EquipmentRecipe> Forge::CanCraftRecipes()
 	return craftableList;
 }
 
-void Forge::DisplayAllRecipes()
-{
-	for(int i = 0; i < recipeBook.size(); i++)
-	{
-		cout << i + 1 << "." << recipeBook[i].craftEquipment->GetName() << "필요한 재료: [";
-		for(const unordered_map<string, int>::value_type& pair : recipeBook[i].materials)
-		{
-			cout << pair.first << " " << pair.second << "개";
-		}
-		cout << "]" << endl;
-	}
-}
-
-void Forge::CraftEquipment()
+void Forge::CraftCategory()
 {
 	cout << "대장간에서는 멋진 장비를 제작할 수 있습니다!" << endl;
 	cout << "현재 제작 가능한 아이템 목록" << endl;
-
 	vector<EquipmentRecipe> craftableList = CanCraftRecipes();
 	
 	if(craftableList.empty())
@@ -300,10 +240,45 @@ void Forge::CraftEquipment()
 	}
 
 	int num;
-	cout << "제작할 장비아이템의 번호를 입력해주세요: ";
-	cin >> num;
+	while (true)
+	{
+		cout << "제작할 장비아이템의 번호를 입력해주세요: ";
+		cin >> num;
+
+		if (num <= 0 || num > static_cast<int>(craftableList.size()))
+		{
+			cout << "잘못된 번호입니다." << endl;
+			continue;
+		}
+
+		break;
+	}
 
 	Craft(craftableList[num - 1], craftableList[num - 1].craftEquipment);
+}
+
+void Forge::CraftUniqueEquipiment(string recipeName)
+{
+	//드래곤 재료로 만들 수 있는 재료 찾아오기
+	EquipmentRecipe findRecipe = FindRecipe(recipeName);
+
+	bool usedDragonPart = false;
+	for (unordered_map<Item*, int>::value_type& bone : Inventory::Get().otherItems)
+	{
+		for (unordered_map<string, int>::value_type& mat : findRecipe.materials)
+		{
+			//드래곤을 잡아서 얻은 재료가 있을때
+			if (mat.first == bone.first->GetName())
+			{
+				Craft(findRecipe, findRecipe.craftEquipment);
+				usedDragonPart = true;
+				return;
+			}
+		}
+	}
+
+	cout << "드워프 대장장이 불카누스: 저번에 잡은 드래곤의 부산물은 다 사용한 것 같은데?" << endl;
+	cout << "드워프 대장장이 불카누스: 더 만들고 싶으면 드래곤 한마리 더 잡아보라고!" << endl;
 }
 
 void Forge::Craft(const EquipmentRecipe& recipe, Item* item)
@@ -319,7 +294,6 @@ void Forge::Craft(const EquipmentRecipe& recipe, Item* item)
 	Character::Get().GetItem(_item);
 
 }
-
 #pragma endregion
 
 #pragma region RecipeManagement
@@ -334,5 +308,29 @@ void Forge::InitRecipes()
 void Forge::AddCraftRecipe(Item* craftItem, const unordered_map<string, int> materials)
 {
 	recipeBook.emplace_back(craftItem, materials);
+}
+
+void Forge::DisplayAllRecipes()
+{
+	for (int i = 0; i < recipeBook.size(); i++)
+	{
+		cout << i + 1 << "." << recipeBook[i].craftEquipment->GetName() << "필요한 재료: ";
+		for (const unordered_map<string, int>::value_type& pair : recipeBook[i].materials)
+		{
+			cout << "["  << pair.first << " " << pair.second << "개] ";
+		}
+	}
+}
+
+Forge::EquipmentRecipe& Forge::FindRecipe(std::string recipeName)
+{
+	for (EquipmentRecipe& recipe : recipeBook)
+	{
+		if (recipe.craftEquipment->GetName() == recipeName)
+		{
+			return recipe;
+			break;
+		}
+	}
 }
 #pragma endregion
