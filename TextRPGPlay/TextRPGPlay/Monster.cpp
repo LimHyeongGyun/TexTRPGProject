@@ -1,5 +1,7 @@
 #include "Monster.h"
 
+using namespace std;
+
 string Monster::getName() const {
 	return name;
 }
@@ -24,7 +26,7 @@ int Monster::getExpDrop() const {
 	return alive ? 0 : expDrop;
 }
 
-int Monster::getGoldDrop() const {
+int Monster::getGoldDrop() const {	
 	return alive ? 0 : goldDrop;
 }
 
@@ -32,16 +34,6 @@ bool Monster::IsAlive() {
 	return alive;
 }
 
-void Monster::rollItemDrop() {
-	const auto& items = getPossibleDrops();
-	int idx = getRandomInRange(0, items.size() - 1);
-	itemDrop = items[idx];
-}
-
-ItemType Monster::getItemDrop() const {
-	return itemDrop;
-}
-
-string Monster::getItemDropName() const {
-	return getItemName(itemDrop);
+Item* Monster::ItemDrop() {
+	return getPossibleDrops();
 }

@@ -18,5 +18,5 @@ Troll::Troll(int level) {
 	expDrop = 50;
 	goldDrop = getRandomInRange(10, 20);
 
-	rollItemDrop();
+	ItemDrop();
 }
