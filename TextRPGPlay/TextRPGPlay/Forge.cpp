@@ -161,21 +161,23 @@ void Forge::Upgrade(Item* equipment)
 	int successRate = GetUpgradePercent(equipment->GetUpgradePhase());
 	int roll = rand() % 100;
 
+	equipment->Upgrade();
+}
+
+void Forge::UpgradeResult(Item* equipment, int roll, int successRate)
+{
 	//강화 성공
 	if (roll < successRate)
 	{
 		cout << "강화 단계: " << equipment->GetUpgradePhase() - 1 << "=>" << equipment->GetUpgradePhase() << endl;
 		if (equipment->GetType() == ItemType::Weapon)
 		{
-			cout << "강화 후 아이템 수치" << equipment->GetAtack() - upgradeAtkValue << "=>" << equipment->GetAtack() << endl;
+			cout << "강화 후 아이템 수치" << equipment->GetAtack() - GetUpgradeAtkValue() << "=>" << equipment->GetAtack() << endl;
 		}
 		else if (equipment->GetType() == ItemType::Armor)
 		{
-			cout << "강화 후 아이템 수치" << equipment->GetBonusHealth() - upgradeHpValue << "=>" << equipment->GetBonusHealth() << endl;
+			cout << "강화 후 아이템 수치" << equipment->GetBonusHealth() - GetUpgradeAtkValue() << "=>" << equipment->GetBonusHealth() << endl;
 		}
-		/*equipment->upgradePhase++;
-		if (equipment->itemType == Weapon) equipment->attackPower += upgradeAtkValue;
-		else if (equipment->itemType == Armor) equipment->health += upgradeHpValue;*/
 	}
 	//강화 실패
 	else
@@ -183,6 +185,17 @@ void Forge::Upgrade(Item* equipment)
 		cout << "강화에 실패했습니다. " << endl;
 	}
 }
+
+int Forge::GetUpgradeAtkValue()
+{
+	return upgradeAtkValue;
+}
+
+int Forge::GetUpgradeHPValue()
+{
+	return upgradeHPValue;
+}
+
 
 #pragma region CraftEquipment
 
