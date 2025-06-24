@@ -1,25 +1,21 @@
 #include "GameManager.h"
-#include "Monster.h" 
+#include "Monster.h"
 #include "Goblin.h"
 #include "Orc.h"
 #include "Troll.h"
 #include "Slime.h"
 #include "Dragon.h"
-#include "Character.h"
 #include "Inventory.h"
 #include "ItemManager.h"
 #include "Item.h"
 #include "DropItems.h"
-
 #include <iostream>
 #include <vector>
 #include <limits>
 
 using namespace std;
 
-GameManager::GameManager() {
-    player = Character::Get("용사");
-}
+GameManager::GameManager() {}
 
 Monster* GameManager::GenerateMonster(int level) {
     if (level <= 3) return new Slime(level);
@@ -73,52 +69,37 @@ void GameManager::Battle(Character* character, Monster* monster) {
     delete monster;
 }
 
-void GameManager::DisplayInventory(Character* character) {
-    Inventory::Get()->DisplayInventory();
-}
+void GameManager::DisplayInventory() {}
 
 void GameManager::Run() {
-    while (player->IsAlive() && player->GetLevel() < 10) {
-        cout << "\n===== 전투 시작 (레벨: " << player->GetLevel() << ") =====" << endl;
-        Monster* monster = GenerateMonster(player->GetLevel());
+    Character& player = *Character::Get();
+
+    while (player.IsAlive() && player.GetLevel() < 10) {
+        cout << "\n===== 캐릭터 상태 =====" << endl;
+        player.DisplayStatus();
+
+        cout << "\n===== 전투 시작 (레벨: " << player.GetLevel() << ") =====" << endl;
+        Monster* monster = GenerateMonster(player.GetLevel());
         cout << monster->getName() << " 등장! 체력: " << monster->getHealth()
             << ", 공격력: " << monster->Attack() << endl;
-        Battle(player, monster);
 
-        if (!player->IsAlive()) break;
+        Battle(&player, monster);
 
-        char choice;
-        cout << "인벤토리를 확인하시겠습니까? (Y/N): ";
-        while (true) {
-            cin >> choice;
-            if (cin.fail()) {
-                cin.clear();
-                cin.ignore(numeric_limits<streamsize>::max(), '\n');
-                cout << "입력 오류입니다. Y 또는 N을 입력해주세요: ";
-                continue;
-            }
-            if (choice == 'Y' || choice == 'y') {
-                DisplayInventory(player);
-                break;
-            }
-            else if (choice == 'N' || choice == 'n') {
-                break;
-            }
-            else {
-                cout << "잘못된 입력입니다. Y 또는 N을 입력해주세요: ";
-            }
-        }
+        if (!player.IsAlive()) break;
     }
 
-    if (player->IsAlive() && player->GetLevel() >= 10) {
+    if (player.IsAlive() && player.GetLevel() >= 10) {
         cout << "\n===== 보스 몬스터 등장 =====" << endl;
-        Monster* boss = GenerateBossMonster(player->GetLevel());
+        player.DisplayStatus();
+
+        Monster* boss = GenerateBossMonster(player.GetLevel());
         cout << boss->getName() << " 등장! 체력: " << boss->getHealth()
             << ", 공격력: " << boss->Attack() << endl;
-        Battle(player, boss);
+
+        Battle(&player, boss);
         delete boss;
 
-        if (player->IsAlive()) {
+        if (player.IsAlive()) {
             cout << "\n축하합니다! 보스를 물리치고 게임을 클리어했습니다!" << endl;
         }
         else {
@@ -127,6 +108,5 @@ void GameManager::Run() {
     }
 
     cout << "\n게임 종료. 메모리 정리 중..." << endl;
-    delete player;
-    player = nullptr;
+    delete Character::Get();
 }
