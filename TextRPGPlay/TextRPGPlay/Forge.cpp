@@ -45,6 +45,16 @@ void Forge::EnteredForge()
 		}
 		else if (num == 4)
 		{
+			bool hasToken = false;
+			for (unordered_map<Item*, int>::value_type& token : Inventory::Get().otherItems)
+			{
+				if (token.first->GetName() == "드래곤 증표")
+				{
+					hasToken = true;
+					break;
+				}
+			}
+
 			EquipmentRecipe* findRecipe = nullptr;
 			for (EquipmentRecipe& recipe : recipeBook)
 			{
@@ -54,19 +64,16 @@ void Forge::EnteredForge()
 					break;
 				}
 			}
-			
-			bool hasToken = false;
-			hasToken = true;
 
-			bool usedDragonPart = false;
 			if (hasToken)
 			{
-				for (unordered_map<Item*, int>::value_type& token : Inventory::Get()->otherItems)
+				bool usedDragonPart = false;
+				for (unordered_map<Item*, int>::value_type& bone : Inventory::Get().otherItems)
 				{
 					for (unordered_map<string, int>::value_type& heart : findRecipe->materials)
 					{
 						//드래곤을 잡아서 얻은 재료가 있을때
-						if (heart.first == token.first->GetName())
+						if (heart.first == bone.first->GetName())
 						{
 							Craft(*findRecipe, findRecipe->craftEquipment);
 							usedDragonPart = true;
@@ -116,11 +123,11 @@ void Forge::DisplayUpgradeEquipment()
 	switch (category)
 	{
 		case 1:
-			itemList = Inventory::Get()->weaponItems;
+			itemList = Inventory::Get().weaponItems;
 			cout << "내가 소지한 강화 가능한 무기 리스트" << endl;
 			break;
 		case 2:
-			itemList = Inventory::Get()->armorItems;
+			itemList = Inventory::Get().armorItems;
 			cout << "내가 소지한 강화 가능한 방어구 리스트" << endl;
 			break;
 		default:
@@ -234,7 +241,7 @@ vector<Forge::EquipmentRecipe> Forge::CanCraftRecipes()
 			int requiredAmount = material.second; //재료의 수량
 
 			bool found = false;
-			for (unordered_map<Item*, int>::value_type& pair : Inventory::Get()->otherItems)
+			for (unordered_map<Item*, int>::value_type& pair : Inventory::Get().otherItems)
 			{
 				//이름이 일치하고 수량이 충분할 때
 				if (pair.first->GetName() == name && pair.second >= requiredAmount)
@@ -303,13 +310,13 @@ void Forge::Craft(const EquipmentRecipe& recipe, Item* item)
 {
 	//Inventory에 제거할 재료목록 전달
 	unordered_map<string, int> materialMap = recipe.materials;
-	Inventory::Get()->RemoveItem(materialMap);
+	Inventory::Get().RemoveItem(materialMap);
 
 	//Character에 제작한 아이템 전달
 	cout << "아이템 제작에 성공했습니다!" << endl;
 	vector<Item*> _item;
 	_item.push_back(item);
-	Character::Get()->GetItem(_item);
+	Character::Get().GetItem(_item);
 
 }
 
@@ -319,7 +326,7 @@ void Forge::Craft(const EquipmentRecipe& recipe, Item* item)
 
 void Forge::InitRecipes()
 {
-	Item* softArmor = ItemManager::Get()->CreateItem("말랑한 보호대");
+	Item* softArmor = ItemManager::Get().CreateItem("말랑한 보호대");
 	unordered_map<string, int> needMat = {{"슬라임의 핵", 2}, {"고블린의 허리띠", 2}};
 	AddCraftRecipe(softArmor, needMat);
 }

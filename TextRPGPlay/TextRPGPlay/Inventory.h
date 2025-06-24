@@ -22,7 +22,7 @@ private:
 	void UnEquipWeapon(); //방어구 해제
 	void UnEquipArmor(); //무기 해제
 public:
-	static Inventory* Get(); //싱글턴 인스턴스
+	static Inventory& Get(); //싱글턴 인스턴스
 
 	std::unordered_map<Item*, int> expendableItems;
 	std::unordered_map<Item*, int> otherItems;

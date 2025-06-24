@@ -24,7 +24,7 @@ Character::Character(string playerName) {
     equipArmor = nullptr;
 }
 
-Character* Character::Get(string playerName)
+Character& Character::Get(string playerName)
 {
     //만약 instance가 생성되지 않았다면
     if (charInstance == nullptr)
@@ -32,7 +32,7 @@ Character* Character::Get(string playerName)
         charInstance = new Character(playerName); //캐릭터 생성해주기
     }
 
-    return charInstance;
+    return *charInstance;
 }
 
 void Character::DisplayStatus() const
@@ -156,11 +156,11 @@ void Character::UnEquipStatus(int getAttack, int getHealth)
 
 void Character::GetItem(vector<Item*> getItems) const
 {
-    Inventory::Get()->ClassificationItem(getItems);
+    Inventory::Get().ClassificationItem(getItems);
 }
 void Character::UseItem(int index) const
 {
-    Inventory::Get()->DisplayConsumeItem();
+    Inventory::Get().DisplayConsumeItem();
 }
 
 void Character::BorrowGold(int getGold)

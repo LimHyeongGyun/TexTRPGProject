@@ -29,7 +29,7 @@ private:
 public:
 	Character(const Character&) = delete;
 	Character& operator=(const Character&) = delete;
-	static Character* Get(std::string playerName = " "); //싱글턴 인스턴스
+	static Character& Get(std::string playerName = " "); //싱글턴 인스턴스
 
 	//플레이어 정보
 	void DisplayStatus() const; //플레이어의 현재 스탯 확인

@@ -9,14 +9,14 @@ using namespace std;
 
 Inventory* Inventory::iveninstance = nullptr;
 
-Inventory* Inventory::Get()
+Inventory& Inventory::Get()
 {
     if (iveninstance == nullptr)
     {
         iveninstance = new Inventory(); //인벤토리 생성해주기
     }
 
-    return iveninstance;
+    return *iveninstance;
 }
 
 void Inventory::ClassificationItem(vector<Item*> items)
@@ -121,11 +121,11 @@ void Inventory::DisplayConsumeItem()
         return;
     }
 
-    Character* character = Character::Get();
+    Character& character = Character::Get();
     for (unordered_map<Item*, int>::value_type& item : expendableItems)
     {
         if (item.first->GetName() == key) {
-            item.first->Use(character);
+            item.first->Use(&character);
             return;
         }
     }
@@ -211,19 +211,19 @@ void Inventory::EquipWeapon(Item* weapon)
     {
         weapon->SetEquip(true);
 
-        Character* character = Character::Get();
-        Item* equipped = character->GetEquipWeapon();
+        Character& character = Character::Get();
+        Item* equipped = character.GetEquipWeapon();
 
         //장착한 무기가 있을때
         if (equipped != nullptr)
         {
             //무기해제
             UnEquipWeapon();
-            character->UnEquipStatus(equipped->GetAtack(), 0); //장비로 얻은 능력치 해제
+            character.UnEquipStatus(equipped->GetAtack(), 0); //장비로 얻은 능력치 해제
         }
 
-        character->SetEquipWeapon(weapon);
-        character->EquipStatus(weapon->GetAtack(), 0);
+        character.SetEquipWeapon(weapon);
+        character.EquipStatus(weapon->GetAtack(), 0);
     }
 }
 void Inventory::EquipArmor(Item* armor)
@@ -237,28 +237,28 @@ void Inventory::EquipArmor(Item* armor)
     {
         armor->SetEquip(true);
 
-        Character* character = Character::Get();
-        Item* equipped = character->GetEquipArmor();
+        Character& character = Character::Get();
+        Item* equipped = character.GetEquipArmor();
 
         //장착한 방어구가 있을때
         if (equipped != nullptr)
         {
             //기존 방어구 해제
             UnEquipArmor();
-            character->UnEquipStatus(0, equipped->GetBonusHealth()); //장비로 얻은 능력치 해제
+            character.UnEquipStatus(0, equipped->GetBonusHealth()); //장비로 얻은 능력치 해제
         }
         //새로운 방어구 장착
-        character->SetEquipArmor(armor);
-        character->EquipStatus(0, armor->GetBonusHealth());
+        character.SetEquipArmor(armor);
+        character.EquipStatus(0, armor->GetBonusHealth());
     }
 }
 void Inventory::UnEquipWeapon()
 {
-    Character::Get()->GetEquipWeapon()->SetEquip(false);
+    Character::Get().GetEquipWeapon()->SetEquip(false);
 }
 void Inventory::UnEquipArmor()
 {
-    Character::Get()->GetEquipArmor()->SetEquip(false);
+    Character::Get().GetEquipArmor()->SetEquip(false);
 }
 
 void Inventory::RemoveItem(const unordered_map<string, int>& materials)
