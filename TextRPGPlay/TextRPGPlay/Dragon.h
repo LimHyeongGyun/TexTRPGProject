@@ -1,15 +1,13 @@
 #pragma once
 
-#include "ItemManager.h"
-
-inline int getRandomInRange(int min, int max);
+class ItemManager;
 class Monster;
 
 class Dragon : public Monster {
 public:
 	Dragon(int level);
-	Item* dropItem = ItemManager::Get().CreateItem("드래곤심장");
 
+	Item* dropItem = ItemManager::Get().CreateItem("드래곤심장");
 	Item* getPossibleDrops() const override {
 		return dropItem;
 	}

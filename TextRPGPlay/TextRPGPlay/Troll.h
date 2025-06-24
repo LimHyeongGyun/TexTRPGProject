@@ -1,6 +1,7 @@
 #pragma once
 
-#include "Monster.h"
+class ItemManager;
+class Monster;
 
 class Troll : public Monster {
 public:
