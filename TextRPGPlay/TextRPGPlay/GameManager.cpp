@@ -10,26 +10,17 @@
 #include "Character.h"
 #include <iostream>
 #include <vector>
+#include <limits>
 
 using namespace std;
 
 GameManager::GameManager() {}
 
-Slime* GenerateSlime(int level) {
-    return new Slime(level);
-}
-Orc* GenerateOrc(int level) {
-    return new Orc(level);
-}
-Troll* GenerateTroll(int level) {
-    return new Troll(level);
-}
-Goblin* GenerateGoblin(int level) {
-    return new Goblin(level);
-}
-Dragon* GenerateDragon(int level) {
-    return new Dragon(level);
-}
+Slime* GenerateSlime(int level) { return new Slime(level); }
+Orc* GenerateOrc(int level) { return new Orc(level); }
+Troll* GenerateTroll(int level) { return new Troll(level); }
+Goblin* GenerateGoblin(int level) { return new Goblin(level); }
+Dragon* GenerateDragon(int level) { return new Dragon(level); }
 
 void GameManager::Run() {
     Character& player = Character::Get();
@@ -82,10 +73,44 @@ void GameManager::Run() {
 
 void GameManager::Battle(Character* player, Monster* monster) {
     while (player->GetHealth() > 0 && monster->getHealth() > 0) {
-        int damage = player->Attack();
-        monster->takeDamage(damage);
-        cout << player->GetName() << "이(가) " << monster->getName()
-            << "을(를) 공격! 몬스터 체력: " << monster->getHealth() << endl;
+        cout << "\n==== 행동을 선택하세요 ====\n";
+        cout << "1. 공격\n";
+        cout << "2. 아이템 사용\n";
+        cout << "3. 도망가기\n";
+        cout << "입력 >> ";
+
+        int choice;
+        cin >> choice;
+
+        if (cin.fail()) {
+            cin.clear();
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');
+            cout << "잘못된 입력입니다.\n";
+            continue;
+        }
+
+        if (choice == 1) {
+            int damage = player->Attack();
+            monster->takeDamage(damage);
+            cout << player->GetName() << "이(가) " << monster->getName()
+                << "을(를) 공격! 몬스터 체력: " << monster->getHealth() << endl;
+        }
+        else if (choice == 2) {
+            Inventory::Get().DisplayConsumeItem();
+            cout << "사용할 아이템 번호 입력 >> ";
+            int index;
+            cin >> index;
+            player->UseItem(index);
+            continue;
+        }
+        else if (choice == 3) {
+            cout << "도망쳤습니다!\n";
+            return;
+        }
+        else {
+            cout << "잘못된 선택입니다. 다시 입력하세요.\n";
+            continue;
+        }
 
         if (monster->getHealth() > 0) {
             int mDamage = monster->Attack();
