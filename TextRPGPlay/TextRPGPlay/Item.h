@@ -64,7 +64,7 @@ public:
 	int GetUpgradePhase() { return upgradePhase; }
 	//강화성공 횟수 가져오기
 
-	int GetMaxUbgradePhase() { return maxUpgradePhase; }
+	int GetMaxUpgradePhase() { return maxUpgradePhase; }
 	//최대 강화 횟수 가져오기
 
 	void Use(Character* character);
