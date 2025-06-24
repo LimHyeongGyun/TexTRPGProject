@@ -7,8 +7,9 @@ class Dragon : public Monster {
 public:
 	Dragon(int level);
 
-	Item* dropItem = ItemManager::Get().CreateItem("드래곤심장");
-	Item* getPossibleDrops() const override {
+	Item* dropItem;
+	Item* getPossibleDrops() const override
+	{
 		return dropItem;
 	}
 

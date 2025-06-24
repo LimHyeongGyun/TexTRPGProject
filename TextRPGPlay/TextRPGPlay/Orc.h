@@ -7,7 +7,7 @@ class Orc : public Monster {
 public:
 	Orc(int level);
 
-	Item* dropItem = ItemManager::Get().CreateItem("오크족전투휘장");
+	Item* dropItem;
 	Item* getPossibleDrops() const override {
 		return dropItem;
 	}
