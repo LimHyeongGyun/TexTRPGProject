@@ -27,7 +27,7 @@ int main() {
         if (cin.fail()) {
             cin.clear();
             cin.ignore(numeric_limits<streamsize>::max(), '\n');
-            cout << "잘못된 입력입니다.\n";
+            cout << GameManager::Get().WrongInputMessage();
             continue;
         }
 
@@ -41,7 +41,7 @@ int main() {
             Character::Get(name);
 
             // 게임 실행
-            GameManager game;
+            GameManager& game = GameManager::Get();
             game.Run();
         }
         else if (choice == 2) {

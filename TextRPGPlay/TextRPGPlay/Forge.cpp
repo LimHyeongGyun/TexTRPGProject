@@ -5,6 +5,7 @@
 #include "Inventory.h"
 #include "Character.h"
 #include "ItemManager.h"
+#include "GameManager.h"
 
 using namespace std;
 
@@ -44,7 +45,7 @@ void Forge::EnteredForge()
 				JudgementUseCategory();
 				break;
 			default:
-				cout << "진행 가능한 작업만 입력해주세요." << endl;
+				cout << GameManager::Get().WrongInputMessage();
 				continue;
 		}
 
@@ -91,7 +92,7 @@ void Forge::DisplayPossibleUpgradEquipment()
 			cout << "내가 소지한 강화 가능한 방어구 리스트" << endl;
 			break;
 		default:
-			cout << "잘못된 번호입니다." << endl;
+			cout << GameManager::Get().WrongInputMessage();;
 			continue;
 		}
 		break;
@@ -133,7 +134,7 @@ void Forge::DisplayPossibleUpgradEquipment()
 		//유효성 검사
 		if (selected <= 0 || selected > static_cast<int>(itemList.size()))
 		{
-			cout << "다시 입력해 주세요" << endl;
+			cout << GameManager::Get().WrongInputMessage();
 			system("pause");
 		}
 	}
@@ -147,7 +148,7 @@ void Forge::DisplayUpgradePercent()
 	cout << "==============강화확률==============" << endl;
 	for (int i = 0; i < UP.per.size(); i++)
 	{
-		cout << i << "강 강화확률:" << UP.per[i] << endl;
+		cout << i << "강화확률:" << UP.per[i] << endl;
 	}
 }
 
@@ -262,7 +263,7 @@ void Forge::CraftCategory()
 
 		if (num <= 0 || num > static_cast<int>(craftableList.size()))
 		{
-			cout << "잘못된 번호입니다." << endl;
+			cout << GameManager::Get().WrongInputMessage();
 			continue;
 		}
 

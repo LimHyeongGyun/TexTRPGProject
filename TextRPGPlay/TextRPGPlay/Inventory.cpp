@@ -3,6 +3,7 @@
 
 #include "Character.h"
 #include "Inventory.h"
+#include "GameManager.h"
 #include "Item.h"
 
 using namespace std;
@@ -93,7 +94,7 @@ void Inventory::DisplayInventory()
             case 1: DisplayConsumeItem(); break;
             case 2: DisplayWeapon(); break;
             case 3: DisplayArmor(); break;
-            default: cout << "유효하지 않은 입력입니다" << endl; break;
+            default: cout << GameManager::Get().WrongInputMessage(); break;
         }
     }
 }
@@ -163,7 +164,7 @@ void Inventory::DisplayWeapon()
     }
     else
     {
-        cout << "유효하지 않은 번호입니다." << endl;
+        cout << GameManager::Get().WrongInputMessage();
     }
 }
 
@@ -195,7 +196,7 @@ void Inventory::DisplayArmor()
     }
     else
     {
-        cout << "유효하지 않은 번호입니다." << endl;
+        cout << GameManager::Get().WrongInputMessage();
     }
 }
 
