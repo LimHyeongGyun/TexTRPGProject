@@ -175,7 +175,7 @@ void Forge::UpgradeResult(Item* equipment, int roll, int successRate)
 		cout << "강화 단계: " << equipment->GetUpgradePhase() - 1 << "=>" << equipment->GetUpgradePhase() << endl;
 		if (equipment->GetType() == ItemType::Weapon)
 		{
-			cout << "강화 후 아이템 수치" << equipment->GetAtack() - GetUpgradeAtkValue() << "=>" << equipment->GetAtack() << endl;
+			cout << "강화 후 아이템 수치" << equipment->GetAttack() - GetUpgradeAtkValue() << "=>" << equipment->GetAttack() << endl;
 		}
 		else if (equipment->GetType() == ItemType::Armor)
 		{
@@ -251,7 +251,7 @@ void Forge::CraftCategory()
 	for (int i = 0; i < craftableList.size(); i++)
 	{
 		cout << i+1 << "." << craftableList[i].craftEquipment->GetName()
-			<< "공격력: " << craftableList[i].craftEquipment->GetAtack()
+			<< "공격력: " << craftableList[i].craftEquipment->GetAttack()
 			<< "체력: " << craftableList[i].craftEquipment->GetBonusHealth() << endl;
 	}
 

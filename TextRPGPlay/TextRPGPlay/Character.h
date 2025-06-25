@@ -13,8 +13,10 @@ private:
 	std::string name; //플레이어 이름
 	int level = 1; //레벨
 	int maxLevel = 10;
+	int baseHealth = 0; //플레이어 자체 체력 (장비 또는 포션의 효과를 제외한)
 	int health = 0; //현재 체력
 	int maxHealth = 0; //최대 체력
+	int baseAttack = 0; //플레이어 자체 공격력 (장비 또는 포션의 효과를 제외한)
 	int attack = 0; //공격력
 	int experience = 0; //경험치
 	int needExperience = 100;
@@ -23,7 +25,7 @@ private:
 	Item* equipWeapon;
 	Item* equipArmor;
 
-	void UpgradeStatus(); //레벨업 했을 때 스탯 업그레이드
+	void LevelUpStatus(); //레벨업 했을 때 스탯 업그레이드
 	void LevelUp(); //레벨업
 
 public:
@@ -36,6 +38,7 @@ public:
 	std::string GetName() const; //플레이어 이름
 	int GetHealth() const; //플레이어 체력
 	int GetLevel() const; //플레이어 레벨
+	void UpadatePlayerStatus(); //장비 또는 아이템으로 플레이어의 스탯이 변경되어야 할 때 호출
 
 	//전투 관련
 	int Attack() const;
@@ -51,8 +54,6 @@ public:
 	Item* GetEquipArmor() const; //현재 장착 방어구 반환
 	void SetEquipWeapon(Item* weapon); //무기 장착
 	void SetEquipArmor(Item* armor); //방어구 장착
-	void EquipStatus(int getAttack, int getHealth); //장비 장착시 스탯 변환
-	void UnEquipStatus(int getAttack, int getHealth); //장비 해제시 스탯 변환
 
 	//골드 관련
 	void BorrowGold(int getGold);

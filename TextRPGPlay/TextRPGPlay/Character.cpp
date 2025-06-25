@@ -2,6 +2,7 @@
 
 #include "Character.h"
 #include "Inventory.h"
+#include "Item.h"
 
 using namespace std;
 
@@ -13,9 +14,11 @@ Character::Character(string playerName) {
     name = playerName;
     level = 1;
     maxLevel = 10;
-    maxHealth = 200;
+    baseHealth = 200;
+    maxHealth = baseHealth;
     health = maxHealth;
-    attack = 30;
+    baseAttack = 30;
+    attack = baseAttack;
     experience = 0;
     needExperience = 100;
     gold = 0;
@@ -59,7 +62,23 @@ int Character::GetLevel() const
 {
     return level;
 }
-
+void Character::UpadatePlayerStatus()
+{
+    if (equipArmor != nullptr)
+    {
+        maxHealth = baseHealth + equipArmor->GetBonusHealth();
+    }
+    if (equipWeapon != nullptr)
+    {
+        attack = baseAttack + equipWeapon->GetAttack();
+    }
+    else if (equipArmor == nullptr && equipWeapon == nullptr)
+    {
+        maxHealth = baseHealth;
+        attack = baseAttack;
+    }
+    
+}
 #pragma endregion
 
 #pragma region Battle
@@ -117,16 +136,18 @@ void Character::LevelUp()
     if (level < maxLevel) {
         level += 1;
     }
-    UpgradeStatus();
+    LevelUpStatus();
 }
 
-void Character::UpgradeStatus()
+void Character::LevelUpStatus()
 {
-    maxHealth += level * 20; //최대 체력 증가
-    attack = attack + level * 5; //공격력 증가
+    baseHealth += level * 20; //최대 체력 증가
+    baseAttack = baseAttack + level * 5; //공격력 증가
 
+    UpadatePlayerStatus(); //플레이어 스탯 업데이트
     RecoveryHP(maxHealth); //체력 회복
 }
+
 #pragma endregion
 
 #pragma region Equipment
@@ -147,19 +168,6 @@ void Character::SetEquipArmor(Item* armor)
 {
     equipArmor = armor;
 }
-
-void Character::EquipStatus(int getAttack, int getHealth)
-{
-    attack += getAttack;
-    maxHealth += getHealth;
-}
-
-void Character::UnEquipStatus(int getAttack, int getHealth)
-{
-    attack -= getAttack;
-    maxHealth -= getHealth;
-}
-
 
 #pragma endregion
 

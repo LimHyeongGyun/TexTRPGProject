@@ -210,21 +210,16 @@ void Inventory::EquipWeapon(Item* weapon)
     //착용중이 아닐 때
     else
     {
-        weapon->SetEquip(true);
-
-        Character& character = Character::Get();
-        Item* equipped = character.GetEquipWeapon();
-
-        //장착한 무기가 있을때
-        if (equipped != nullptr)
+        //기존에 장착한 무기가 있을때
+        if (Character::Get().GetEquipWeapon() != nullptr)
         {
             //무기해제
             UnEquipWeapon();
-            character.UnEquipStatus(equipped->GetAtack(), 0); //장비로 얻은 능력치 해제
         }
-
-        character.SetEquipWeapon(weapon);
-        character.EquipStatus(weapon->GetAtack(), 0);
+        //새로운 무기 장착
+        Character::Get().SetEquipWeapon(weapon);
+        weapon->SetEquip(true); //해당 무기 장착상태로 변경
+        Character::Get().UpadatePlayerStatus(); //플레이어 스탯 업데이트
     }
 }
 void Inventory::EquipArmor(Item* armor)
@@ -236,21 +231,17 @@ void Inventory::EquipArmor(Item* armor)
     }
     else
     {
-        armor->SetEquip(true);
-
-        Character& character = Character::Get();
-        Item* equipped = character.GetEquipArmor();
-
-        //장착한 방어구가 있을때
-        if (equipped != nullptr)
+        //기존에 장착한 방어구가 있을때
+        if (Character::Get().GetEquipArmor() != nullptr)
         {
             //기존 방어구 해제
             UnEquipArmor();
-            character.UnEquipStatus(0, equipped->GetBonusHealth()); //장비로 얻은 능력치 해제
         }
+
         //새로운 방어구 장착
-        character.SetEquipArmor(armor);
-        character.EquipStatus(0, armor->GetBonusHealth());
+        Character::Get().SetEquipArmor(armor);
+        armor->SetEquip(true); //해당 방어구 장착 상태로 변경
+        Character::Get().UpadatePlayerStatus(); //플레이어 스탯 업데이트
     }
 }
 void Inventory::UnEquipWeapon()

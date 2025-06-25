@@ -105,7 +105,7 @@ void Item::Upgrade(Forge forge)
 		{
 			this->attack = forge.GetUpgradeAtkValue();
 		}
-
+		Character::Get().UpadatePlayerStatus();
 	}
 	else
 	{
