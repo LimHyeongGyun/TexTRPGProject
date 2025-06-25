@@ -337,13 +337,13 @@ void Forge::Craft(const EquipmentRecipe& recipe, Item* item)
 
 void Forge::CreateRecipe()
 {
-	InitRecipes(ItemManager::Get().CreateItem("고블린톱니단검"), { {"고블린 이빨", 3}, {"거친 가죽 조각", 1}, {"고블린의 귀걸이", 1}});
-	InitRecipes(ItemManager::Get().CreateItem("오크 어금니 도끼"), { {"오크의 어금니", 2}, {"오크족 전투 휘장", 1} });
-	InitRecipes(ItemManager::Get().CreateItem("오크 가죽 갑옷"), { {"상처 난 오크 등가죽", 3}, {"오크 등가죽", 2} });
-	InitRecipes(ItemManager::Get().CreateItem("트롤뼈 몽둥이"), { {"트롤의 변이된 손톱", 3}, {"트롤의 가죽", 1} });
-	InitRecipes(ItemManager::Get().CreateItem("트롤가죽 갑옷"), { {"트롤의 가죽", 5}, {"트롤의 재생 혈액", 2} });
-	InitRecipes(ItemManager::Get().CreateItem("용기사의 창"), { {"드래곤의 발톱", 1}, {"드래곤의 비늘", 2} });
-	InitRecipes(ItemManager::Get().CreateItem("용기사의 갑주"), { {"드래곤 심장", 1}, {"드래곤의 비늘", 2} });
+	InitRecipes(ItemManager::Get().CreateItem("고블린톱니단검"), { {"고블린이빨", 3}, {"거친가죽조각", 1}, {"고블린의귀걸이", 1}});
+	InitRecipes(ItemManager::Get().CreateItem("오크어금니도끼"), { {"오크의어금니", 2}, {"오크족전투휘장", 1} });
+	InitRecipes(ItemManager::Get().CreateItem("오크가죽갑옷"), { {"상처난오크등가죽", 3}, {"오크등가죽", 2} });
+	InitRecipes(ItemManager::Get().CreateItem("트롤뼈몽둥이"), { {"트롤의변이된 손톱", 3}, {"트롤의가죽", 1} });
+	InitRecipes(ItemManager::Get().CreateItem("트롤가죽갑옷"), { {"트롤의가죽", 5}, {"트롤의재생혈액", 2} });
+	InitRecipes(ItemManager::Get().CreateItem("용기사의창"), { {"드래곤의발톱", 1}, {"드래곤의비늘", 2} });
+	InitRecipes(ItemManager::Get().CreateItem("용기사의갑주"), { {"드래곤심장", 1}, {"드래곤의비늘", 2} });
 }
 void Forge::InitRecipes(Item* craftItem, unordered_map<string, int> mats)
 {
@@ -359,11 +359,12 @@ void Forge::DisplayAllRecipes()
 {
 	for (int i = 0; i < recipeBook.size(); i++)
 	{
-		cout << i + 1 << "." << recipeBook[i].craftEquipment->GetName() << "필요한 재료: ";
+		cout << i + 1 << "." << recipeBook[i].craftEquipment->GetName() << " 필요한 재료: ";
 		for (const unordered_map<string, int>::value_type& pair : recipeBook[i].materials)
 		{
 			cout << "["  << pair.first << " " << pair.second << "개] ";
 		}
+		cout << endl;
 	}
 	system("pause");
 	EnteredForge();
