@@ -62,6 +62,7 @@ void Inventory::ClassificationItem(vector<Item*> items)
                 if (other.first->GetName() == item->GetName())
                 {
                     otherItems[other.first] += 1; //기존에 가지고있던 갯수에 추가해주기
+                    hasItem = true;
                     break;
                 }
             }
@@ -109,6 +110,7 @@ void Inventory::DisplayWeapon(string func)
     if (weaponItems.empty())
     {
         cout << "소지하고 있는 무기가 없습니다." << endl;
+        DisplayInventory(func);
         return;
     }
 
@@ -132,6 +134,7 @@ void Inventory::DisplayWeapon(string func)
         else
         {
             cout << "현재 작업 종료하기" << endl;
+            DisplayInventory(func);
             return;
         }
         cin >> num;
@@ -139,6 +142,7 @@ void Inventory::DisplayWeapon(string func)
         if (num == 0)
         {
             cout << "취소했습니다." << endl;
+            DisplayInventory(func);
             return;
         }
         //장비를 장착할 때
@@ -152,6 +156,7 @@ void Inventory::DisplayWeapon(string func)
             {
                 Store::Get().SellItem(weaponItems[num - 1]);//판매
             }
+            DisplayWeapon(func);
         }
         else
         {
@@ -165,6 +170,7 @@ void Inventory::DisplayArmor(string func)
     //소지하고 있는 방어구가 없을 때
     if (armorItems.empty()) {
         cout << "소지하고 있는 방어구가 없습니다." << endl;
+        DisplayInventory(func);
         return;
     }
 
@@ -187,6 +193,7 @@ void Inventory::DisplayArmor(string func)
         else
         {
             cout << "현재 작업 종료하기" << endl;
+            DisplayInventory(func);
             return;
         }
         cin >> num;
@@ -194,6 +201,7 @@ void Inventory::DisplayArmor(string func)
         if (num == 0)
         {
             cout << "취소했습니다." << endl;
+            DisplayInventory(func);
             return;
         }
         //장비를 장착할 때
@@ -207,6 +215,8 @@ void Inventory::DisplayArmor(string func)
             {
                 Store::Get().SellItem(armorItems[num - 1]);//판매
             }
+            DisplayArmor(func);
+            return;
         }
         else
         {
@@ -221,6 +231,7 @@ void Inventory::DisplayConsumeItem(string func)
     if (expendableItems.empty())
     {
         cout << "소지하고 있는 소비아이템 없습니다." << endl;
+        DisplayInventory(func);
         return;
     }
 
@@ -246,6 +257,7 @@ void Inventory::DisplayConsumeItem(string func)
         else
         {
             cout << "현재 작업 종료하기" << endl;
+            DisplayInventory(func);
             return;
         }
 
@@ -253,6 +265,7 @@ void Inventory::DisplayConsumeItem(string func)
         if (key == "p")
         {
             cout << "취소했습니다." << endl;
+            DisplayInventory(func);
             return;
         }
         for (unordered_map<Item*, int>::value_type& item : expendableItems)
@@ -266,22 +279,26 @@ void Inventory::DisplayConsumeItem(string func)
                 {
                     Store::Get().SellItem(item.first);//판매로직
                 }
+                DisplayConsumeItem(func);
                 return;
             }
             //찾아봐도 소지하고 있지 않는 아이템 이름일 때
             if (key != item.first->GetName() && expendableItems.find(item.first) == expendableItems.end())
             {
                 cout << GameManager::Get().WrongInputMessage();
+                DisplayConsumeItem(func);
+                return;
             }
         }
     }
 }
-void Inventory::DIsplayOtherItem(std::string func)
+void Inventory::DIsplayOtherItem(string func)
 {
     //소지하고 있는 기타아이템이 없을 때
     if (otherItems.empty())
     {
         cout << "소지하고 있는 기타아이템 없습니다." << endl;
+        DisplayInventory(func);
         return;
     }
 
@@ -303,6 +320,7 @@ void Inventory::DIsplayOtherItem(std::string func)
         else
         {
             cout << "현재 작업 종료하기" << endl;
+            DisplayInventory(func);
             return;
         }
 
@@ -310,6 +328,7 @@ void Inventory::DIsplayOtherItem(std::string func)
         if (key == "p")
         {
             cout << "취소했습니다." << endl;
+            DisplayInventory(func);
             return;
         }
         for (unordered_map<Item*, int>::value_type& item : otherItems)
@@ -318,13 +337,16 @@ void Inventory::DIsplayOtherItem(std::string func)
                 if (func == sell)
                 {
                     Store::Get().SellItem(item.first);//판매
+                    DIsplayOtherItem(func);
+                    return;
                 }
-                return;
             }
             //찾아봐도 소지하고 있지 않는 아이템 이름일 때
             if (key != item.first->GetName() && expendableItems.find(item.first) == otherItems.end())
             {
                 cout << GameManager::Get().WrongInputMessage();
+                DIsplayOtherItem(func);
+                return;
             }
         }
     }
@@ -378,6 +400,7 @@ void Inventory::EquipWeapon(Item* weapon)
     if (weapon->GetEquip())
     {
         cout << "이미 착용중인 무기입니다." << endl;
+        return;
     }
     //착용중이 아닐 때
     else
@@ -393,6 +416,7 @@ void Inventory::EquipWeapon(Item* weapon)
         weapon->SetEquip(true); //해당 무기 장착상태로 변경
         Character::Get().UpadatePlayerStatus(); //플레이어 스탯 업데이트
     }
+    DisplayWeapon(use); //이전 작업으로 되돌아가기
 }
 void Inventory::EquipArmor(Item* armor)
 {
@@ -400,6 +424,7 @@ void Inventory::EquipArmor(Item* armor)
     if (armor->GetEquip())
     {
         cout << "이미 착용중인 방어구입니다." << endl;
+        return;
     }
     else
     {
@@ -415,6 +440,7 @@ void Inventory::EquipArmor(Item* armor)
         armor->SetEquip(true); //해당 방어구 장착 상태로 변경
         Character::Get().UpadatePlayerStatus(); //플레이어 스탯 업데이트
     }
+    DisplayArmor(use); //이전 작업으로 되돌아가기
 }
 void Inventory::UnEquipWeapon()
 {

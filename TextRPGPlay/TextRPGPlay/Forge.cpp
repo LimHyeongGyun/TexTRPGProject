@@ -11,6 +11,7 @@ using namespace std;
 
 void Forge::EnteredForge()
 {
+	CreateRecipe();
 	int num;
 
 	cin.ignore();
@@ -59,6 +60,8 @@ void Forge::JudgementUseUniqueCategory()
 	{
 		if (token.first->GetName() == "드래곤 증표") //나중에 증표 토큰은 따로 해서 변경
 		{
+			cout << "드워프 대장장이 불카누스: 애송이인줄 알았더니 드래곤을 잡아올줄이야!" << endl;
+			cout << "드워프 대장장이 불카누스: 조금만 기다려봐 내가 걸작을 만들어주지!" << endl;
 			//추후 여유 있을시 CraftUniqueItem을 제외하고 제작가능한 유니크아이템 목록 보여주기
 			CraftUniqueEquipiment("용기사의창");
 			return;
@@ -68,6 +71,7 @@ void Forge::JudgementUseUniqueCategory()
 	//특별한 몬스터를 잡은 증표가 없을때
 	cout << "드워프 대장장이 불카누스: 이건 아직 너 같은 애송이가 사용할 수 있는게 아니야!" << endl;
 	cout << "드워프 대장장이 불카누스: 드래곤 정도는 잡고 오라고!" << endl;
+	EnteredForge();
 }
 void Forge::DisplayPossibleUpgradEquipment()
 {
@@ -78,11 +82,14 @@ void Forge::DisplayPossibleUpgradEquipment()
 
 	while (true)
 	{
-		cout << "강화할 장비카테고리 번호를 입력해주세요.[1.무기, 2.방어구]: " << endl;
+		cout << "강화할 장비카테고리 번호를 입력해주세요.[0.강화취소 1.무기, 2.방어구]: " << endl;
 		cin >> category;
 
 		switch (category)
 		{
+		case 0:
+			EnteredForge();
+			return;
 		case 1:
 			itemList = Inventory::Get().weaponItems;
 			cout << "내가 소지한 강화 가능한 무기 리스트" << endl;
@@ -117,6 +124,7 @@ void Forge::DisplayPossibleUpgradEquipment()
 	//강화할 장비가 없을때
 	if (itemList.empty()) {
 		cout << "강화할 수 있는 장비가 없습니다." << endl;
+		EnteredForge();
 		return;
 	}
 
@@ -128,11 +136,15 @@ void Forge::DisplayPossibleUpgradEquipment()
 	int selected = 0; //장비 순서
 	while (true)
 	{
-		cout << "강화를 진행할 장비의 번호를 입력해주세요: ";
+		cout << "강화를 진행할 장비의 번호를 입력해주세요[0:취소]: ";
 		cin >> selected;
 
+		if (selected == 0)
+		{
+			EnteredForge();
+		}
 		//유효성 검사
-		if (selected <= 0 || selected > static_cast<int>(itemList.size()))
+		if (selected < 0 || selected > static_cast<int>(itemList.size()))
 		{
 			cout << GameManager::Get().WrongInputMessage();
 			system("pause");
@@ -187,6 +199,7 @@ void Forge::UpgradeResult(Item* equipment, int roll, int successRate)
 	{
 		cout << "강화에 실패했습니다. " << endl;
 	}
+	DisplayPossibleUpgradEquipment();
 }
 
 int Forge::GetUpgradeAtkValue()
@@ -246,6 +259,7 @@ void Forge::CraftCategory()
 	if(craftableList.empty())
 	{
 		cout << "현재 제작 가능한 장비가 없습니다." << endl;
+		EnteredForge();
 		return;
 	}
 	for (int i = 0; i < craftableList.size(); i++)
@@ -264,6 +278,7 @@ void Forge::CraftCategory()
 		if (num == 0)
 		{
 			cout << "취소했습니다." << endl;
+			EnteredForge();
 			return;
 		}
 		if (num < 0 || num > static_cast<int>(craftableList.size()))
@@ -283,7 +298,6 @@ void Forge::CraftUniqueEquipiment(string recipeName)
 	//드래곤 재료로 만들 수 있는 재료 찾아오기
 	EquipmentRecipe* findRecipe = FindRecipe(recipeName);
 
-	bool usedDragonPart = false;
 	for (unordered_map<Item*, int>::value_type& bone : Inventory::Get().otherItems)
 	{
 		for (unordered_map<string, int>::value_type& mat : findRecipe->materials)
@@ -291,8 +305,9 @@ void Forge::CraftUniqueEquipiment(string recipeName)
 			//드래곤을 잡아서 얻은 재료가 있을때
 			if (mat.first == bone.first->GetName())
 			{
+				cout << "드워프 대장장이 불카누스: 아주 걸작이야! 잘 써보라고" << endl;
+				cout << "드워프 대장장이 불카누스: 귀한 재료를 만져봤으니 특별히 A/S는 무료로 해주지" << endl;
 				Craft(*findRecipe, findRecipe->craftEquipment);
-				usedDragonPart = true;
 				return;
 			}
 		}
@@ -313,6 +328,8 @@ void Forge::Craft(const EquipmentRecipe& recipe, Item* item)
 	vector<Item*> _item;
 	_item.push_back(item);
 	Character::Get().GetItem(_item);
+
+	EnteredForge();
 }
 #pragma endregion
 
@@ -348,6 +365,8 @@ void Forge::DisplayAllRecipes()
 			cout << "["  << pair.first << " " << pair.second << "개] ";
 		}
 	}
+	system("pause");
+	EnteredForge();
 }
 
 Forge::EquipmentRecipe* Forge::FindRecipe(std::string recipeName)

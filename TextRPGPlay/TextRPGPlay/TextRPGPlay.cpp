@@ -52,7 +52,6 @@ int main() {
             cout << "1 또는 2만 입력해주세요." << endl;
         }
     }
-
     return 0;
 }
 
