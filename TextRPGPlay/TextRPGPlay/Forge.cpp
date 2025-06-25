@@ -20,7 +20,7 @@ void Forge::EnteredForge()
 	{
 		cout << "0.대장간 떠나기" << endl;
 		cout << "1.장비강화" << endl;
-		cout << "2.장비제작 " << endl;
+		cout << "2.장비제작" << endl;
 		cout << "3.조합식 확인하기" << endl;
 		cout << "4.유니크 아이템 제작" << endl;
 		cout << "진행할 작업의 번호를 입력해주세요: ";
@@ -258,10 +258,15 @@ void Forge::CraftCategory()
 	int num;
 	while (true)
 	{
-		cout << "제작할 장비아이템의 번호를 입력해주세요: ";
+		cout << "제작할 장비아이템의 번호를 입력해주세요(취소하기: 0): ";
 		cin >> num;
 
-		if (num <= 0 || num > static_cast<int>(craftableList.size()))
+		if (num == 0)
+		{
+			cout << "취소했습니다." << endl;
+			return;
+		}
+		if (num < 0 || num > static_cast<int>(craftableList.size()))
 		{
 			cout << GameManager::Get().WrongInputMessage();
 			continue;
@@ -308,17 +313,24 @@ void Forge::Craft(const EquipmentRecipe& recipe, Item* item)
 	vector<Item*> _item;
 	_item.push_back(item);
 	Character::Get().GetItem(_item);
-
 }
 #pragma endregion
 
 #pragma region RecipeManagement
 
-void Forge::InitRecipes()
+void Forge::CreateRecipe()
 {
-	Item* softArmor = ItemManager::Get().CreateItem("용기사의창");
-	unordered_map<string, int> needMat = {{"드래곤의 발톱", 1}, {"드래곤의 비늘", 2}};
-	AddCraftRecipe(softArmor, needMat);
+	InitRecipes(ItemManager::Get().CreateItem("고블린톱니단검"), { {"고블린 이빨", 3}, {"거친 가죽 조각", 1}, {"고블린의 귀걸이", 1}});
+	InitRecipes(ItemManager::Get().CreateItem("오크 어금니 도끼"), { {"오크의 어금니", 2}, {"오크족 전투 휘장", 1} });
+	InitRecipes(ItemManager::Get().CreateItem("오크 가죽 갑옷"), { {"상처 난 오크 등가죽", 3}, {"오크 등가죽", 2} });
+	InitRecipes(ItemManager::Get().CreateItem("트롤뼈 몽둥이"), { {"트롤의 변이된 손톱", 3}, {"트롤의 가죽", 1} });
+	InitRecipes(ItemManager::Get().CreateItem("트롤가죽 갑옷"), { {"트롤의 가죽", 5}, {"트롤의 재생 혈액", 2} });
+	InitRecipes(ItemManager::Get().CreateItem("용기사의 창"), { {"드래곤의 발톱", 1}, {"드래곤의 비늘", 2} });
+	InitRecipes(ItemManager::Get().CreateItem("용기사의 갑주"), { {"드래곤 심장", 1}, {"드래곤의 비늘", 2} });
+}
+void Forge::InitRecipes(Item* craftItem, unordered_map<string, int> mats)
+{
+	AddCraftRecipe(craftItem, mats);
 }
 
 void Forge::AddCraftRecipe(Item* craftItem, const unordered_map<string, int> materials)
