@@ -306,7 +306,7 @@ void Forge::Craft(const EquipmentRecipe& recipe, Item* item)
 {
 	//Inventory에 제거할 재료목록 전달
 	unordered_map<string, int> materialMap = recipe.materials;
-	Inventory::Get().RemoveItem(materialMap);
+	Inventory::Get().RemoveNoneEquipItem(materialMap, ItemType::Other);
 
 	//Character에 제작한 아이템 전달
 	cout << "아이템 제작에 성공했습니다!" << endl;

@@ -20,6 +20,7 @@ Inventory& Inventory::Get()
     return *iveninstance;
 }
 
+#pragma region InventoryManagement
 void Inventory::ClassificationItem(vector<Item*> items)
 {
     for (Item* item : items) {
@@ -75,7 +76,7 @@ void Inventory::ClassificationItem(vector<Item*> items)
     }
 }
 
-void Inventory::DisplayInventory()
+void Inventory::DisplayInventory(string func)
 {
     int category;
 
@@ -84,6 +85,7 @@ void Inventory::DisplayInventory()
         cout << "1. 소모형 아이템" << endl;
         cout << "2. 무기" << endl;
         cout << "3. 방어구" << endl;
+        cout << "4. 기타 아이템" << endl;
         cout << "0. 종료" << endl;
         cout << "입력: ";
         cin >> category;
@@ -91,50 +93,16 @@ void Inventory::DisplayInventory()
         switch (category)
         {
             case 0: return;
-            case 1: DisplayConsumeItem(); break;
-            case 2: DisplayWeapon(); break;
-            case 3: DisplayArmor(); break;
+            case 1: DisplayConsumeItem(func); break;
+            case 2: DisplayWeapon(func); break;
+            case 3: DisplayArmor(func); break;
+            case 4: DIsplayOtherItem(func); break;
             default: cout << GameManager::Get().WrongInputMessage(); break;
         }
     }
 }
 
-void Inventory::DisplayConsumeItem()
-{
-    //소지하고 있는 소비아이템이 없을 때
-    if (expendableItems.empty())
-    {
-        cout << "소지하고 있는 소비아이템 없습니다." << endl;
-        return;
-    }
-
-    cout << "소비 아이템 목록" << endl;
-    for (unordered_map<Item*, int>::value_type& p : expendableItems)
-    {
-        cout << "아이템 이름" << p.first->GetName() << "" << p.second << "개" << endl;
-    }
-
-    string key;
-    cout << "사용할 아이템의 이름을 입력해 주세요: (취소하기 'p' 입력)" << key << endl;
-    if (key == "p")
-    {
-        cout << "취소했습니다." << endl;
-        return;
-    }
-
-    Character& character = Character::Get();
-    for (unordered_map<Item*, int>::value_type& item : expendableItems)
-    {
-        if (item.first->GetName() == key) {
-            item.first->Use(&character);
-            return;
-        }
-    }
-
-    cout << "입력한 이름의 아이템이 없습니다." << endl;
-}
-
-void Inventory::DisplayWeapon()
+void Inventory::DisplayWeapon(string func)
 {
     //소지하고 있는 무기가 없을 때
     if (weaponItems.empty())
@@ -150,25 +118,48 @@ void Inventory::DisplayWeapon()
     }
 
     int num = 0;
-    cout << "장착할 무기의 번호를 입력해 주세요(취소하기 '0' 입력): ";
-    cin >> num;
+    while (true)
+    {
+        if (func == use)
+        {
+            cout << "장착할 무기의 번호를 입력해 주세요(취소하기 '0' 입력): ";
+        }
+        else if (func == sell)
+        {
+            cout << "판매할 무기의 번호를 입력해 주세요(취소하기 '0' 입력): ";
+        }
+        else
+        {
+            cout << "현재 작업 종료하기" << endl;
+            return;
+        }
+        cin >> num;
 
-    if (num == 0)
-    {
-        cout << "취소했습니다." << endl;
-        return;
-    }
-    //장비를 장착할 때
-    if (num > 0 && num <= weaponItems.size()) {
-        weaponItems[num - 1]->Use(this);
-    }
-    else
-    {
-        cout << GameManager::Get().WrongInputMessage();
+        if (num == 0)
+        {
+            cout << "취소했습니다." << endl;
+            return;
+        }
+        //장비를 장착할 때
+        else if (num > 0 && num <= weaponItems.size())
+        {
+            if (func == use)
+            {
+                weaponItems[num - 1]->Use(this);
+            }
+            else if (func == sell)
+            {
+                //판매 로직
+            }
+        }
+        else
+        {
+            cout << GameManager::Get().WrongInputMessage();
+        }
     }
 }
 
-void Inventory::DisplayArmor()
+void Inventory::DisplayArmor(string func)
 {
     //소지하고 있는 방어구가 없을 때
     if (armorItems.empty()) {
@@ -182,24 +173,204 @@ void Inventory::DisplayArmor()
     }
 
     int num = 0;
-    cout << "장착할 방어구의 번호를 입력해 주세요(취소하기 '0' 입력): " << num << endl;
-
-    if (num == 0)
+    while (true)
     {
-        cout << "취소했습니다." << endl;
-        return;
-    }
+        if (func == use)
+        {
+            cout << "장착할 방어구의 번호를 입력해 주세요(취소하기 '0' 입력): ";
+        }
+        else if (func == sell)
+        {
+            cout << "판매할 방어구의 번호를 입력해 주세요(취소하기 '0' 입력): ";
+        }
+        else
+        {
+            cout << "현재 작업 종료하기" << endl;
+            return;
+        }
+        cin >> num;
 
-    //장비를 장착할 때
-    if (num > 0 && num <= armorItems.size()) {
-        armorItems[num - 1]->Use(this);
-    }
-    else
-    {
-        cout << GameManager::Get().WrongInputMessage();
+        if (num == 0)
+        {
+            cout << "취소했습니다." << endl;
+            return;
+        }
+        //장비를 장착할 때
+        else if (num > 0 && num <= armorItems.size())
+        {
+            if (func == use)
+            {
+                armorItems[num - 1]->Use(this);
+            }
+            else if (func == sell)
+            {
+                //판매 로직
+            }
+        }
+        else
+        {
+            cout << GameManager::Get().WrongInputMessage();
+        }
     }
 }
 
+void Inventory::DisplayConsumeItem(string func)
+{
+    //소지하고 있는 소비아이템이 없을 때
+    if (expendableItems.empty())
+    {
+        cout << "소지하고 있는 소비아이템 없습니다." << endl;
+        return;
+    }
+
+    cout << "소비 아이템 목록" << endl;
+    int num = 0;
+    for (unordered_map<Item*, int>::value_type& p : expendableItems)
+    {
+        ++num;
+        cout << num << "." << p.first->GetName() << "" << p.second << "개" << endl;
+    }
+
+    string key;
+    while (true)
+    {
+        if (func == use)
+        {
+            cout << "사용할 아이템의 이름을 입력해 주세요(취소하기 'p' 입력): ";
+        }
+        else if (func == sell)
+        {
+            cout << "판매할 아이템의 이름을 입력해 주세요(취소하기 'p' 입력): ";
+        }
+        else
+        {
+            cout << "현재 작업 종료하기" << endl;
+            return;
+        }
+
+        cin >> key;
+        if (key == "p")
+        {
+            cout << "취소했습니다." << endl;
+            return;
+        }
+        for (unordered_map<Item*, int>::value_type& item : expendableItems)
+        {
+            if (item.first->GetName() == key) {
+                if (func == use)
+                {
+                    item.first->Use(&Character::Get());
+                }
+                else if (func == sell)
+                {
+                    //판매함수 들어오기
+                }
+                return;
+            }
+            //찾아봐도 소지하고 있지 않는 아이템 이름일 때
+            if (key != item.first->GetName() && expendableItems.find(item.first) == expendableItems.end())
+            {
+                cout << GameManager::Get().WrongInputMessage();
+            }
+        }
+    }
+}
+void Inventory::DIsplayOtherItem(std::string func)
+{
+    //소지하고 있는 기타아이템이 없을 때
+    if (otherItems.empty())
+    {
+        cout << "소지하고 있는 기타아이템 없습니다." << endl;
+        return;
+    }
+
+    cout << "기타 아이템 목록" << endl;
+    int num = 0;
+    for (unordered_map<Item*, int>::value_type& p : otherItems)
+    {
+        ++num;
+        cout << num << "." << p.first->GetName() << "" << p.second << "개" << endl;
+    }
+
+    string key;
+    while (true)
+    {
+        if (func == sell)
+        {
+            cout << "판매할 아이템의 이름을 입력해 주세요(취소하기 'p' 입력): ";
+        }
+        else
+        {
+            cout << "현재 작업 종료하기" << endl;
+            return;
+        }
+
+        cin >> key;
+        if (key == "p")
+        {
+            cout << "취소했습니다." << endl;
+            return;
+        }
+        for (unordered_map<Item*, int>::value_type& item : otherItems)
+        {
+            if (item.first->GetName() == key) {
+                if (func == sell)
+                {
+                    //판매함수 들어오기
+                }
+                return;
+            }
+            //찾아봐도 소지하고 있지 않는 아이템 이름일 때
+            if (key != item.first->GetName() && expendableItems.find(item.first) == otherItems.end())
+            {
+                cout << GameManager::Get().WrongInputMessage();
+            }
+        }
+    }
+}
+
+void Inventory::RemoveEquipItem(Item* equip)
+{
+    if (equip->GetType() == ItemType::Weapon)
+    {
+        vector<Item*>::iterator item = find(weaponItems.begin(), weaponItems.end(), equip);
+        weaponItems.erase(item);
+    }
+    else if (equip->GetType() == ItemType::Armor)
+    {
+        vector<Item*>::iterator item = find(armorItems.begin(), armorItems.end(), equip);
+        armorItems.erase(item);
+    }
+}
+void Inventory::RemoveNoneEquipItem(const unordered_map<string, int>& materials, ItemType type)
+{
+    unordered_map<Item*, int>& inventory = (type == ItemType::Expendables) ? expendableItems : otherItems;
+
+    for (const unordered_map<string, int>::value_type& material : materials)
+    {
+        const string& itemName = material.first;
+        int amountToRemove = material.second;
+
+        for (unordered_map<Item*, int>::value_type& other : inventory)
+        {
+            if (other.first->GetName() == itemName)
+            {
+                if (other.second > amountToRemove)
+                {
+                    other.second -= amountToRemove;
+                }
+                else if (other.second == amountToRemove)
+                {
+                    otherItems.erase(other.first);
+                }
+                break;
+            }
+        }
+    }
+}
+#pragma endregion
+
+#pragma region EquipManagement
 void Inventory::EquipWeapon(Item* weapon)
 {
     //이미 착용중일 때
@@ -252,31 +423,7 @@ void Inventory::UnEquipArmor()
 {
     Character::Get().GetEquipArmor()->SetEquip(false);
 }
-
-void Inventory::RemoveItem(const unordered_map<string, int>& materials)
-{
-    for (const unordered_map<string, int>::value_type& material : materials)
-    {
-        const string& itemName = material.first;
-        int amountToRemove = material.second;
-
-        for (unordered_map<Item*, int>::value_type& other : otherItems)
-        {
-            if (other.first->GetName() == itemName)
-            {
-                if (other.second > amountToRemove)
-                {
-                    other.second -= amountToRemove;
-                }
-                else if (other.second == amountToRemove)
-                {
-                    otherItems.erase(other.first);
-                }
-                break;
-            }
-        }
-    }
-}
+#pragma endregion
 
 Inventory::~Inventory()
 {
