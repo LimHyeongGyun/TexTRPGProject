@@ -43,7 +43,8 @@ private:
 
 	//레시피
 	void DisplayAllRecipes(); //모든 장비 레시피 보여주기
-	void InitRecipes(); //레시피 생성
+	void CreateRecipe();
+	void InitRecipes(Item* craftItem, std::unordered_map<std::string, int> mats); //레시피 생성
 	void AddCraftRecipe(Item* equipment, std::unordered_map<std::string, int> materials);//레시피 추가
 	EquipmentRecipe* FindRecipe(std::string recipeName); //레시피 찾기
 
