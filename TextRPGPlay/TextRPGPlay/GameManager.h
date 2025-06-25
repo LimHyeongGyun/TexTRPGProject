@@ -10,6 +10,11 @@ class Inventory;
 class Forge;
 class Store;
 
+enum class PlayState {
+    Idle,
+    Battle,
+    End
+};
 class GameManager {
 private:
     static GameManager* instance;
@@ -19,13 +24,13 @@ public:
     GameManager(const GameManager&) = delete;
     GameManager& operator=(const GameManager&) = delete;
 
-    Monster* GenerateMonster(int level);
-    Monster* GenerateStageMonster(int level);
-    void RepeatBattleUntilLevel10();
+    PlayState playState = PlayState::Idle;
 
-    void Battle(Character* character, Monster* monster);
-    void DisplayInventory();
-    void PostBattleMenu();
     void Run();
+    void Menu(PlayState playState);//메뉴
+    void IdleBehavior(); //대기상태 행동
+    void SetStage(); //스테이지 설정
+    Monster* GenerateMonster(int level);//몬스터 생성
+    void Battle(Character* character, Monster* monster);//전투 반복
     string WrongInputMessage();
 };

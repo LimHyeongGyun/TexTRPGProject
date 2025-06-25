@@ -116,7 +116,7 @@ void Inventory::DisplayWeapon(string func)
     //소지하고 있는 무기가 없을 때
     if (weaponItems.empty())
     {
-        cout << "소지하고 있는 무기가 없습니다." << endl;
+        cout << "소지하고 있는 무기가 없습니다.\n" << endl;
         return;
     }
 
@@ -139,7 +139,8 @@ void Inventory::DisplayWeapon(string func)
         }
         else
         {
-            cout << "현재 작업 종료하기" << endl;
+            cout << "현재 작업 종료하기(Press Any Key)" << endl;
+            system("pause");
             return;
         }
 
@@ -153,7 +154,7 @@ void Inventory::DisplayWeapon(string func)
         }
         if (num == 0)
         {
-            cout << "취소했습니다." << endl;
+            cout << "취소했습니다.\n" << endl;
             return;
         }
         //장비를 장착할 때
@@ -180,7 +181,7 @@ void Inventory::DisplayArmor(string func)
 {
     //소지하고 있는 방어구가 없을 때
     if (armorItems.empty()) {
-        cout << "소지하고 있는 방어구가 없습니다." << endl;
+        cout << "소지하고 있는 방어구가 없습니다.\n" << endl;
         return;
     }
 
@@ -202,7 +203,8 @@ void Inventory::DisplayArmor(string func)
         }
         else
         {
-            cout << "현재 작업 종료하기" << endl;
+            cout << "현재 작업 종료하기(Press Any Key)" << endl;
+            system("pause");
             return;
         }
 
@@ -216,7 +218,7 @@ void Inventory::DisplayArmor(string func)
         }
         if (num == 0)
         {
-            cout << "취소했습니다." << endl;
+            cout << "취소했습니다.\n" << endl;
             return;
         }
         //장비를 장착할 때
@@ -245,7 +247,7 @@ void Inventory::DisplayExpendableItem(string func)
     //소지하고 있는 소비아이템이 없을 때
     if (expendableItems.empty())
     {
-        cout << "소지하고 있는 소비아이템 없습니다." << endl;
+        cout << "소지하고 있는 소비아이템 없습니다.\n" << endl;
         return;
     }
 
@@ -270,7 +272,8 @@ void Inventory::DisplayExpendableItem(string func)
         }
         else
         {
-            cout << "현재 작업 종료하기" << endl;
+            cout << "현재 작업 종료하기(Press Any Key)\n" << endl;
+            system("pause");
             return;
         }
 
@@ -329,7 +332,8 @@ void Inventory::DIsplayOtherItem(string func)
         }
         else
         {
-            cout << "현재 작업 종료하기" << endl;
+            cout << "현재 작업 종료하기(Press Any Key)" << endl;
+            system("pause");
             return;
         }
 

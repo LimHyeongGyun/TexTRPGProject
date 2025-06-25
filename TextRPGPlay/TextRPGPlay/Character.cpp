@@ -2,6 +2,7 @@
 
 #include "Character.h"
 #include "Inventory.h"
+#include "Store.h"
 #include "Item.h"
 
 using namespace std;
@@ -40,12 +41,13 @@ Character& Character::Get(string playerName)
 
 void Character::DisplayStatus() const
 {
+    cout << "\n===== 플레이어 상태창 =====" << endl;
     cout << "플레이어 캐릭터 이름: " << name << endl;
     cout << "플레이어 레벨: " << level << endl;
     cout << "플레이어 현재체력/최대체력: " << health << "/" << maxHealth << endl;
     cout << "플레이어 공격력: " << attack << endl;
     cout << "플레이어 현재 경험치/레벨업에 필요한 경험치: " << experience << "/" << needExperience << endl;
-    cout << "플레이어 소지 골드: " << gold << endl;
+    cout << "플레이어 소지 골드: " << gold << "\n" << endl;
 }
 
 string Character::GetName() const
@@ -105,7 +107,7 @@ void Character::TakeDamage(int damage)
         Die();
     }
     else {
-        cout << "플레이어 남은 체력: " << health << "/" << maxHealth << endl;
+        cout << "플레이어 남은 체력: " << health << "/" << maxHealth << "\n" << endl;
     }
 }
 
@@ -183,7 +185,7 @@ void Character::GetItem(vector<Item*> getItems) const
 {
     Inventory::Get().ClassificationItem(getItems);
 }
-void Character::UseItem(int index) const
+void Character::UseItem() const
 {
     Inventory::Get().DisplayExpendableItem(Inventory::Get().use);
 }
@@ -196,11 +198,6 @@ void Character::BorrowGold(int getGold)
 void Character::ConsumeGold(int consumeGold)
 {
     gold -= consumeGold;
-}
-
-void Character::VisitShop()
-{
-    Inventory::Get().DisplayInventory(Inventory::Get().sell);
 }
 #pragma endregion
 

@@ -32,8 +32,9 @@ int main() {
         }
 
         if (choice == 1) {
-            cin.ignore(); // 입력 버퍼 정리
             string name;
+            cin.ignore(); // 입력 버퍼 정리
+
             cout << "플레이어 캐릭터 이름을 입력하세요: ";
             getline(cin, name);
 

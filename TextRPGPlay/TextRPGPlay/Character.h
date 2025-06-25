@@ -50,7 +50,7 @@ public:
 
 	//아이템 관리
 	void GetItem(std::vector<Item*> item) const;
-	void UseItem(int index) const; //전투에서 아이템 사용
+	void UseItem() const; //전투에서 아이템 사용
 	Item* GetEquipWeapon() const; //현재 장착 무기 반환
 	Item* GetEquipArmor() const; //현재 장착 방어구 반환
 	void SetEquipWeapon(Item* weapon); //무기 장착
@@ -59,7 +59,6 @@ public:
 	//골드 관련
 	void BorrowGold(int getGold);
 	void ConsumeGold(int consumeGold);
-	void VisitShop(); //Shop과 상호작용
 
 	~Character();
 };

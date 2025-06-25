@@ -16,9 +16,9 @@
 
 using namespace std;
 
-GameManager::GameManager() {}
-
 GameManager* GameManager::instance = nullptr;
+
+GameManager::GameManager() {}
 
 GameManager& GameManager::Get()
 {
@@ -29,87 +29,36 @@ GameManager& GameManager::Get()
     return *instance;
 }
 
-Monster* GameManager::GenerateStageMonster(int level) {
-    if (level <= 3) return new Slime(level);
-    else if (level <= 5) return new Orc(level);
-    else if (level <= 7) return new Troll(level);
-    else if(level <= 9) return new Goblin(level);
-    return 0;
-}
-
-void GameManager::RepeatBattleUntilLevel10()
-{
-    Character& player = Character::Get();
-
-    while (player.GetHealth() > 0) {
-        if (player.GetLevel() >= 10) {
-            cout << "[DEBUG] 레벨 10 도달! 일반 전투 종료.\n";
-            break;
-        }
-
-        cout << "\n===== 캐릭터 상태 =====" << endl;
-        player.DisplayStatus();
-
-        cout << "\n===== 전투 시작 (레벨: " << player.GetLevel() << ") =====" << endl;
-
-        Monster* monster = GenerateStageMonster(player.GetLevel());
-
-        cout << monster->getName() << " 등장! 체력: " << monster->getHealth()
-            << ", 공격력: " << monster->Attack() << endl;
-
-        Battle(&player, monster);
-        delete monster;
-    }
-}
-
 void GameManager::Run()
 {
-    Character& player = Character::Get();
-
-    RepeatBattleUntilLevel10();  // 일반 몬스터 반복
-
-    if (player.GetHealth() > 0 && player.GetLevel() >= 10) {
-        cout << "\n===== 보스 몬스터 등장 =====" << endl;
-        player.DisplayStatus();
-
-        Monster* boss = new Dragon(player.GetLevel());
-
-        cout << boss->getName() << " 등장! 체력: " << boss->getHealth()
-            << ", 공격력: " << boss->Attack() << endl;
-
-        Battle(&player, boss);
-        delete boss;
-
-        if (player.GetHealth() > 0) {
-            cout << "\n축하합니다! 보스를 물리치고 게임을 클리어했습니다!" << endl;
-        }
-        else {
-            cout << "\n보스에게 패배했습니다. 게임 오버." << endl;
-        }
-    }
-
-    cout << "\n게임 종료. 메모리 정리 중..." << endl;
+    playState = PlayState::Idle; //대기상태
+    IdleBehavior();
 }
 
-string GameManager::WrongInputMessage() {
-    return "잘못된 입력입니다.\n";
-}
-
-Monster* GameManager::GenerateMonster(int level) {
-    if (level <= 3) return new Slime(level);
-    else if (level <= 5) return new Orc(level);
-    else if (level <= 7) return new Troll(level);
-    else if (level <= 9) return new Goblin(level);
-    return 0;
-}
-
-void GameManager::Battle(Character* player, Monster* monster)
+void GameManager::Menu(PlayState playState)
 {
-    while (player->GetHealth() > 0 && monster->getHealth() > 0) {
-        cout << "\n==== 행동을 선택하세요 ====\n";
+    if (playState == PlayState::Idle)
+    {
+        cout << "\n==== [대기] ====\n";
+        cout << "0.플레이어 스탯 확인\n";
+        cout << "1. 인벤토리 확인\n";
+        cout << "2. 대장간 방문\n";
+        cout << "3. 상점 방문\n";
+        cout << "4. 전투 진행\n";
+    }
+    else if (playState == PlayState::Battle)
+    {
+        cout << "\n==== [전투]행동을 선택하세요 ====\n";
         cout << "1. 공격\n";
         cout << "2. 아이템 사용\n";
         cout << "3. 도망가기\n";
+    }
+}
+
+void GameManager::IdleBehavior()
+{
+    while (true) {
+        Menu(playState);
         cout << "입력 >> ";
 
         int choice;
@@ -118,126 +67,159 @@ void GameManager::Battle(Character* player, Monster* monster)
         if (cin.fail()) {
             cin.clear();
             cin.ignore(numeric_limits<streamsize>::max(), '\n');
+            cout << WrongInputMessage();
+            continue;
+        }
+
+        switch (choice)
+        {
+            case 0:
+                Character::Get().DisplayStatus(); //플레이어 스탯 확인
+                break;
+            case 1:
+                Inventory::Get().DisplayInventory(); //인벤토리 확인
+                break;
+            case 2:
+            {
+                Forge forge;
+                forge.EnteredForge(); //대장간 진입
+                break;
+            }
+            case 3:
+                Store::Get().EnteredStore(); //상점 진입
+                break;
+            case 4:
+                SetStage();
+                return;
+            default:
+                cout << WrongInputMessage();
+                break;
+        }
+    }
+}
+
+Monster* GameManager::GenerateMonster(int level)
+{
+    Monster* spawnMonster = nullptr;
+    if (level <= 3) spawnMonster = new Slime(level);
+    else if (level <= 5) spawnMonster = new Orc(level);
+    else if (level <= 7) spawnMonster = new Troll(level);
+    else if (level <= 9) spawnMonster = new Goblin(level);
+    else if (level >= 10) spawnMonster = new Dragon(level);
+    return spawnMonster;
+}
+
+void GameManager::SetStage()
+{
+    Character& player = Character::Get();
+
+    int level = player.GetLevel();
+    Monster* monster = GenerateMonster(level);
+
+    player.DisplayStatus(); //플레이어 상태 표시
+
+    cout << "\n===== 스테이지 정보 =====" << endl;
+    cout << monster->getName() << " 등장!" << endl;
+    cout << monster->getName() << " 체력: " << monster->getHealth() << endl;
+    cout << monster->getName() << " 공격력 : " << monster->Attack() << endl; //스테이지 몬스터 정보
+
+    cout << "\n===============================" << endl;
+    cout << "========== 전투 시작 ==========" << endl;
+    cout << "===============================" << endl;
+    playState = PlayState::Battle;
+    Battle(&player, monster); //전투 시작
+}
+
+void GameManager::Battle(Character* player, Monster* monster)
+{
+    //전투진행
+    while (player->GetHealth() > 0 && monster->getHealth() > 0)
+    {
+        Menu(playState);
+        cout << "입력 >> ";
+
+        int choice;
+        cin >> choice;
+
+        if (cin.fail())
+        {
+            cin.clear();
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');
             cout << "잘못된 입력입니다.\n";
             continue;
         }
 
-        if (choice == 1) {
+        if (choice == 1)
+        {
             int damage = player->Attack();
+            cout << player->GetName() << "이(가) " << monster->getName() << "을(를) 공격!" << endl;
+
             monster->takeDamage(damage);
-            cout << player->GetName() << "이(가) " << monster->getName()
-                << "을(를) 공격! 몬스터 체력: " << monster->getHealth() << endl;
+            cout << "몬스터 체력 : " << monster->getHealth() << endl;
         }
-        else if (choice == 2) {
-            Inventory::Get().DisplayExpendableItem(Inventory::Get().use);
-            cout << "사용할 아이템 번호 입력 >> ";
-            int index;
-            cin >> index;
-            player->UseItem(index);
+        else if (choice == 2)
+        {
+            player->UseItem();
             continue;
         }
-        else if (choice == 3) {
+        else if (choice == 3)
+        {
             cout << "도망쳤습니다!\n";
             return;
         }
-        else {
+        else
+        {
             cout << "잘못된 입력입니다.\n";
             continue;
         }
 
-        if (monster->getHealth() > 0) {
+        if (monster->getHealth() > 0)
+        {
             int mDamage = monster->Attack();
+            cout << "몬스터" << monster->getName() << "의 공격! " << endl;
+
             player->TakeDamage(mDamage);
-            cout << monster->getName() << "의 반격! " << player->GetName()
-                << " 체력: " << player->GetHealth() << endl;
+            cout << player->GetName() << " 체력: " << player->GetHealth() << endl;
+        }
+        else
+        {
+            break; //전투 탈출
         }
     }
 
     if (player->GetHealth() > 0) {
+        playState = PlayState::Idle; //대기상태 변경
         cout << "\n전투 승리!" << endl;
 
-        int exp = monster->getExpDrop();
-        int gold = monster->getGoldDrop();
-        player->GetExperience(exp);
-        player->BorrowGold(gold);
-        cout << "경험치: +" << exp << ", 골드: +" << gold << endl;
+        Item* dropItem = monster->ItemDrop(); //몬스터 아이템 드랍
+        int dropExp = monster->getExpDrop(); //몬스터 경험치 드랍
+        int dropGold = monster->getGoldDrop(); //몬스터 골드 드랍
 
-        Item* dropItem = monster->ItemDrop();
+        player->GetExperience(dropExp); //경험치 획득
+        player->BorrowGold(dropGold); //골드 획득
+        cout << "경험치: " << dropExp << "획득" << endl;
+        cout << "골드: " << dropGold << "획득" << endl; //획득한 경험치와 골드
+
         if (dropItem) {
             vector<Item*> dropItems = { dropItem };
-            player->GetItem(dropItems);
-            cout << "아이템 획득: " << dropItem->GetName() << endl;
+            player->GetItem(dropItems); //플레이어 아이템 획득
         }
         
         cout << "\n===== 캐릭터 현재 상태 =====\n";
         player->DisplayStatus(); 
     }
     else {
-        cout << player->GetName() << "이(가) 사망했습니다. 게임 오버." << endl;
+        playState = PlayState::End;
+        Character::Get().Die(); //플레이어 사망
+        system("pause");
+        return;
     }
 
-    PostBattleMenu();
+    delete monster; //몬스터 메모리 해제
+    IdleBehavior();
 }
 
-void GameManager::PostBattleMenu()
+string GameManager::WrongInputMessage()
 {
-    using namespace std;
-
-    while (true) {
-        cout << "\n==== 전투 후 메뉴 ====\n";
-        cout << "1. 인벤토리 확인\n";
-        cout << "2. 대장간 방문\n";
-        cout << "3. 상점 방문\n";
-        cout << "4. 계속 전투\n";
-        cout << "입력 >> ";
-
-        int choice;
-        cin >> choice;
-
-        if (cin.fail()) {
-            cin.clear();
-            cin.ignore(numeric_limits<streamsize>::max(), '\n');
-            cout << WrongInputMessage();
-            continue;
-        }
-
-        switch (choice) {
-        case 0:
-            cout << "다시 선택하세요.\n";
-            break;
-        case 1:
-            Inventory::Get().DisplayInventory();
-            break;
-        case 2:
-        {
-            Forge forge;
-            forge.EnteredForge();
-            break;
-        }
-        case 3:
-        {
-            int sub;
-            cout << "1. 구매\n2. 판매\n입력 >> ";
-            cin >> sub;
-            if (sub == 1)
-                Store::Get().Buy();
-            else
-                Character::Get().VisitShop();
-            break;
-        }
-        case 4:
-        {
-            int level = Character::Get().GetLevel();
-            Monster* newMonster = GenerateMonster(level);
-            Battle(&Character::Get(), newMonster);
-            delete newMonster;
-            return;
-        }
-        default:
-            cout << WrongInputMessage();
-            break;
-        }
-
-    }
-
+    return "잘못된 입력입니다.\n";
 }

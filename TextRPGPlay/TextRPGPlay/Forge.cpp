@@ -37,7 +37,7 @@ void Forge::EnteredForge()
 		{
 			case 0:
 				cout << "드워프 대장장이 불카누스: 몬스터를 잡으면 장비를 제작하러 오게!" << endl;
-				cout << "드워프 대장장이 불카누스: 내가 아주 멋진 것을 만들어주지!" << endl;
+				cout << "드워프 대장장이 불카누스: 내가 아주 멋진 것을 만들어주지!\n" << endl;
 				return;
 			case 1:
 				DisplayPossibleUpgradEquipment();
@@ -65,7 +65,7 @@ void Forge::JudgementUseUniqueCategory()
 		if (token.first->GetName() == "드래곤 증표") //나중에 증표 토큰은 따로 해서 변경
 		{
 			cout << "드워프 대장장이 불카누스: 애송이인줄 알았더니 드래곤을 잡아올줄이야!" << endl;
-			cout << "드워프 대장장이 불카누스: 조금만 기다려봐 내가 걸작을 만들어주지!" << endl;
+			cout << "드워프 대장장이 불카누스: 조금만 기다려봐 내가 걸작을 만들어주지!\n" << endl;
 			//추후 여유 있을시 CraftUniqueItem을 제외하고 제작가능한 유니크아이템 목록 보여주기
 			CraftUniqueEquipiment("용기사의창");
 			return;
@@ -74,7 +74,7 @@ void Forge::JudgementUseUniqueCategory()
 
 	//특별한 몬스터를 잡은 증표가 없을때
 	cout << "드워프 대장장이 불카누스: 이건 아직 너 같은 애송이가 사용할 수 있는게 아니야!" << endl;
-	cout << "드워프 대장장이 불카누스: 드래곤 정도는 잡고 오라고!" << endl;
+	cout << "드워프 대장장이 불카누스: 드래곤 정도는 잡고 오라고!\n" << endl;
 }
 void Forge::DisplayPossibleUpgradEquipment()
 {
@@ -162,7 +162,6 @@ void Forge::DisplayPossibleUpgradEquipment()
 		if (selected < 0 || selected > static_cast<int>(itemList.size()))
 		{
 			cout << GameManager::Get().WrongInputMessage();
-			system("pause");
 		}
 		break;
 	}
@@ -299,7 +298,6 @@ void Forge::CraftCategory()
 		if (num == 0)
 		{
 			cout << "취소했습니다." << endl;
-			EnteredForge();
 			return;
 		}
 		if (num < 0 || num > static_cast<int>(craftableList.size()))
@@ -327,7 +325,7 @@ void Forge::CraftUniqueEquipiment(string recipeName)
 			if (mat.first == bone.first->GetName())
 			{
 				cout << "드워프 대장장이 불카누스: 아주 걸작이야! 잘 써보라고" << endl;
-				cout << "드워프 대장장이 불카누스: 귀한 재료를 만져봤으니 특별히 A/S는 무료로 해주지" << endl;
+				cout << "드워프 대장장이 불카누스: 귀한 재료를 만져봤으니 특별히 A/S는 무료로 해주지\n" << endl;
 				Craft(*findRecipe, findRecipe->craftEquipment);
 				return;
 			}
@@ -335,7 +333,7 @@ void Forge::CraftUniqueEquipiment(string recipeName)
 	}
 
 	cout << "드워프 대장장이 불카누스: 저번에 잡은 드래곤의 부산물은 다 사용한 것 같은데?" << endl;
-	cout << "드워프 대장장이 불카누스: 더 만들고 싶으면 드래곤 한마리 더 잡아보라고!" << endl;
+	cout << "드워프 대장장이 불카누스: 더 만들고 싶으면 드래곤 한마리 더 잡아보라고!\n" << endl;
 }
 
 void Forge::Craft(const EquipmentRecipe& recipe, Item* item)
@@ -385,6 +383,7 @@ void Forge::DisplayAllRecipes()
 		}
 		cout << endl;
 	}
+	cout << "(Press Any Key)" << endl;
 	system("pause");
 }
 

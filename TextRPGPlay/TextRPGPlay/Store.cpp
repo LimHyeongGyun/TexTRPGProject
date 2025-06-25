@@ -2,6 +2,7 @@
 #include "ItemManager.h"
 #include"Character.h"
 #include"Inventory.h"
+#include "GameManager.h"
 #include<iostream>
 #include<string>
 #include<vector>
@@ -24,6 +25,42 @@ Store& Store::Get()
 
 
 Store::Store() {}
+
+void Store::EnteredStore()
+{
+	int sub;
+	while (true)
+	{
+		cout << "0. 돌아가기\n 1. 구매\n2. 판매\n입력 >> ";
+		cin >> sub;
+		if (cin.fail())
+		{
+			cin.clear();
+			cin.ignore(numeric_limits<streamsize>::max(), '\n');
+			cout << GameManager::Get().WrongInputMessage();
+			continue;
+		}
+
+		if (sub == 0)
+		{
+			return;
+		}
+		else if (sub == 1)
+		{
+			Store::Get().Buy();
+			break;
+		}
+		else if (sub == 2)
+		{
+			Inventory::Get().DisplayInventory(Inventory::Get().sell);
+			break;
+		}
+		else
+		{
+			cout << GameManager::Get().WrongInputMessage();
+		}
+	}
+}
 
 void Store::SellItem(Item* item)
 {

@@ -15,6 +15,7 @@ public:
 	Store& operator=(const Store&) = delete;
 	static Store& Get();
 	
+	void EnteredStore();
 	void SellItem(Item* item);
 	void Buy();
 };
