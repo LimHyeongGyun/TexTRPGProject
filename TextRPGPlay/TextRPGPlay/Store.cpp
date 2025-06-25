@@ -37,6 +37,9 @@ void Store::SellItem(Item* item)
 	{
 		Inventory::Get().RemoveNoneEquipItem({ {item->GetName(), 1} }, item->GetType());
 	}
+
+	cout << item->GetName() << "À»(¸¦) ÆÇ¸ÅÇß½À´Ï´Ù." << endl;
+	cout << "È¹µæÇÑ °ñµå: " << item->GetValue() << endl;
 }
 
 void Store::Buy()

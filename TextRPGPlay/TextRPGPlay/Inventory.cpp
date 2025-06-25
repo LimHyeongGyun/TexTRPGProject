@@ -307,7 +307,7 @@ void Inventory::DIsplayOtherItem(string func)
     for (unordered_map<Item*, int>::value_type& p : otherItems)
     {
         ++num;
-        cout << num << "." << p.first->GetName() << "" << p.second << "개" << endl;
+        cout << num << "." << p.first->GetName() << ": " << p.second << "개" << endl;
     }
 
     string key;
@@ -324,7 +324,8 @@ void Inventory::DIsplayOtherItem(string func)
             return;
         }
 
-        cin >> key;
+        cin.ignore();
+        getline(cin, key);
         if (key == "p")
         {
             cout << "취소했습니다." << endl;
