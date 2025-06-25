@@ -41,30 +41,43 @@ void Store::SellItem(Item* item)
 
 void Store::Buy()
 {
-	vector<Item*>item;
-	cout << "==================== 상점 판매 목록 ====================" << endl;
-	cout << "1: 나무 롱소드 (Weapon) - 가격: 55, 공격력: 25" << endl;
-	cout << "2: 가죽 갑옷 (Armor) - 가격: 55, 방어력: 30" << endl;
-	cout << "3: 흑요석 롱소드 (Weapon) - 가격: 150, 공격력: 60" << endl;
-	cout << "4: 사슬 갑옷 (Armor) - 가격: 198, 방어력: 70" << endl;
-	cout << "5: 철 롱소드 (Weapon) - 가격: 308, 공격력: 100" << endl;
-	cout << "6: 철 갑옷 (Armor) - 가격: 308, 방어력: 100" << endl;
-	cout << "7: 소형 힐링 포션 (Expendables) - 가격: 55, 힐량: 50" << endl;
-	cout << "8: 중형 힐링 포션 (Expendables) - 가격: 132, 힐량: 100" << endl;
-	cout << "9: 대형 힐링 포션 (Expendables) - 가격: 275, 힐량: 200" << endl;
-	cout << "========================================================" << endl;
-	string name;
-	cout << "구매하실 아이템 이름을 입력해 주세요:";
-	cin >> name;
-	Item* buyitem = ItemManager::Get().CreateItem(name);
-	int a = buyitem->GetValue()+ static_cast<int>(buyitem->GetValue() * 0.1);
-	if (buyitem != nullptr) {
+	while (true) {
+		vector<Item*>item;
+		cout << "==================== 상점 판매 목록 ====================" << endl;
+		cout << "1: 나무 롱소드 (Weapon) - 가격: 55, 공격력: 25" << endl;
+		cout << "2: 가죽 갑옷 (Armor) - 가격: 55, 방어력: 30" << endl;
+		cout << "3: 흑요석 롱소드 (Weapon) - 가격: 150, 공격력: 60" << endl;
+		cout << "4: 사슬 갑옷 (Armor) - 가격: 198, 방어력: 70" << endl;
+		cout << "5: 철 롱소드 (Weapon) - 가격: 308, 공격력: 100" << endl;
+		cout << "6: 철 갑옷 (Armor) - 가격: 308, 방어력: 100" << endl;
+		cout << "7: 소형 힐링 포션 (Expendables) - 가격: 55, 힐량: 50" << endl;
+		cout << "8: 중형 힐링 포션 (Expendables) - 가격: 132, 힐량: 100" << endl;
+		cout << "9: 대형 힐링 포션 (Expendables) - 가격: 275, 힐량: 200" << endl;
+		cout << "========================================================" << endl;
+		string name;
+		cout << "구매하실 아이템 이름을 입력해 주세요:";
+		cout << "상점 나가기:p";
+		cout << endl;
+		cin >> name;
+
+		Item* buyitem = ItemManager::Get().CreateItem(name);
+		if (buyitem == nullptr) {
+			if (name == "p") {
+				return;
+			}
+			cout << "존재하지 않는 아이템입니다. 다시 입력해 주세요." << endl;
+			continue;
+		}
+
+		int a = buyitem->GetValue() + static_cast<int>(buyitem->GetValue() * 0.1);
+
 
 		item.push_back(buyitem);
 		if (Character::Get().GetGold() > a) {
 			Character::Get().ConsumeGold(a);
 			Character::Get().GetItem(item);
 		}
+
 	}
 
 }
