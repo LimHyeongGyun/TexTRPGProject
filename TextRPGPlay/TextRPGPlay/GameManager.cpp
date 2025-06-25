@@ -1,4 +1,4 @@
-#include "GameManager.h"
+ï»¿#include "GameManager.h"
 #include "Goblin.h"
 #include "Orc.h"
 #include "Troll.h"
@@ -29,32 +29,26 @@ GameManager& GameManager::Get()
     return *instance;
 }
 
-Slime* GenerateSlime(int level) { return new Slime(level); }
-Orc* GenerateOrc(int level) { return new Orc(level); }
-Troll* GenerateTroll(int level) { return new Troll(level); }
-Goblin* GenerateGoblin(int level) { return new Goblin(level); }
-Dragon* GenerateDragon(int level) { return new Dragon(level); }
-
 void GameManager::Run()
 {
     Character& player = Character::Get();
 
     while (player.GetHealth() > 0 && player.GetLevel() < 10) {
-        cout << "\n===== Ä³¸¯ÅÍ »óÅÂ =====" << endl;
+        cout << "\n===== ìºë¦­í„° ìƒíƒœ =====" << endl;
         player.DisplayStatus();
 
-        cout << "\n===== ÀüÅõ ½ÃÀÛ (·¹º§: " << player.GetLevel() << ") =====" << endl;
+        cout << "\n===== ì „íˆ¬ ì‹œìž‘ (ë ˆë²¨: " << player.GetLevel() << ") =====" << endl;
 
         int level = player.GetLevel();
         Monster* monster = nullptr;
 
-        if (level <= 3) monster = GenerateSlime(level);
-        else if (level <= 5) monster = GenerateOrc(level);
-        else if (level <= 7) monster = GenerateTroll(level);
-        else monster = GenerateGoblin(level);
+        if (level <= 3) monster = new Slime(level);
+        else if (level <= 5) monster = new Orc(level);
+        else if (level <= 7) monster = new Troll(level);
+        else monster = new Goblin(level);
 
-        cout << monster->getName() << " µîÀå! Ã¼·Â: " << monster->getHealth()
-            << ", °ø°Ý·Â: " << monster->Attack() << endl;
+        cout << monster->getName() << " ë“±ìž¥! ì²´ë ¥: " << monster->getHealth()
+            << ", ê³µê²©ë ¥: " << monster->Attack() << endl;
 
         Battle(&player, monster);
         delete monster;
@@ -63,38 +57,123 @@ void GameManager::Run()
     }
 
     if (player.GetHealth() > 0 && player.GetLevel() >= 10) {
-        cout << "\n===== º¸½º ¸ó½ºÅÍ µîÀå =====" << endl;
+        cout << "\n===== ë³´ìŠ¤ ëª¬ìŠ¤í„° ë“±ìž¥ =====" << endl;
         player.DisplayStatus();
 
-        Monster* boss = GenerateDragon(player.GetLevel());
+        Monster* boss = new Dragon(player.GetLevel());
 
-        cout << boss->getName() << " µîÀå! Ã¼·Â: " << boss->getHealth()
-            << ", °ø°Ý·Â: " << boss->Attack() << endl;
+        cout << boss->getName() << " ë“±ìž¥! ì²´ë ¥: " << boss->getHealth()
+            << ", ê³µê²©ë ¥: " << boss->Attack() << endl;
 
         Battle(&player, boss);
         delete boss;
 
         if (player.GetHealth() > 0) {
-            cout << "\nÃàÇÏÇÕ´Ï´Ù! º¸½º¸¦ ¹°¸®Ä¡°í °ÔÀÓÀ» Å¬¸®¾îÇß½À´Ï´Ù!" << endl;
+            cout << "\nì¶•í•˜í•©ë‹ˆë‹¤! ë³´ìŠ¤ë¥¼ ë¬¼ë¦¬ì¹˜ê³  ê²Œìž„ì„ í´ë¦¬ì–´í–ˆìŠµë‹ˆë‹¤!" << endl;
         }
         else {
-            cout << "\nº¸½º¿¡°Ô ÆÐ¹èÇß½À´Ï´Ù. °ÔÀÓ ¿À¹ö." << endl;
+            cout << "\në³´ìŠ¤ì—ê²Œ íŒ¨ë°°í–ˆìŠµë‹ˆë‹¤. ê²Œìž„ ì˜¤ë²„." << endl;
         }
     }
 
-    cout << "\n°ÔÀÓ Á¾·á. ¸Þ¸ð¸® Á¤¸® Áß..." << endl;
+    cout << "\nê²Œìž„ ì¢…ë£Œ. ë©”ëª¨ë¦¬ ì •ë¦¬ ì¤‘..." << endl;
+}
+
+string GameManager::WrongInputMessage() {
+    return "ìž˜ëª»ëœ ìž…ë ¥ìž…ë‹ˆë‹¤.\n";
+}
+
+Monster* GameManager::GenerateMonster(int level) {
+    if (level <= 3) return new Slime(level);
+    else if (level <= 5) return new Orc(level);
+    else if (level <= 7) return new Troll(level);
+    else return new Goblin(level);
 }
 
 void GameManager::Battle(Character* player, Monster* monster)
 {
     while (player->GetHealth() > 0 && monster->getHealth() > 0) {
-        cout << "\n==== Çàµ¿À» ¼±ÅÃÇÏ¼¼¿ä ====\n";
-        cout << "1. °ø°Ý\n";
-        cout << "2. ¾ÆÀÌÅÛ »ç¿ë\n";
-        cout << "3. µµ¸Á°¡±â\n";
-        cout << "4. »óÁ¡ ¹æ¹®\n";
-        cout << "5. ´ëÀå°£ ¹æ¹®\n";
-        cout << "ÀÔ·Â >> ";
+        cout << "\n==== í–‰ë™ì„ ì„ íƒí•˜ì„¸ìš” ====\n";
+        cout << "1. ê³µê²©\n";
+        cout << "2. ì•„ì´í…œ ì‚¬ìš©\n";
+        cout << "3. ë„ë§ê°€ê¸°\n";
+        cout << "ìž…ë ¥ >> ";
+
+        int choice;
+        cin >> choice;
+
+        if (cin.fail()) {
+            cin.clear();
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');
+            cout << "ìž˜ëª»ëœ ìž…ë ¥ìž…ë‹ˆë‹¤.\n";
+            continue;
+        }
+
+        if (choice == 1) {
+            int damage = player->Attack();
+            monster->takeDamage(damage);
+            cout << player->GetName() << "ì´(ê°€) " << monster->getName()
+                << "ì„(ë¥¼) ê³µê²©! ëª¬ìŠ¤í„° ì²´ë ¥: " << monster->getHealth() << endl;
+        }
+        else if (choice == 2) {
+            Inventory::Get().DisplayExpendableItem(Inventory::Get().use);
+            cout << "ì‚¬ìš©í•  ì•„ì´í…œ ë²ˆí˜¸ ìž…ë ¥ >> ";
+            int index;
+            cin >> index;
+            player->UseItem(index);
+            continue;
+        }
+        else if (choice == 3) {
+            cout << "ë„ë§ì³¤ìŠµë‹ˆë‹¤!\n";
+            return;
+        }
+        else {
+            cout << "ìž˜ëª»ëœ ìž…ë ¥ìž…ë‹ˆë‹¤.\n";
+            continue;
+        }
+
+        if (monster->getHealth() > 0) {
+            int mDamage = monster->Attack();
+            player->TakeDamage(mDamage);
+            cout << monster->getName() << "ì˜ ë°˜ê²©! " << player->GetName()
+                << " ì²´ë ¥: " << player->GetHealth() << endl;
+        }
+    }
+
+    if (player->GetHealth() > 0) {
+        cout << "\nì „íˆ¬ ìŠ¹ë¦¬!" << endl;
+
+        int exp = monster->getExpDrop();
+        int gold = monster->getGoldDrop();
+        player->GetExperience(exp);
+        player->BorrowGold(gold);
+        cout << "ê²½í—˜ì¹˜: +" << exp << ", ê³¨ë“œ: +" << gold << endl;
+
+        Item* dropItem = monster->ItemDrop();
+        if (dropItem) {
+            vector<Item*> dropItems = { dropItem };
+            player->GetItem(dropItems);
+            cout << "ì•„ì´í…œ íšë“: " << dropItem->GetName() << endl;
+        }
+    }
+    else {
+        cout << player->GetName() << "ì´(ê°€) ì‚¬ë§í–ˆìŠµë‹ˆë‹¤. ê²Œìž„ ì˜¤ë²„." << endl;
+    }
+
+    PostBattleMenu();
+}
+
+void GameManager::PostBattleMenu()
+{
+    using namespace std;
+
+    while (true) {
+        cout << "\n==== ì „íˆ¬ í›„ ë©”ë‰´ ====\n";
+        cout << "1. ì¸ë²¤í† ë¦¬ í™•ì¸\n";
+        cout << "2. ëŒ€ìž¥ê°„ ë°©ë¬¸\n";
+        cout << "3. ìƒì  ë°©ë¬¸\n";
+        cout << "4. ê³„ì† ì „íˆ¬\n";
+        cout << "ìž…ë ¥ >> ";
 
         int choice;
         cin >> choice;
@@ -106,79 +185,43 @@ void GameManager::Battle(Character* player, Monster* monster)
             continue;
         }
 
-        if (choice == 1) {
-            int damage = player->Attack();
-            monster->takeDamage(damage);
-            cout << player->GetName() << "ÀÌ(°¡) " << monster->getName()
-                << "À»(¸¦) °ø°Ý! ¸ó½ºÅÍ Ã¼·Â: " << monster->getHealth() << endl;
-        }
-        else if (choice == 2) {
-            Inventory::Get().DisplayExpendableItem(Inventory::Get().use);
-            cout << "»ç¿ëÇÒ ¾ÆÀÌÅÛ ¹øÈ£ ÀÔ·Â >> ";
-            int index;
-            cin >> index;
-            player->UseItem(index);
-            continue;
-        }
-        else if (choice == 3) {
-            cout << "µµ¸ÁÃÆ½À´Ï´Ù!\n";
-            return;
-        }
-        else if (choice == 4)
-        {
-            int ab;
-            cout <<"1 ±¸¸Å";
-            cout << "2 ÆÇ¸Å";
-            cin >>ab;
-            if (ab == 1)
-            {
-                Store::Get().Buy();
-            }
-            else {
-                Character::Get().VisitShop();
-            }
-            }
-        else if (choice == 5)
+        switch (choice) {
+        case 0:
+            cout << "ë‹¤ì‹œ ì„ íƒí•˜ì„¸ìš”.\n";
+            break;
+        case 1:
+            Inventory::Get().DisplayInventory();
+            break;
+        case 2:
         {
             Forge forge;
             forge.EnteredForge();
+            break;
         }
-        else {
+        case 3:
+        {
+            int sub;
+            cout << "1. êµ¬ë§¤\n2. íŒë§¤\nìž…ë ¥ >> ";
+            cin >> sub;
+            if (sub == 1)
+                Store::Get().Buy();
+            else
+                Character::Get().VisitShop();
+            break;
+        }
+        case 4:
+        {
+            int level = Character::Get().GetLevel();
+            Monster* newMonster = GenerateMonster(level);
+            Battle(&Character::Get(), newMonster);
+            delete newMonster;
+            return;
+        }
+        default:
             cout << WrongInputMessage();
-            continue;
+            break;
         }
 
-        if (monster->getHealth() > 0) {
-            int mDamage = monster->Attack();
-            player->TakeDamage(mDamage);
-            cout << monster->getName() << "ÀÇ ¹Ý°Ý! " << player->GetName()
-                << " Ã¼·Â: " << player->GetHealth() << endl;
-        }
     }
 
-    if (player->GetHealth() > 0) {
-        cout << "\nÀüÅõ ½Â¸®!" << endl;
-
-        int exp = monster->getExpDrop();
-        int gold = monster->getGoldDrop();
-        player->GetExperience(exp);
-        player->BorrowGold(gold);
-        cout << "°æÇèÄ¡: +" << exp << ", °ñµå: +" << gold << endl;
-
-        Item* dropItem = monster->ItemDrop();
-        if (dropItem) {
-            vector<Item*> dropItems = { dropItem };
-            player->GetItem(dropItems);
-            cout << "¾ÆÀÌÅÛ È¹µæ: " << dropItem->GetName() << endl;
-        }
-    }
-    else {
-        cout << player->GetName() << "ÀÌ(°¡) »ç¸ÁÇß½À´Ï´Ù. °ÔÀÓ ¿À¹ö." << endl;
-    }
-}
-
-string GameManager::WrongInputMessage()
-{
-    string wrongMessage = "Àß¸øµÈ ÀÔ·ÂÀÔ´Ï´Ù. ´Ù½Ã ÀÔ·ÂÇØÁÖ¼¼¿ä.\n";
-    return wrongMessage;
 }
