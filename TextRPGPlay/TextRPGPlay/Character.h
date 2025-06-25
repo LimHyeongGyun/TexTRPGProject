@@ -38,6 +38,7 @@ public:
 	std::string GetName() const; //플레이어 이름
 	int GetHealth() const; //플레이어 체력
 	int GetLevel() const; //플레이어 레벨
+	int GetGold() const;
 	void UpadatePlayerStatus(); //장비 또는 아이템으로 플레이어의 스탯이 변경되어야 할 때 호출
 
 	//전투 관련

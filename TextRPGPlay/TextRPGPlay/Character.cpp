@@ -62,6 +62,12 @@ int Character::GetLevel() const
 {
     return level;
 }
+
+int Character::GetGold() const
+{
+    return gold;
+}
+
 void Character::UpadatePlayerStatus()
 {
     if (equipArmor != nullptr)
