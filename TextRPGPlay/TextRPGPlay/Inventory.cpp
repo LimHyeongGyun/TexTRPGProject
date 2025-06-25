@@ -283,11 +283,9 @@ void Inventory::DisplayExpendableItem(string func)
                 return;
             }
             //찾아봐도 소지하고 있지 않는 아이템 이름일 때
-            if (key != item.first->GetName() && expendableItems.find(item.first) == expendableItems.end())
+            if (expendableItems.begin() == prev(expendableItems.end()) && key != item.first->GetName())
             {
                 cout << GameManager::Get().WrongInputMessage();
-                DisplayExpendableItem(func);
-                return;
             }
         }
     }
@@ -311,6 +309,7 @@ void Inventory::DIsplayOtherItem(string func)
     }
 
     string key;
+    cin.ignore();
     while (true)
     {
         if (func == sell)
@@ -324,7 +323,6 @@ void Inventory::DIsplayOtherItem(string func)
             return;
         }
 
-        cin.ignore();
         getline(cin, key);
         if (key == "p")
         {
@@ -346,8 +344,6 @@ void Inventory::DIsplayOtherItem(string func)
             else if (otherItems.begin() == prev(otherItems.end()) && key != item.first->GetName())
             {
                 cout << GameManager::Get().WrongInputMessage();
-                DIsplayOtherItem(func);
-                return;
             }
         }
     }
