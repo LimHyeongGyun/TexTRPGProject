@@ -90,8 +90,15 @@ void Inventory::DisplayInventory(string func)
         cout << "4. 기타 아이템" << endl;
         cout << "0. 종료" << endl;
         cout << "입력: ";
+        
         cin >> category;
-
+        if (cin.fail())
+        {
+            cin.clear();
+            cin.ignore();
+            cout << GameManager::Get().WrongInputMessage();;
+            continue;
+        }
         switch (category)
         {
             case 0: return;
@@ -110,7 +117,6 @@ void Inventory::DisplayWeapon(string func)
     if (weaponItems.empty())
     {
         cout << "소지하고 있는 무기가 없습니다." << endl;
-        DisplayInventory(func);
         return;
     }
 
@@ -134,15 +140,20 @@ void Inventory::DisplayWeapon(string func)
         else
         {
             cout << "현재 작업 종료하기" << endl;
-            DisplayInventory(func);
             return;
         }
-        cin >> num;
 
+        cin >> num;
+        if (cin.fail())
+        {
+            cin.clear();
+            cin.ignore();
+            cout << GameManager::Get().WrongInputMessage();;
+            continue;
+        }
         if (num == 0)
         {
             cout << "취소했습니다." << endl;
-            DisplayInventory(func);
             return;
         }
         //장비를 장착할 때
@@ -170,7 +181,6 @@ void Inventory::DisplayArmor(string func)
     //소지하고 있는 방어구가 없을 때
     if (armorItems.empty()) {
         cout << "소지하고 있는 방어구가 없습니다." << endl;
-        DisplayInventory(func);
         return;
     }
 
@@ -193,15 +203,20 @@ void Inventory::DisplayArmor(string func)
         else
         {
             cout << "현재 작업 종료하기" << endl;
-            DisplayInventory(func);
             return;
         }
-        cin >> num;
 
+        cin >> num;
+        if (cin.fail())
+        {
+            cin.clear();
+            cin.ignore();
+            cout << GameManager::Get().WrongInputMessage();;
+            continue;
+        }
         if (num == 0)
         {
             cout << "취소했습니다." << endl;
-            DisplayInventory(func);
             return;
         }
         //장비를 장착할 때
@@ -231,7 +246,6 @@ void Inventory::DisplayExpendableItem(string func)
     if (expendableItems.empty())
     {
         cout << "소지하고 있는 소비아이템 없습니다." << endl;
-        DisplayInventory(func);
         return;
     }
 
@@ -257,15 +271,13 @@ void Inventory::DisplayExpendableItem(string func)
         else
         {
             cout << "현재 작업 종료하기" << endl;
-            DisplayInventory(func);
             return;
         }
 
-        cin >> key;
+        getline(cin, key);
         if (key == "p")
         {
             cout << "취소했습니다." << endl;
-            DisplayInventory(func);
             return;
         }
         for (unordered_map<Item*, int>::value_type& item : expendableItems)
@@ -296,7 +308,6 @@ void Inventory::DIsplayOtherItem(string func)
     if (otherItems.empty())
     {
         cout << "소지하고 있는 기타아이템 없습니다." << endl;
-        DisplayInventory(func);
         return;
     }
 
@@ -319,7 +330,6 @@ void Inventory::DIsplayOtherItem(string func)
         else
         {
             cout << "현재 작업 종료하기" << endl;
-            DisplayInventory(func);
             return;
         }
 
@@ -327,7 +337,6 @@ void Inventory::DIsplayOtherItem(string func)
         if (key == "p")
         {
             cout << "취소했습니다." << endl;
-            DisplayInventory(func);
             return;
         }
         for (unordered_map<Item*, int>::value_type& item : otherItems)

@@ -14,7 +14,6 @@ void Forge::EnteredForge()
 	CreateRecipe();
 	int num;
 
-	cin.ignore();
 	cout << "드워프 대장장이 불카누스: 무슨 볼일이 있어서 왔나?" << endl;
 
 	while (true)
@@ -25,8 +24,15 @@ void Forge::EnteredForge()
 		cout << "3.조합식 확인하기" << endl;
 		cout << "4.유니크 아이템 제작" << endl;
 		cout << "진행할 작업의 번호를 입력해주세요: ";
-		cin >> num;
 
+		cin >> num;
+		if (cin.fail())
+		{
+			cin.clear();
+			cin.ignore();
+			cout << GameManager::Get().WrongInputMessage();;
+			continue;
+		}
 		switch (num)
 		{
 			case 0:
@@ -47,10 +53,8 @@ void Forge::EnteredForge()
 				break;
 			default:
 				cout << GameManager::Get().WrongInputMessage();
-				continue;
+				break;
 		}
-
-		break;
 	}
 }
 
@@ -71,7 +75,6 @@ void Forge::JudgementUseUniqueCategory()
 	//특별한 몬스터를 잡은 증표가 없을때
 	cout << "드워프 대장장이 불카누스: 이건 아직 너 같은 애송이가 사용할 수 있는게 아니야!" << endl;
 	cout << "드워프 대장장이 불카누스: 드래곤 정도는 잡고 오라고!" << endl;
-	EnteredForge();
 }
 void Forge::DisplayPossibleUpgradEquipment()
 {
@@ -83,12 +86,18 @@ void Forge::DisplayPossibleUpgradEquipment()
 	while (true)
 	{
 		cout << "강화할 장비카테고리 번호를 입력해주세요.[0.강화취소 1.무기, 2.방어구]: " << endl;
+		
 		cin >> category;
-
+		if (cin.fail())
+		{
+			cin.clear();
+			cin.ignore();
+			cout << GameManager::Get().WrongInputMessage();;
+			continue;
+		}
 		switch (category)
 		{
 		case 0:
-			EnteredForge();
 			return;
 		case 1:
 			itemList = Inventory::Get().weaponItems;
@@ -100,7 +109,7 @@ void Forge::DisplayPossibleUpgradEquipment()
 			break;
 		default:
 			cout << GameManager::Get().WrongInputMessage();;
-			continue;
+			break;
 		}
 		break;
 	}
@@ -124,7 +133,6 @@ void Forge::DisplayPossibleUpgradEquipment()
 	//강화할 장비가 없을때
 	if (itemList.empty()) {
 		cout << "강화할 수 있는 장비가 없습니다." << endl;
-		EnteredForge();
 		return;
 	}
 
@@ -137,11 +145,18 @@ void Forge::DisplayPossibleUpgradEquipment()
 	while (true)
 	{
 		cout << "강화를 진행할 장비의 번호를 입력해주세요[0:취소]: ";
-		cin >> selected;
 
+		if (cin.fail())
+		{
+			cin.clear();
+			cin.ignore();
+			cout << GameManager::Get().WrongInputMessage();;
+			continue;
+		}
+		cin >> selected;
 		if (selected == 0)
 		{
-			EnteredForge();
+			return;
 		}
 		//유효성 검사
 		if (selected < 0 || selected > static_cast<int>(itemList.size()))
@@ -199,7 +214,6 @@ void Forge::UpgradeResult(Item* equipment, int roll, int successRate)
 	{
 		cout << "강화에 실패했습니다. " << endl;
 	}
-	DisplayPossibleUpgradEquipment();
 }
 
 int Forge::GetUpgradeAtkValue()
@@ -259,7 +273,6 @@ void Forge::CraftCategory()
 	if(craftableList.empty())
 	{
 		cout << "현재 제작 가능한 장비가 없습니다." << endl;
-		EnteredForge();
 		return;
 	}
 	for (int i = 0; i < craftableList.size(); i++)
@@ -275,6 +288,13 @@ void Forge::CraftCategory()
 		cout << "제작할 장비아이템의 번호를 입력해주세요(취소하기: 0): ";
 		cin >> num;
 
+		if (cin.fail())
+		{
+			cin.clear();
+			cin.ignore();
+			cout << GameManager::Get().WrongInputMessage();;
+			continue;
+		}
 		if (num == 0)
 		{
 			cout << "취소했습니다." << endl;
@@ -328,8 +348,6 @@ void Forge::Craft(const EquipmentRecipe& recipe, Item* item)
 	vector<Item*> _item;
 	_item.push_back(item);
 	Character::Get().GetItem(_item);
-
-	EnteredForge();
 }
 #pragma endregion
 
@@ -367,7 +385,6 @@ void Forge::DisplayAllRecipes()
 		cout << endl;
 	}
 	system("pause");
-	EnteredForge();
 }
 
 Forge::EquipmentRecipe* Forge::FindRecipe(std::string recipeName)
