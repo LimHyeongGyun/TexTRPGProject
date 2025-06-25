@@ -42,7 +42,7 @@ void Forge::EnteredForge()
 				DisplayAllRecipes();
 				break;
 			case 4:
-				JudgementUseCategory();
+				JudgementUseUniqueCategory();
 				break;
 			default:
 				cout << GameManager::Get().WrongInputMessage();
@@ -53,14 +53,14 @@ void Forge::EnteredForge()
 	}
 }
 
-void Forge::JudgementUseCategory()
+void Forge::JudgementUseUniqueCategory()
 {
 	for (unordered_map<Item*, int>::value_type& token : Inventory::Get().otherItems)
 	{
 		if (token.first->GetName() == "드래곤 증표") //나중에 증표 토큰은 따로 해서 변경
 		{
 			//추후 여유 있을시 CraftUniqueItem을 제외하고 제작가능한 유니크아이템 목록 보여주기
-			CraftUniqueEquipiment("드래곤 이빨검");
+			CraftUniqueEquipiment("용기사의창");
 			return;
 		}
 	}
@@ -316,8 +316,8 @@ void Forge::Craft(const EquipmentRecipe& recipe, Item* item)
 
 void Forge::InitRecipes()
 {
-	Item* softArmor = ItemManager::Get().CreateItem("말랑한 보호대");
-	unordered_map<string, int> needMat = {{"슬라임의 핵", 2}, {"고블린의 허리띠", 2}};
+	Item* softArmor = ItemManager::Get().CreateItem("용기사의창");
+	unordered_map<string, int> needMat = {{"드래곤의 발톱", 1}, {"드래곤의 비늘", 2}};
 	AddCraftRecipe(softArmor, needMat);
 }
 

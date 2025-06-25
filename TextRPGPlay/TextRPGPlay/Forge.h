@@ -25,7 +25,7 @@ private:
 	UpgradeProbablity UP; //강화확률
 	int expense = 0; //Forge에서 사용하는 작업에 드는 비용
 
-	void JudgementUseCategory(); //카테고리 사용할 수 있는지 판단
+	void JudgementUseUniqueCategory(); //카테고리 사용할 수 있는지 판단
 
 	//강화
 	int upgradeAtkValue;
