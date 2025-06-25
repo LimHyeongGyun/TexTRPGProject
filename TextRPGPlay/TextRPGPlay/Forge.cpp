@@ -146,6 +146,7 @@ void Forge::DisplayPossibleUpgradEquipment()
 	{
 		cout << "강화를 진행할 장비의 번호를 입력해주세요[0:취소]: ";
 
+		cin >> selected;
 		if (cin.fail())
 		{
 			cin.clear();
@@ -153,7 +154,6 @@ void Forge::DisplayPossibleUpgradEquipment()
 			cout << GameManager::Get().WrongInputMessage();;
 			continue;
 		}
-		cin >> selected;
 		if (selected == 0)
 		{
 			return;
@@ -164,6 +164,7 @@ void Forge::DisplayPossibleUpgradEquipment()
 			cout << GameManager::Get().WrongInputMessage();
 			system("pause");
 		}
+		break;
 	}
 	
 	//결과
