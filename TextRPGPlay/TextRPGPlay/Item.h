@@ -16,7 +16,7 @@ private:
 	std::string name;
 	ItemType type= ItemType::Other;
 	int value;
-	int atack=0;
+	int attack=0;
 	int health =0;
 	int heal=0;
 	int upgradeAtack=0;
@@ -35,7 +35,7 @@ public:
 	int GetValue() { return value; }
 	//가격 가져오기
 
-	int GetAtack() { return atack; }
+	int GetAttack() { return attack; }
 	//공격력
 
 	int GetUpgradeAtack() { return upgradeAtack; }

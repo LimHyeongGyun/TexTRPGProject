@@ -11,7 +11,7 @@ using namespace std;
 class Character;
 
 Item::Item(std::string name, ItemType type, int Value, int Atack, int Defense, int Heal)
-	:name(name), type(type),value(Value), atack(Atack), health(Defense), heal(Heal) {}
+	:name(name), type(type),value(Value), attack(Atack), health(Defense), heal(Heal) {}
 
 
 //장비 여부 가져오기
@@ -103,7 +103,7 @@ void Item::Upgrade(Forge forge)
 
 		else
 		{
-			this->atack = forge.GetUpgradeAtkValue();
+			this->attack = forge.GetUpgradeAtkValue();
 		}
 
 	}
