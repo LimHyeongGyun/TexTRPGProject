@@ -16,13 +16,25 @@ using namespace std;
 
 GameManager::GameManager() {}
 
+GameManager* GameManager::instance = nullptr;
+
+GameManager& GameManager::Get()
+{
+    if (instance == nullptr)
+    {
+        instance = new GameManager();
+    }
+    return *instance;
+}
+
 Slime* GenerateSlime(int level) { return new Slime(level); }
 Orc* GenerateOrc(int level) { return new Orc(level); }
 Troll* GenerateTroll(int level) { return new Troll(level); }
 Goblin* GenerateGoblin(int level) { return new Goblin(level); }
 Dragon* GenerateDragon(int level) { return new Dragon(level); }
 
-void GameManager::Run() {
+void GameManager::Run()
+{
     Character& player = Character::Get();
 
     while (player.GetHealth() > 0 && player.GetLevel() < 10) {
@@ -71,7 +83,8 @@ void GameManager::Run() {
     cout << "\n게임 종료. 메모리 정리 중..." << endl;
 }
 
-void GameManager::Battle(Character* player, Monster* monster) {
+void GameManager::Battle(Character* player, Monster* monster)
+{
     while (player->GetHealth() > 0 && monster->getHealth() > 0) {
         cout << "\n==== 행동을 선택하세요 ====\n";
         cout << "1. 공격\n";
@@ -85,7 +98,7 @@ void GameManager::Battle(Character* player, Monster* monster) {
         if (cin.fail()) {
             cin.clear();
             cin.ignore(numeric_limits<streamsize>::max(), '\n');
-            cout << "잘못된 입력입니다.\n";
+            cout << WrongInputMessage();
             continue;
         }
 
@@ -108,7 +121,7 @@ void GameManager::Battle(Character* player, Monster* monster) {
             return;
         }
         else {
-            cout << "잘못된 선택입니다. 다시 입력하세요.\n";
+            cout << WrongInputMessage();
             continue;
         }
 
@@ -139,4 +152,10 @@ void GameManager::Battle(Character* player, Monster* monster) {
     else {
         cout << player->GetName() << "이(가) 사망했습니다. 게임 오버." << endl;
     }
+}
+
+string GameManager::WrongInputMessage()
+{
+    string wrongMessage = "잘못된 입력입니다. 다시 입력해주세요.\n";
+    return wrongMessage;
 }
