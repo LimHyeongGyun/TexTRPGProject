@@ -20,7 +20,8 @@ public:
     GameManager& operator=(const GameManager&) = delete;
 
     Monster* GenerateMonster(int level);
-    Monster* GenerateBossMonster(int level);
+    Monster* GenerateStageMonster(int level);
+    void RepeatBattleUntilLevel10();
 
     void Battle(Character* character, Monster* monster);
     void DisplayInventory();

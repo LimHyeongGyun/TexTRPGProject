@@ -29,32 +29,44 @@ GameManager& GameManager::Get()
     return *instance;
 }
 
-void GameManager::Run()
+Monster* GameManager::GenerateStageMonster(int level) {
+    if (level <= 3) return new Slime(level);
+    else if (level <= 5) return new Orc(level);
+    else if (level <= 7) return new Troll(level);
+    else if(level <= 9) return new Goblin(level);
+    return 0;
+}
+
+void GameManager::RepeatBattleUntilLevel10()
 {
     Character& player = Character::Get();
 
-    while (player.GetHealth() > 0 && player.GetLevel() < 10) {
+    while (player.GetHealth() > 0) {
+        if (player.GetLevel() >= 10) {
+            cout << "[DEBUG] 레벨 10 도달! 일반 전투 종료.\n";
+            break;
+        }
+
         cout << "\n===== 캐릭터 상태 =====" << endl;
         player.DisplayStatus();
 
         cout << "\n===== 전투 시작 (레벨: " << player.GetLevel() << ") =====" << endl;
 
-        int level = player.GetLevel();
-        Monster* monster = nullptr;
-
-        if (level <= 3) monster = new Slime(level);
-        else if (level <= 5) monster = new Orc(level);
-        else if (level <= 7) monster = new Troll(level);
-        else monster = new Goblin(level);
+        Monster* monster = GenerateStageMonster(player.GetLevel());
 
         cout << monster->getName() << " 등장! 체력: " << monster->getHealth()
             << ", 공격력: " << monster->Attack() << endl;
 
         Battle(&player, monster);
         delete monster;
-
-        if (player.GetHealth() <= 0) break;
     }
+}
+
+void GameManager::Run()
+{
+    Character& player = Character::Get();
+
+    RepeatBattleUntilLevel10();  // 일반 몬스터 반복
 
     if (player.GetHealth() > 0 && player.GetLevel() >= 10) {
         cout << "\n===== 보스 몬스터 등장 =====" << endl;
@@ -87,7 +99,8 @@ Monster* GameManager::GenerateMonster(int level) {
     if (level <= 3) return new Slime(level);
     else if (level <= 5) return new Orc(level);
     else if (level <= 7) return new Troll(level);
-    else return new Goblin(level);
+    else if (level <= 9) return new Goblin(level);
+    return 0;
 }
 
 void GameManager::Battle(Character* player, Monster* monster)
@@ -155,6 +168,9 @@ void GameManager::Battle(Character* player, Monster* monster)
             player->GetItem(dropItems);
             cout << "아이템 획득: " << dropItem->GetName() << endl;
         }
+        
+        cout << "\n===== 캐릭터 현재 상태 =====\n";
+        player->DisplayStatus(); 
     }
     else {
         cout << player->GetName() << "이(가) 사망했습니다. 게임 오버." << endl;
