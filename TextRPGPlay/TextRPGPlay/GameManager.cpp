@@ -8,6 +8,7 @@
 #include "ItemManager.h"
 #include "Item.h"
 #include "Character.h"
+#include "Forge.h"
 #include <iostream>
 #include <vector>
 #include <limits>
@@ -90,6 +91,8 @@ void GameManager::Battle(Character* player, Monster* monster)
         cout << "1. 공격\n";
         cout << "2. 아이템 사용\n";
         cout << "3. 도망가기\n";
+        cout << "4. 상점 방문\n";
+        cout << "5. 대장간 방문\n";
         cout << "입력 >> ";
 
         int choice;
@@ -109,7 +112,7 @@ void GameManager::Battle(Character* player, Monster* monster)
                 << "을(를) 공격! 몬스터 체력: " << monster->getHealth() << endl;
         }
         else if (choice == 2) {
-            Inventory::Get().DisplayConsumeItem();
+            Inventory::Get().DisplayConsumeItem(Inventory::Get().use);
             cout << "사용할 아이템 번호 입력 >> ";
             int index;
             cin >> index;
@@ -119,6 +122,15 @@ void GameManager::Battle(Character* player, Monster* monster)
         else if (choice == 3) {
             cout << "도망쳤습니다!\n";
             return;
+        }
+        else if (choice == 4)
+        {
+            Character::Get().VisitShop();
+        }
+        else if (choice == 5)
+        {
+            Forge forge;
+            forge.EnteredForge();
         }
         else {
             cout << WrongInputMessage();
