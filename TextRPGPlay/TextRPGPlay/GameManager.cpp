@@ -12,6 +12,7 @@
 #include <iostream>
 #include <vector>
 #include <limits>
+#include "Store.h"
 
 using namespace std;
 
@@ -125,8 +126,18 @@ void GameManager::Battle(Character* player, Monster* monster)
         }
         else if (choice == 4)
         {
-            Character::Get().VisitShop();
-        }
+            int ab;
+            cout <<"1 구매";
+            cout << "2 판매";
+            cin >>ab;
+            if (ab == 1)
+            {
+                Store::Get().Buy();
+            }
+            else {
+                Character::Get().VisitShop();
+            }
+            }
         else if (choice == 5)
         {
             Forge forge;
