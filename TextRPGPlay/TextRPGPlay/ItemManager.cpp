@@ -14,6 +14,7 @@ ItemManager::ItemManager() {
     // --- 제작 포션  ---
     Itemdb["점액응고포션"] = make_unique<Item>("점액 응고 포션", ItemType::Expendables, 80, 0, 0, 80); // 가성비 상향
     Itemdb["트롤피재생비약"] = make_unique<Item>("트롤 피 재생 비약", ItemType::Expendables, 600, 0, 0, 400); // 가치에 맞게 가격 조정
+    Itemdb["열화된재생비약"] = make_unique<Item>("열화된 재생 비약", ItemType::Expendables, 450, 0, 0, 280);
     Itemdb["용심장비약"] = make_unique<Item>("용심장 비약", ItemType::Expendables, 2000, 0, 0, 1200); // 최종 등급에 맞게 성능 및 가격 조정
 
 
@@ -68,9 +69,17 @@ ItemManager::ItemManager() {
     //오크
     Itemdb["오크족전투휘장"] = make_unique<Item>("오크족 전투 휘장", ItemType::Other, 100, 0, 0, 0);
     Itemdb["오크의어금니"] = make_unique<Item>("오크의 어금니", ItemType::Other, 120, 0, 0, 0);
+    Itemdb["오크힘줄"] = make_unique<Item>("오크 힘줄", ItemType::Other, 40, 0, 0, 0);
+    Itemdb["상처난오크등가죽"] = make_unique<Item>("상처 난 오크 등가죽", ItemType::Other, 280, 0, 0, 0);
+    Itemdb["오크등가죽"] = make_unique<Item>("오크 등가죽", ItemType::Other, 280, 0, 0, 0);
+
+
     //트롤
+    Itemdb["재생촉매이끼"] = make_unique<Item>("재생 촉매 이끼", ItemType::Other, 500, 0, 0, 0);
+    Itemdb["굳어버린트롤의피"] = make_unique<Item>("굳어버린 트롤의 피", ItemType::Other, 150, 0, 0, 0);
     Itemdb["트롤의가죽"] = make_unique<Item>("트롤의 가죽", ItemType::Other, 200, 0, 0, 0);
     Itemdb["트롤의재생혈액"] = make_unique<Item>("트롤의 재생 혈액", ItemType::Other, 350, 0, 0, 0);
+    Itemdb["트롤의변이된손톱"] = make_unique<Item>("트롤의 변이된 손톱", ItemType::Other, 180, 0, 0, 0);
     //드래곤
     Itemdb["드래곤비늘"] = make_unique<Item>("드래곤 비늘", ItemType::Other, 500, 0, 0, 0);
     Itemdb["드래곤의발톱"] = make_unique<Item>("드래곤의 발톱", ItemType::Other, 750, 0, 0, 0);
