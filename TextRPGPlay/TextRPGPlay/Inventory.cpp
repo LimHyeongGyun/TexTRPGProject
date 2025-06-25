@@ -5,6 +5,7 @@
 #include "Inventory.h"
 #include "GameManager.h"
 #include "Item.h"
+#include "Store.h"
 
 using namespace std;
 
@@ -149,7 +150,7 @@ void Inventory::DisplayWeapon(string func)
             }
             else if (func == sell)
             {
-                //판매 로직
+                Store::Get().SellItem(weaponItems[num - 1]);//판매
             }
         }
         else
@@ -204,7 +205,7 @@ void Inventory::DisplayArmor(string func)
             }
             else if (func == sell)
             {
-                //판매 로직
+                Store::Get().SellItem(armorItems[num - 1]);//판매
             }
         }
         else
@@ -263,7 +264,7 @@ void Inventory::DisplayConsumeItem(string func)
                 }
                 else if (func == sell)
                 {
-                    //판매함수 들어오기
+                    Store::Get().SellItem(item.first);//판매로직
                 }
                 return;
             }
@@ -316,7 +317,7 @@ void Inventory::DIsplayOtherItem(std::string func)
             if (item.first->GetName() == key) {
                 if (func == sell)
                 {
-                    //판매함수 들어오기
+                    Store::Get().SellItem(item.first);//판매
                 }
                 return;
             }

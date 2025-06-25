@@ -185,7 +185,7 @@ void Character::GetItem(vector<Item*> getItems) const
 }
 void Character::UseItem(int index) const
 {
-    Inventory::Get().DisplayConsumeItem();
+    Inventory::Get().DisplayConsumeItem(Inventory::Get().use);
 }
 
 void Character::BorrowGold(int getGold)
@@ -200,7 +200,7 @@ void Character::ConsumeGold(int consumeGold)
 
 void Character::VisitShop()
 {
-
+    Inventory::Get().DisplayInventory(Inventory::Get().sell);
 }
 #pragma endregion
 
