@@ -37,7 +37,7 @@ public:
 	//인벤토리 관리
 	void ClassificationItem(std::vector<Item*> items); //획득한 아이템을 분류해서 인벤토리에 넣기
 	void DisplayInventory(std::string func = " ");
-	void DisplayConsumeItem(std::string func);
+	void DisplayExpendableItem(std::string func);
 	void DIsplayOtherItem(std::string func);
 	void RemoveEquipItem(Item* equip);
 	void RemoveNoneEquipItem(const std::unordered_map<std::string, int>& materials, ItemType type); //아이템 제거

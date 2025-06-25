@@ -113,7 +113,7 @@ void GameManager::Battle(Character* player, Monster* monster)
                 << "을(를) 공격! 몬스터 체력: " << monster->getHealth() << endl;
         }
         else if (choice == 2) {
-            Inventory::Get().DisplayConsumeItem(Inventory::Get().use);
+            Inventory::Get().DisplayExpendableItem(Inventory::Get().use);
             cout << "사용할 아이템 번호 입력 >> ";
             int index;
             cin >> index;

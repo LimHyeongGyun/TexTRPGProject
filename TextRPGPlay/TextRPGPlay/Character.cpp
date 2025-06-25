@@ -185,7 +185,7 @@ void Character::GetItem(vector<Item*> getItems) const
 }
 void Character::UseItem(int index) const
 {
-    Inventory::Get().DisplayConsumeItem(Inventory::Get().use);
+    Inventory::Get().DisplayExpendableItem(Inventory::Get().use);
 }
 
 void Character::BorrowGold(int getGold)

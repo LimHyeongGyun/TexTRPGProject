@@ -95,7 +95,7 @@ void Inventory::DisplayInventory(string func)
         switch (category)
         {
             case 0: return;
-            case 1: DisplayConsumeItem(func); break;
+            case 1: DisplayExpendableItem(func); break;
             case 2: DisplayWeapon(func); break;
             case 3: DisplayArmor(func); break;
             case 4: DIsplayOtherItem(func); break;
@@ -225,7 +225,7 @@ void Inventory::DisplayArmor(string func)
     }
 }
 
-void Inventory::DisplayConsumeItem(string func)
+void Inventory::DisplayExpendableItem(string func)
 {
     //소지하고 있는 소비아이템이 없을 때
     if (expendableItems.empty())
@@ -279,14 +279,14 @@ void Inventory::DisplayConsumeItem(string func)
                 {
                     Store::Get().SellItem(item.first);//판매로직
                 }
-                DisplayConsumeItem(func);
+                DisplayExpendableItem(func);
                 return;
             }
             //찾아봐도 소지하고 있지 않는 아이템 이름일 때
             if (key != item.first->GetName() && expendableItems.find(item.first) == expendableItems.end())
             {
                 cout << GameManager::Get().WrongInputMessage();
-                DisplayConsumeItem(func);
+                DisplayExpendableItem(func);
                 return;
             }
         }
