@@ -35,9 +35,8 @@ ItemManager::ItemManager() {
 
     // -- 초급 제작 세트 (고블린/슬라임 재료) --
     Itemdb["고블린톱니단검"] = make_unique<Item>("고블린 톱니 단검", ItemType::Weapon, 90, 45, 0, 0);
-
-    //잡템으로 만들수 있는 갑옷
     Itemdb["누더기갑옷"] = make_unique<Item>("누더기 갑옷", ItemType::Armor, 220, 0, 90, 0);
+
 
     // -- 중급 제작 세트 1 (오크 재료) --
     Itemdb["오크어금니도끼"] = make_unique<Item>("오크 어금니 도끼", ItemType::Weapon, 350, 115, 0, 0); // 철 롱소드보다 확실히 좋도록 상향
