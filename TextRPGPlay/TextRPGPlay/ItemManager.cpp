@@ -77,7 +77,7 @@ ItemManager::ItemManager() {
 
 
     //트롤
-    Itemdb["재생촉매이끼"] = make_unique<Item>("재생 촉매 이끼", ItemType::Other, 500, 0, 0, 0);
+    Itemdb["재생촉매이끼"] = make_unique<Item>("재생 촉매 이끼", ItemType::Other, 300, 0, 0, 0);
     Itemdb["굳어버린트롤의피"] = make_unique<Item>("굳어버린 트롤의 피", ItemType::Other, 150, 0, 0, 0);
     Itemdb["상처난트롤가죽"] = make_unique<Item>("상처 난 트롤 가죽", ItemType::Other, 150, 0, 0, 0);
     Itemdb["트롤의가죽"] = make_unique<Item>("트롤의 가죽", ItemType::Other, 200, 0, 0, 0);
