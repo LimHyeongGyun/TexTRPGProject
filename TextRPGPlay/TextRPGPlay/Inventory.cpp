@@ -342,7 +342,7 @@ void Inventory::DIsplayOtherItem(string func)
                 }
             }
             //찾아봐도 소지하고 있지 않는 아이템 이름일 때
-            if (key != item.first->GetName() && expendableItems.find(item.first) == otherItems.end())
+            if (key != item.first->GetName() || expendableItems.find(item.first) == otherItems.end())
             {
                 cout << GameManager::Get().WrongInputMessage();
                 DIsplayOtherItem(func);
