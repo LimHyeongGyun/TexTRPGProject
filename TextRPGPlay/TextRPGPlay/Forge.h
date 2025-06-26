@@ -28,8 +28,8 @@ private:
 	void JudgementUseUniqueCategory(); //카테고리 사용할 수 있는지 판단
 
 	//강화
-	int upgradeAtkValue = 0;
-	int upgradeHPValue = 0;
+	int upgradeAtkValue = 10;
+	int upgradeHPValue = 15;
 	void Upgrade(Item* equipment); //장비 강화
 	void DisplayUpgradePercent(); //강화확률 보여주기
 	int GetUpgradePercent(int upValue); //강화 확률
