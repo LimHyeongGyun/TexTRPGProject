@@ -1,4 +1,4 @@
-#include "Store.h"
+ï»¿#include "Store.h"
 #include "ItemManager.h"
 #include"Character.h"
 #include"Inventory.h"
@@ -10,16 +10,16 @@ using namespace std;
 
 Store* Store::instance = nullptr;
 
-// 2. Get() ÇÔ¼ö ±¸Çö
+// 2. Get() í•¨ìˆ˜ êµ¬í˜„
 Store& Store::Get()
 {
-	// ¸¸¾à ÀÎ½ºÅÏ½º°¡ ¾ÆÁ÷ ¾ø´Ù¸é
+	// ë§Œì•½ ì¸ìŠ¤í„´ìŠ¤ê°€ ì•„ì§ ì—†ë‹¤ë©´
 	if (instance == nullptr)
 	{
-		// »õ·Î »ı¼º
+		// ìƒˆë¡œ ìƒì„±
 		instance = new Store();
 	}
-	// À¯ÀÏÇÑ ÀÎ½ºÅÏ½ºÀÇ ÂüÁ¶¸¦ ¹İÈ¯
+	// ìœ ì¼í•œ ì¸ìŠ¤í„´ìŠ¤ì˜ ì°¸ì¡°ë¥¼ ë°˜í™˜
 	return *instance;
 }
 
@@ -31,7 +31,7 @@ void Store::EnteredStore()
 	int sub;
 	while (true)
 	{
-		cout << "0. µ¹¾Æ°¡±â\n 1. ±¸¸Å\n2. ÆÇ¸Å\nÀÔ·Â >> ";
+		cout << "0. ëŒì•„ê°€ê¸°\n 1. êµ¬ë§¤\n2. íŒë§¤\nì…ë ¥ >> ";
 		cin >> sub;
 		if (cin.fail())
 		{
@@ -64,7 +64,7 @@ void Store::EnteredStore()
 
 void Store::SellItem(Item* item)
 {
-	Character::Get().BorrowGold(item->GetValue()); //µ· ¼öÀÍ
+	Character::Get().BorrowGold(item->GetValue()); //ëˆ ìˆ˜ìµ
 
 	if (item->GetType() == ItemType::Weapon || item->GetType() == ItemType::Armor)
 	{
@@ -75,28 +75,28 @@ void Store::SellItem(Item* item)
 		Inventory::Get().RemoveNoneEquipItem({ {item->GetName(), 1} }, item->GetType());
 	}
 
-	cout << item->GetName() << "À»(¸¦) ÆÇ¸ÅÇß½À´Ï´Ù." << endl;
-	cout << "È¹µæÇÑ °ñµå: " << item->GetValue() << endl;
+	cout << item->GetName() << "ì„(ë¥¼) íŒë§¤í–ˆìŠµë‹ˆë‹¤." << endl;
+	cout << "íšë“í•œ ê³¨ë“œ: " << item->GetValue() << endl;
 }
 
 void Store::Buy()
 {
 	while (true) {
 		vector<Item*>item;
-		cout << "==================== »óÁ¡ ÆÇ¸Å ¸ñ·Ï ====================" << endl;
-		cout << "1: ³ª¹« ·Õ¼Òµå (Weapon) - °¡°İ: 55, °ø°İ·Â: 25" << endl;
-		cout << "2: °¡Á× °©¿Ê (Armor) - °¡°İ: 55, ¹æ¾î·Â: 30" << endl;
-		cout << "3: Èæ¿ä¼® ·Õ¼Òµå (Weapon) - °¡°İ: 150, °ø°İ·Â: 60" << endl;
-		cout << "4: »ç½½ °©¿Ê (Armor) - °¡°İ: 198, ¹æ¾î·Â: 70" << endl;
-		cout << "5: Ã¶ ·Õ¼Òµå (Weapon) - °¡°İ: 308, °ø°İ·Â: 100" << endl;
-		cout << "6: Ã¶ °©¿Ê (Armor) - °¡°İ: 308, ¹æ¾î·Â: 100" << endl;
-		cout << "7: ¼ÒÇü Èú¸µ Æ÷¼Ç (Expendables) - °¡°İ: 55, Èú·®: 50" << endl;
-		cout << "8: ÁßÇü Èú¸µ Æ÷¼Ç (Expendables) - °¡°İ: 132, Èú·®: 100" << endl;
-		cout << "9: ´ëÇü Èú¸µ Æ÷¼Ç (Expendables) - °¡°İ: 275, Èú·®: 200" << endl;
+		cout << "==================== ìƒì  íŒë§¤ ëª©ë¡ ====================" << endl;
+		cout << "1: ë‚˜ë¬´ë¡±ì†Œë“œ (Weapon) - ê°€ê²©: 55, ê³µê²©ë ¥: 25" << endl;
+		cout << "2: ê°€ì£½ê°‘ì˜· (Armor) - ê°€ê²©: 55, ë°©ì–´ë ¥: 30" << endl;
+		cout << "3: í‘ìš”ì„ë¡±ì†Œë“œ (Weapon) - ê°€ê²©: 150, ê³µê²©ë ¥: 60" << endl;
+		cout << "4: ì‚¬ìŠ¬ê°‘ì˜· (Armor) - ê°€ê²©: 198, ë°©ì–´ë ¥: 70" << endl;
+		cout << "5: ì² ë¡±ì†Œë“œ (Weapon) - ê°€ê²©: 308, ê³µê²©ë ¥: 100" << endl;
+		cout << "6: ì² ê°‘ì˜· (Armor) - ê°€ê²©: 308, ë°©ì–´ë ¥: 100" << endl;
+		cout << "7: ì†Œí˜•íë§í¬ì…˜ (Expendables) - ê°€ê²©: 55, íëŸ‰: 50" << endl;
+		cout << "8: ì¤‘í˜•íë§í¬ì…˜ (Expendables) - ê°€ê²©: 132, íëŸ‰: 100" << endl;
+		cout << "9: ëŒ€í˜•íë§í¬ì…˜ (Expendables) - ê°€ê²©: 275, íëŸ‰: 200" << endl;
 		cout << "========================================================" << endl;
 		string name;
-		cout << "±¸¸ÅÇÏ½Ç ¾ÆÀÌÅÛ ÀÌ¸§À» ÀÔ·ÂÇØ ÁÖ¼¼¿ä:";
-		cout << "»óÁ¡ ³ª°¡±â:p";
+		cout << "êµ¬ë§¤í•˜ì‹¤ ì•„ì´í…œ ì´ë¦„ì„ ì…ë ¥í•´ ì£¼ì„¸ìš”:";
+		cout << "ìƒì  ë‚˜ê°€ê¸°:p";
 		cout << endl;
 		cin >> name;
 
@@ -105,7 +105,7 @@ void Store::Buy()
 			if (name == "p") {
 				return;
 			}
-			cout << "Á¸ÀçÇÏÁö ¾Ê´Â ¾ÆÀÌÅÛÀÔ´Ï´Ù. ´Ù½Ã ÀÔ·ÂÇØ ÁÖ¼¼¿ä." << endl;
+			cout << "ì¡´ì¬í•˜ì§€ ì•ŠëŠ” ì•„ì´í…œì…ë‹ˆë‹¤. ë‹¤ì‹œ ì…ë ¥í•´ ì£¼ì„¸ìš”." << endl;
 			continue;
 		}
 
