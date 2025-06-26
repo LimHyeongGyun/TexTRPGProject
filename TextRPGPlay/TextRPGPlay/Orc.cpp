@@ -1,10 +1,11 @@
-#include "ItemManager.h"
 #include "Monster.h"
 #include "Orc.h"
+#include "ItemManager.h"
+#include <vector>
 
 Orc::Orc(int level) {
 	name = "Orc";
-	dropItem = ItemManager::Get().CreateItem(rollRandomItem());
+	dropItem = ItemManager::Get().CreateItem("오크족전투휘장");
 	alive = true;
 
 	int baseMinHp = level * 20;
