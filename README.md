@@ -71,7 +71,7 @@
 | GameManager  | 게임 전체 흐름 제어             |
 | Character    | 플레이어 정보                    |
 | Monster      | 몬스터 기본 클래스               |
-| Slime~Dragon| 레벨별 몬스터 클래스             |
+| Slime~Dragon| 레벨별 몬스터 상속클래스           |
 | Inventory    | 플레이어의 아이템 관리           |
 | ItemManager  | 아이템 원형 등록 및 복제         |
 | Forge        | 장비 강화 기능                   |
