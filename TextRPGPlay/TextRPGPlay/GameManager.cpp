@@ -215,7 +215,14 @@ void GameManager::Battle(Character* player, Monster* monster)
         return;
     }
 
-    delete monster; //몬스터 메모리 해제
+    if (string(monster->getName()) == "Dragon") {
+        cout << "\n드래곤을 처치했습니다. 게임 클리어!\n";
+        delete monster;
+        system("pause");
+        exit(0); // 프로그램 종료
+    }
+
+    delete monster;
     IdleBehavior();
 }
 
