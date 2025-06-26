@@ -3,7 +3,7 @@
 ## **👥 프로젝트 참여 인원**
 
 - 천재우 - 팀장: Game Manager, Main Framework 및 ReadMe 담당
-- 임형균 - 부팀장: Forge, Character, Inventroy, Item 담당
+- 임형균 - 부팀장: Forge, Character, Inventroy 담당
 - 안지호 - 팀원: Item, Item Manager 담당
 - 이정민 - 팀원: Monster 담당
 - 황순호 - 팀원: PPT, Flow Chart, 발표 담당
