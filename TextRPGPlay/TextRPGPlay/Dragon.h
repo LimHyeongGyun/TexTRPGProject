@@ -1,6 +1,8 @@
 #pragma once
 
-class ItemManager;
+#include <string>
+#include <vector>
+
 class Monster;
 
 class Dragon : public Monster {
@@ -8,8 +10,13 @@ public:
 	Dragon(int level);
 
 	Item* dropItem;
-	Item* getPossibleDrops() const override
-	{
+
+	std::string rollRandomItem() {
+		std::vector<std::string> possibleItems = { "드래곤의발톱", "드래곤심장", "드래곤비늘"};
+		return possibleItems[getRandomInRange(0, possibleItems.size())];
+	}
+
+	Item* getPossibleDrops() const override{
 		return dropItem;
 	}
 

@@ -1,11 +1,10 @@
+#include "ItemManager.h"
 #include "Monster.h"
 #include "Troll.h"
-#include "ItemManager.h"
-#include <vector>
 
 Troll::Troll(int level) {
 	name = "Troll";
-	dropItem = ItemManager::Get().CreateItem("Æ®·Ñ°¡Á×");
+	dropItem = ItemManager::Get().CreateItem(rollRandomItem());
 	alive = true;
 
 	int baseMinHp = level * 20;

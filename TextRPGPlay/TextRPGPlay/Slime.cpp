@@ -1,11 +1,10 @@
+#include "ItemManager.h"
 #include "Monster.h"
 #include "Slime.h"
-#include "ItemManager.h"
-#include <vector>
 
 Slime::Slime(int level) {
 	name = "Slime";
-	dropItem = ItemManager::Get().CreateItem("끈적한점액");
+	dropItem = ItemManager::Get().CreateItem(rollRandomItem());
 	alive = true;
 
 	int baseMinHp = level * 20;

@@ -1,11 +1,10 @@
-#include <vector>
 #include "ItemManager.h"
 #include "Monster.h"
 #include "Goblin.h"
 
 Goblin::Goblin(int level) {
 	name = "Goblin";
-	dropItem = ItemManager::Get().CreateItem("∞Ì∫Ì∏∞¿Ãª°");
+	dropItem = ItemManager::Get().CreateItem(rollRandomItem());
 	alive = true;
 
 	int baseMinHp = level * 20;

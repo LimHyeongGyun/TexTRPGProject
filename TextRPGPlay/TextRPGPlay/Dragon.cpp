@@ -1,11 +1,10 @@
+#include "ItemManager.h"
 #include "Monster.h"
 #include "Dragon.h"
-#include "ItemManager.h"
-#include <vector>
 
 Dragon::Dragon(int level) {
 	name = "Dragon";
-	dropItem = ItemManager::Get().CreateItem("µÂ∑°∞ÔΩ…¿Â");
+	dropItem = ItemManager::Get().CreateItem(rollRandomItem());
 	alive = true;
 
 	int baseMinHp = level * 20;
