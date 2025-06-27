@@ -21,16 +21,18 @@
 <br>
 
 ## **🖥️ 프로젝트 정보**
-- 프로젝트 명: Text Rpg 
-- 개발엔진: C++
-- 개발개요: 내일배움캠프 C++ 프로젝트
+- 프로젝트 명: 재우의 모험
+- 개발언어: C++
+- 개발IDE: Visual Studio
+- 개발개요: 내일배움캠프 C++ TextRPG프로젝트
+- 형상관리툴: GitHub
 
 <br>
 
 ## **⚙️ 작동 환경**
 - 운영체제: Windows (콘솔 기반)
 - 권장 C++ 표준: C++17 이상
-- 컴파일러: Visual Studio / g++ / clang 등
+- IDE: g++ / clang 등
 
 <br>
 
