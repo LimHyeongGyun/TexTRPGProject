@@ -169,4 +169,5 @@ Slime, Orc, Troll, Goblin 등 일반 몬스터와 보스 몬스터 Dragon으로 
 ![드래곤 처치 후 게임 끝](https://github.com/user-attachments/assets/a09adff9-1139-4d5e-b997-5a34efd82bb4)<br>
 
 
-
+## **🎮 게임 플레이 영상**
+https://www.youtube.com/watch?v=Bkoj4vTZVc0<br>
