@@ -93,12 +93,12 @@
 
 <br>
 
-## **📖 Text RPG 아이템 데이터터**
+## **📖 Text RPG 아이템 데이터**
 - https://docs.google.com/spreadsheets/d/1aA2sDAyZF77xMp9tFCXwEXo6a4sWK0WscnOHQ2ESNQY/edit?gid=0#gid=0
 
 <br>
 
-## **📈 Flow Chart**
+## **📈 Class Function**
 
 - GameManager
 게임의 전체 흐름을 제어하며, 캐릭터와 몬스터 간의 전투 및 상태 전환을 관리합니다.<br>
