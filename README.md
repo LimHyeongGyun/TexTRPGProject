@@ -93,7 +93,7 @@
 
 <br>
 
-## **📖 Text RPG 아이템 목록**
+## **📖 Text RPG 아이템 데이터터**
 - https://docs.google.com/spreadsheets/d/1aA2sDAyZF77xMp9tFCXwEXo6a4sWK0WscnOHQ2ESNQY/edit?gid=0#gid=0
 
 <br>
